@@ -1,4 +1,6 @@
-﻿using kangfupanda.webapi.Models;
+﻿using kangfupanda.dataentity.DAO;
+using kangfupanda.dataentity.Model;
+using kangfupanda.webapi.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -33,19 +35,19 @@ namespace kangfupanda.webapi.Controllers
                 filename = filename.Replace("%", "");
                 filename = filename.Replace(" ", "");
 
-                string fold = $"{DateTime.Today.ToString("yyyyMMdd")}";
-                string url = fileUplaodUrl + fold + "/" + filename;
+                //string fold = $"{DateTime.Today.ToString("yyyyMMdd")}";
+                string url = fileUplaodUrl + filename;
 
-                string fullFolder = this.HttpContext.Server.MapPath("/") + fileUploadPath + "\\" + fold;
+                string fullFolder = this.HttpContext.Server.MapPath("/") + fileUploadPath + "\\";
 
-                if (!Directory.Exists(fileUploadPath + fold))
+                if (!Directory.Exists(fileUploadPath))
                 {
                     Directory.CreateDirectory(fullFolder);
                 }
 
                 file.SaveAs(fullFolder + "\\" + filename);
 
-                var response = new ResponseEntity<string>(true, "上传成功", url);
+                var response = new ResponseEntity<string>(true, "上传成功", filename);
 
                 return Json(response, JsonRequestBehavior.AllowGet);
             }
@@ -57,6 +59,39 @@ namespace kangfupanda.webapi.Controllers
 
                 return Json(response, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public ActionResult GetVideos()
+        {
+            try
+            {
+                var videos = (new VideoDao(ConfigurationManager.AppSettings["mysqlConnStr"])).GetList();
+
+                return Json(videos, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message, JsonRequestBehavior.AllowGet);
+            }
+            
+        }
+
+        [System.Web.Http.HttpPost]
+        public ActionResult AddVideo(Video video)
+        {
+            var responseEntity = new ResponseEntity<string>(true, "添加成功", string.Empty);
+
+            bool success = (new VideoDao(ConfigurationManager.AppSettings["mysqlConnStr"])).AddVideo(video);
+
+            return Json(responseEntity, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeleteVideo(int id)
+        {
+            var responseEntity = new ResponseEntity<string>(true, "删除成功", string.Empty);
+            (new VideoDao(ConfigurationManager.AppSettings["mysqlConnStr"])).DeleteById(id);
+
+            return Json(responseEntity, JsonRequestBehavior.AllowGet);
         }
     }
 }
