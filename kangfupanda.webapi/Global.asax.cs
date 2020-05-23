@@ -13,6 +13,9 @@ namespace kangfupanda.webapi
     {
         protected void Application_Start()
         {
+            //注册 log4net
+            log4net.Config.XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo(AppDomain.CurrentDomain.BaseDirectory + @"bin\Log4Net.config"));
+
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
