@@ -74,7 +74,7 @@ namespace kangfupanda.dataentity.DAO
             return video;
         }
 
-        public List<Video> GetList()
+        public List<Video> GetList(string filter="")
         {
             List<Video> videos = new List<Video>();
             using (MySqlConnection conn = new MySqlConnection(connStr))
@@ -82,7 +82,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select * from video where expiredAt is null", conn);
+                    MySqlCommand cmd = new MySqlCommand("select * from video where expiredAt is null" + filter, conn);
 
                     var sqlReader = cmd.ExecuteReader();
                     while (sqlReader.Read())

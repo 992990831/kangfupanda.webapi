@@ -76,6 +76,25 @@ namespace kangfupanda.webapi.Controllers
             
         }
 
+        /// <summary>
+        /// 给前端App使用
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetVideosFront()
+        {
+            try
+            {
+                var videos = (new VideoDao(ConfigurationManager.AppSettings["mysqlConnStr"])).GetList(" order by createdat desc");
+
+                return Json(videos, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
         [System.Web.Http.HttpPost]
         public ActionResult AddVideo(Video video)
         {
