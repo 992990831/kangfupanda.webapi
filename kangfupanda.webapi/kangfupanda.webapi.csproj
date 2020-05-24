@@ -265,6 +265,7 @@
     </Compile>
     <Compile Include="Models\ResponseEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\WeixinHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

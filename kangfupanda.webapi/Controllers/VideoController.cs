@@ -1,6 +1,7 @@
 ﻿using kangfupanda.dataentity.DAO;
 using kangfupanda.dataentity.Model;
 using kangfupanda.webapi.Models;
+using kangfupanda.webapi.Util;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -111,6 +112,18 @@ namespace kangfupanda.webapi.Controllers
             (new VideoDao(ConfigurationManager.AppSettings["mysqlConnStr"])).DeleteById(id);
 
             return Json(responseEntity, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 生成微信分享所需的config
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult getShareMessage()
+        {
+            var wxHelper = new WeixinHelper();
+            var response = wxHelper.GenerateWXConfig();
+
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
     }
 }
