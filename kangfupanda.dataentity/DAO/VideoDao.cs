@@ -24,7 +24,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("insert into video(name, author, posterUri, videoUri, duration, createdAt) values(@name, @author, @posterUri, @videoUri, @duration, now())", conn);
+                    MySqlCommand cmd = new MySqlCommand("insert into video(name, author, posterUri, videoUri, duration, createdAt, updatedAt) values(@name, @author, @posterUri, @videoUri, @duration, now(), now())", conn);
                     cmd.Parameters.Add(new MySqlParameter("name", video.name));
                     cmd.Parameters.Add(new MySqlParameter("author", video.author));
                     cmd.Parameters.Add(new MySqlParameter("posterUri", video.posterUri));
@@ -64,6 +64,7 @@ namespace kangfupanda.dataentity.DAO
                         video.duration = (int)sqlReader["duration"];
                         video.videoUri = (string)sqlReader["videoUri"];
                         video.createdAt = (DateTime)sqlReader["createdAt"];
+                        video.updatedAt = (sqlReader["updatedAt"] == DBNull.Value) ? null : (DateTime?)sqlReader["updatedAt"];
                     }
                 }
                 finally {
@@ -74,15 +75,27 @@ namespace kangfupanda.dataentity.DAO
             return video;
         }
 
-        public List<Video> GetList()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pageIndex">当前页数，从1开始</param>
+        /// <param name="pageSize">每页显示条数</param>
+        /// <returns></returns>
+        public List<Video> GetList(int pageIndex = 1, int pageSize = 50)
         {
+            if (pageIndex < 1)
+            {
+                pageIndex = 1;
+            }
             List<Video> videos = new List<Video>();
             using (MySqlConnection conn = new MySqlConnection(connStr))
             {
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select * from video where expiredAt is null", conn);
+                    MySqlCommand cmd = new MySqlCommand("select * from video where expiredAt is null limit @rowNumber, @pageSize", conn);
+                    cmd.Parameters.Add(new MySqlParameter("rowNumber", (pageIndex - 1) * pageSize));
+                    cmd.Parameters.Add(new MySqlParameter("pageSize", pageSize));
 
                     var sqlReader = cmd.ExecuteReader();
                     while (sqlReader.Read())
@@ -95,6 +108,7 @@ namespace kangfupanda.dataentity.DAO
                         video.duration = (int)sqlReader["duration"];
                         video.videoUri = (string)sqlReader["videoUri"];
                         video.createdAt = (DateTime)sqlReader["createdAt"];
+                        video.updatedAt = (sqlReader["updatedAt"] == DBNull.Value) ? null : (DateTime?)sqlReader["updatedAt"];
 
                         videos.Add(video);
                     }
@@ -126,6 +140,37 @@ namespace kangfupanda.dataentity.DAO
                     conn.Close();
                 }
             }
+        }
+
+        public bool EditVideo(Video video)
+        {
+            if (video == null)
+                return false;
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("update video set name=@name, author=@author, posterUri=@posterUri, videoUri=@videoUri, duration=@duration, updatedAt= @updatedAt where id = @id", conn);
+                    cmd.Parameters.Add(new MySqlParameter("name", video.name));
+                    cmd.Parameters.Add(new MySqlParameter("author", video.author));
+                    cmd.Parameters.Add(new MySqlParameter("posterUri", video.posterUri));
+                    cmd.Parameters.Add(new MySqlParameter("videoUri", video.videoUri));
+                    cmd.Parameters.Add(new MySqlParameter("duration", video.duration));
+                    cmd.Parameters.Add(new MySqlParameter("updatedAt", DateTime.Now));
+                    cmd.Parameters.Add(new MySqlParameter("id", video.id));
+
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
         }
     }
 }
