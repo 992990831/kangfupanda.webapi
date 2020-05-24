@@ -12,8 +12,8 @@ namespace kangfupanda.webapi.Util
 {
     public class WeixinHelper
     {
-        private const string AppId = "wxc10ff63ecf588c90";
-        private const string AppSecret = "7289786fae8511cbe9e94a8aec93e125";
+        public const string AppId = "wxc10ff63ecf588c90";
+        public const string AppSecret = "7289786fae8511cbe9e94a8aec93e125";
 
         /// <summary>
         /// 生成前端微信分享所需的签名等参数
