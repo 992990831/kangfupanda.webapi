@@ -86,7 +86,7 @@ namespace kangfupanda.webapi.Controllers
         {
             try
             {
-                bool success = new VideoDao(mysqlConnection).EditVideo(video);
+                bool success = true; //new VideoDao(mysqlConnection).EditVideo(video);
                 var responseEntity = new ResponseEntity<string>(true, "修改成功", string.Empty);
                 return new JsonResult()
                 {
