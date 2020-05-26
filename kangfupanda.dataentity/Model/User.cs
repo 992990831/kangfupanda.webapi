@@ -22,5 +22,10 @@ namespace kangfupanda.dataentity.Model
         /// 用户类型：治疗师/用户
         /// </summary>
         public string usertype { get; set; }
+
+        /// <summary>
+        /// 个人简介
+        /// </summary>
+        public string note { get; set; }
     }
 }

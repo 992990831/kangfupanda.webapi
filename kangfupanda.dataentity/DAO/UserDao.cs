@@ -37,6 +37,7 @@ namespace kangfupanda.dataentity.DAO
                         user.sex = sqlReader["sex"] == DBNull.Value ? string.Empty : (string)sqlReader["sex"];
                         user.headpic = sqlReader["headpic"] == DBNull.Value ? string.Empty : (string)sqlReader["headpic"];
                         user.usertype = sqlReader["usertype"] == DBNull.Value ? string.Empty : (string)sqlReader["usertype"];
+                        user.note = sqlReader["note"] == DBNull.Value ? string.Empty : (string)sqlReader["note"];
                         user.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
                     }
                 }
@@ -59,7 +60,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("insert into user(openId, nickName, province, city, phone, sex, headpic, usertype, createdAt, updatedAt) values(@openId, @nickName, @province, @city, @phone, @sex, @headpic, @usertype, now(), now())", conn);
+                    MySqlCommand cmd = new MySqlCommand("insert into user(openId, nickName, province, city, phone, sex, headpic, usertype, note, createdAt, updatedAt) values(@openId, @nickName, @province, @city, @phone, @sex, @headpic, @usertype, @note, now(), now())", conn);
                     cmd.Parameters.Add(new MySqlParameter("openId", user.openId));
                     cmd.Parameters.Add(new MySqlParameter("nickName", user.nickName));
                     cmd.Parameters.Add(new MySqlParameter("province", user.province));
@@ -67,6 +68,40 @@ namespace kangfupanda.dataentity.DAO
                     cmd.Parameters.Add(new MySqlParameter("phone", user.phone));
                     cmd.Parameters.Add(new MySqlParameter("sex", user.sex));
                     cmd.Parameters.Add(new MySqlParameter("headpic", user.headpic));
+                    cmd.Parameters.Add(new MySqlParameter("note", user.note));
+                    cmd.Parameters.Add(new MySqlParameter("usertype", user.usertype));
+
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+        }
+
+        public bool UpdateUser(User user)
+        {
+            if (user == null)
+                return false;
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("update user set nickName=@nickName, province=@province, city=@city, phone=@phone, sex=@sex, headpic=@headpic, usertype=@usertype, note=@note, updatedAt=now() where openId=@openId", conn);
+                    cmd.Parameters.Add(new MySqlParameter("openId", user.openId));
+                    cmd.Parameters.Add(new MySqlParameter("nickName", user.nickName));
+                    cmd.Parameters.Add(new MySqlParameter("province", user.province));
+                    cmd.Parameters.Add(new MySqlParameter("city", user.city));
+                    cmd.Parameters.Add(new MySqlParameter("phone", user.phone));
+                    cmd.Parameters.Add(new MySqlParameter("sex", user.sex));
+                    cmd.Parameters.Add(new MySqlParameter("headpic", user.headpic));
+                    cmd.Parameters.Add(new MySqlParameter("note", user.note));
                     cmd.Parameters.Add(new MySqlParameter("usertype", user.usertype));
 
                     cmd.ExecuteNonQuery();
@@ -103,6 +138,7 @@ namespace kangfupanda.dataentity.DAO
                         user.sex = sqlReader["sex"] == DBNull.Value ? string.Empty : (string)sqlReader["sex"];
                         user.headpic = sqlReader["headpic"] == DBNull.Value ? string.Empty : (string)sqlReader["headpic"];
                         user.usertype = sqlReader["usertype"] == DBNull.Value ? string.Empty : (string)sqlReader["usertype"];
+                        user.note = sqlReader["note"] == DBNull.Value ? string.Empty : (string)sqlReader["note"];
                         user.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
 
                         users.Add(user);
@@ -115,6 +151,26 @@ namespace kangfupanda.dataentity.DAO
             }
 
             return users;
+        }
+
+        public bool DeleteById(string openId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("update user set expiredAt=now() where openId=@openId", conn);
+                    cmd.Parameters.Add(new MySqlParameter("openId", openId));
+
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
         }
     }
 }

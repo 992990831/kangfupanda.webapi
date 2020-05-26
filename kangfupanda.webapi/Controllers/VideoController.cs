@@ -28,8 +28,8 @@ namespace kangfupanda.webapi.Controllers
                 var file = this.Request.Files[0];
                 string strFileExtName = file.FileName;
 
-                string fileUploadPath = ConfigurationManager.AppSettings["UploadPath"].ToString();
-                string fileUplaodUrl = ConfigurationManager.AppSettings["UploadUrl"].ToString();
+                string fileUploadPath = ConfigurationManager.AppSettings["UploadPath"];
+                //string fileUplaodUrl = ConfigurationManager.AppSettings["UploadUrl"].ToString();
 
                 string filename = DateTime.Now.ToString("yyyyMMddHHmmssfff") + file.FileName;
                 filename = filename.Replace("+", "");
@@ -37,7 +37,7 @@ namespace kangfupanda.webapi.Controllers
                 filename = filename.Replace(" ", "");
 
                 //string fold = $"{DateTime.Today.ToString("yyyyMMdd")}";
-                string url = fileUplaodUrl + filename;
+                //string url = fileUplaodUrl + filename;
 
                 string fullFolder = this.HttpContext.Server.MapPath("/") + fileUploadPath + "\\";
 

@@ -53,5 +53,58 @@ namespace kangfupanda.webapi.Controllers
 
             return users;
         }
+
+        /// <summary>
+        /// 通过Admin portal手动添加，openID自动生成
+        /// </summary>
+        /// <param name="userDTO"></param>
+        /// <returns></returns>
+        [Route("add")]
+        public ResponseEntity<string> AddUser(User userDTO)
+        {
+            userDTO.openId = Guid.NewGuid().ToString();
+            userDTO.headpic = ConfigurationManager.AppSettings["UploadUrl"] + userDTO.headpic;
+
+            ResponseEntity<string> response = new ResponseEntity<string>();
+
+            var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            bool success = dao.AddUser(userDTO);
+            if (success)
+            {
+                response = new ResponseEntity<string>(true, "添加用户成功", "添加用户成功");
+            }
+            else
+            {
+                response = new ResponseEntity<string>(true, "添加用户失败", "添加用户失败");
+            }
+
+            return response;
+        }
+
+        [Route("update")]
+        [HttpPost]
+        public ResponseEntity<string> UpdateUser(User userDTO)
+        {
+            userDTO.headpic = ConfigurationManager.AppSettings["UploadUrl"] + userDTO.headpic;
+
+            ResponseEntity<string> response = new ResponseEntity<string>();
+
+            var responseEntity = new ResponseEntity<string>(true, "删除成功", string.Empty);
+            (new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"])).UpdateUser(userDTO);
+
+            return response;
+        }
+
+        [Route("delete")]
+        [HttpDelete]
+        public ResponseEntity<string> DeleteUser(string openId)
+        {
+            ResponseEntity<string> response = new ResponseEntity<string>();
+
+            var responseEntity = new ResponseEntity<string>(true, "删除成功", string.Empty);
+            (new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"])).DeleteById(openId);
+
+            return response;
+        }
     }
 }
