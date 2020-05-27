@@ -32,5 +32,10 @@ namespace kangfupanda.dataentity.Model
         /// 是否认证
         /// </summary>
         public bool verified { get; set; }
+
+        /// <summary>
+        /// 是否在app中显示
+        /// </summary>
+        public bool displayinapp { get; set; }
     }
 }

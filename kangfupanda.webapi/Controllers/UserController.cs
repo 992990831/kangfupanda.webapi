@@ -62,7 +62,7 @@ namespace kangfupanda.webapi.Controllers
         public List<User> GetDoctorList()
         {
             var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var users = dao.GetList(" and usertype='治疗师'");
+            var users = dao.GetList(" and displayinapp=1");
 
             return users;
         }
@@ -134,6 +134,26 @@ namespace kangfupanda.webapi.Controllers
         {
             ResponseEntity<string> response = new ResponseEntity<string>(true, "取消认证成功", string.Empty);
             (new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"])).VerifyUser(openId, false);
+
+            return response;
+        }
+
+        [Route("display")]
+        [HttpGet]
+        public ResponseEntity<string> DisplayUserInApp(string openId)
+        {
+            ResponseEntity<string> response = new ResponseEntity<string>(true, "显示用户成功", string.Empty);
+            (new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"])).DisplayUser(openId, true);
+
+            return response;
+        }
+
+        [Route("hide")]
+        [HttpGet]
+        public ResponseEntity<string> HideUserFromApp(string openId)
+        {
+            ResponseEntity<string> response = new ResponseEntity<string>(true, "取消显示成功", string.Empty);
+            (new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"])).DisplayUser(openId, false);
 
             return response;
         }

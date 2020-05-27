@@ -148,6 +148,7 @@ namespace kangfupanda.dataentity.DAO
                         user.usertype = sqlReader["usertype"] == DBNull.Value ? string.Empty : (string)sqlReader["usertype"];
                         user.note = sqlReader["note"] == DBNull.Value ? string.Empty : (string)sqlReader["note"];
                         user.verified = sqlReader["verified"] == DBNull.Value ? false : ((ulong)sqlReader["verified"] == 1);
+                        user.displayinapp = sqlReader["displayinapp"] == DBNull.Value ? false : ((ulong)sqlReader["displayinapp"] == 1);
                         user.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
 
                         users.Add(user);
@@ -192,6 +193,30 @@ namespace kangfupanda.dataentity.DAO
                     MySqlCommand cmd = new MySqlCommand("update user set verified=@verify where openId=@openId", conn);
                     cmd.Parameters.Add(new MySqlParameter("openId", openId));
                     cmd.Parameters.Add(new MySqlParameter("verify", isVerified));
+
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+        }
+
+
+        public bool DisplayUser(string openId, bool isDisplay)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("update user set displayinapp=@displayinapp where openId=@openId", conn);
+                    cmd.Parameters.Add(new MySqlParameter("openId", openId));
+                    cmd.Parameters.Add(new MySqlParameter("displayinapp", isDisplay));
 
                     cmd.ExecuteNonQuery();
 
