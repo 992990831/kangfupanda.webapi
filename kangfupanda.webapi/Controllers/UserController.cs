@@ -54,6 +54,15 @@ namespace kangfupanda.webapi.Controllers
             return users;
         }
 
+        [Route("doctor/list")]
+        public List<User> GetDoctorList()
+        {
+            var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            var users = dao.GetList(" and usertype='治疗师'");
+
+            return users;
+        }
+
         /// <summary>
         /// 通过Admin portal手动添加，openID自动生成
         /// </summary>

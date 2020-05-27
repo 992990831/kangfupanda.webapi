@@ -117,13 +117,20 @@ namespace kangfupanda.dataentity.DAO
         }
 
         public List<User> GetList() {
+            var users = GetList(string.Empty);
+
+            return users;
+        }
+
+        public List<User> GetList(string filter)
+        {
             List<User> users = new List<User>();
             using (MySqlConnection conn = new MySqlConnection(connStr))
             {
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select * from user where expiredat is null", conn);
+                    MySqlCommand cmd = new MySqlCommand($"select * from user where expiredat is null {filter}", conn);
 
                     var sqlReader = cmd.ExecuteReader();
                     while (sqlReader.Read())
@@ -131,7 +138,7 @@ namespace kangfupanda.dataentity.DAO
                         User user = new User();
                         user.id = (int)sqlReader["id"];
                         user.openId = (string)sqlReader["openId"];
-                        user.nickName = sqlReader["nickName"]==DBNull.Value? string.Empty : (string)sqlReader["nickName"];
+                        user.nickName = sqlReader["nickName"] == DBNull.Value ? string.Empty : (string)sqlReader["nickName"];
                         user.province = sqlReader["province"] == DBNull.Value ? string.Empty : (string)sqlReader["province"];
                         user.city = sqlReader["city"] == DBNull.Value ? string.Empty : (string)sqlReader["city"];
                         user.phone = sqlReader["phone"] == DBNull.Value ? string.Empty : (string)sqlReader["phone"];
