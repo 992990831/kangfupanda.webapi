@@ -38,6 +38,7 @@ namespace kangfupanda.dataentity.DAO
                         user.headpic = sqlReader["headpic"] == DBNull.Value ? string.Empty : (string)sqlReader["headpic"];
                         user.usertype = sqlReader["usertype"] == DBNull.Value ? string.Empty : (string)sqlReader["usertype"];
                         user.note = sqlReader["note"] == DBNull.Value ? string.Empty : (string)sqlReader["note"];
+                        user.verified = sqlReader["verified"] == DBNull.Value ? false : ((ulong)sqlReader["verified"] == 1);
                         user.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
                     }
                 }
@@ -146,6 +147,7 @@ namespace kangfupanda.dataentity.DAO
                         user.headpic = sqlReader["headpic"] == DBNull.Value ? string.Empty : (string)sqlReader["headpic"];
                         user.usertype = sqlReader["usertype"] == DBNull.Value ? string.Empty : (string)sqlReader["usertype"];
                         user.note = sqlReader["note"] == DBNull.Value ? string.Empty : (string)sqlReader["note"];
+                        user.verified = sqlReader["verified"] == DBNull.Value ? false : ((ulong)sqlReader["verified"] == 1);
                         user.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
 
                         users.Add(user);
@@ -178,6 +180,29 @@ namespace kangfupanda.dataentity.DAO
                     conn.Close();
                 }
             }
+        }
+
+        public bool VerifyUser(string openId, bool isVerified)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("update user set verified=@verify where openId=@openId", conn);
+                    cmd.Parameters.Add(new MySqlParameter("openId", openId));
+                    cmd.Parameters.Add(new MySqlParameter("verify", isVerified));
+
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
         }
     }
 }

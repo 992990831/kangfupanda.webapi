@@ -54,6 +54,10 @@ namespace kangfupanda.webapi.Controllers
             return users;
         }
 
+        /// <summary>
+        /// 给前台App使用
+        /// </summary>
+        /// <returns></returns>
         [Route("doctor/list")]
         public List<User> GetDoctorList()
         {
@@ -108,10 +112,28 @@ namespace kangfupanda.webapi.Controllers
         [HttpDelete]
         public ResponseEntity<string> DeleteUser(string openId)
         {
-            ResponseEntity<string> response = new ResponseEntity<string>();
-
-            var responseEntity = new ResponseEntity<string>(true, "删除成功", string.Empty);
+            ResponseEntity<string> response = new ResponseEntity<string>(true, "删除成功", string.Empty);
             (new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"])).DeleteById(openId);
+
+            return response;
+        }
+
+        [Route("verify")]
+        [HttpGet]
+        public ResponseEntity<string> VerifyUser(string openId)
+        {
+            ResponseEntity<string> response = new ResponseEntity<string>(true, "认证成功", string.Empty);
+            (new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"])).VerifyUser(openId, true);
+
+            return response;
+        }
+
+        [Route("unverify")]
+        [HttpGet]
+        public ResponseEntity<string> UnVerifyUser(string openId)
+        {
+            ResponseEntity<string> response = new ResponseEntity<string>(true, "取消认证成功", string.Empty);
+            (new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"])).VerifyUser(openId, false);
 
             return response;
         }
