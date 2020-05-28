@@ -6,12 +6,10 @@ using System.Text;
 
 namespace kangfupanda.dataentity.DAO
 {
-    public class VideoDao
+    public class VideoDao : BaseDao
     {
-        private string connStr;
-        public VideoDao(string _connStr)
+        public VideoDao(string _connStr) : base(_connStr)
         {
-            this.connStr = _connStr;
         }
 
         public bool AddVideo(Video video)

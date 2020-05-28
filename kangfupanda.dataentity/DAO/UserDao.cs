@@ -6,14 +6,11 @@ using System.Text;
 
 namespace kangfupanda.dataentity.DAO
 {
-    public class UserDao
+    public class UserDao : BaseDao
     {
-        private string connStr;
-        public UserDao(string _connStr)
+        public UserDao(string _connStr) : base(_connStr)
         {
-            this.connStr = _connStr;
         }
-
         public User GetUser(string openId)
         {
             User user = new User();
