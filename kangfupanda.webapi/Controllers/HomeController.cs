@@ -13,8 +13,6 @@ namespace kangfupanda.webapi.Controllers
         {
             ViewBag.Title = "Home Page";
 
-            logger.Info("KangfuPanda Go Go Go!");
-
             return View();
         }
     }
