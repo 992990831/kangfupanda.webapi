@@ -1,4 +1,5 @@
-﻿using System;
+﻿using kangfupanda.webapi.Filter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -9,7 +10,11 @@ namespace kangfupanda.webapi
     {
         public static void Register(HttpConfiguration config)
         {
-            // Web API configuration and services
+            //Web API filters
+            config.Filters.Add(new MyActionTimeFilter());
+            config.Filters.Add(new MyExceptionFilter());
+
+            // Web API configuration and services            
 
             // Web API routes
             config.MapHttpAttributeRoutes();
