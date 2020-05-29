@@ -87,12 +87,12 @@ namespace kangfupanda.dataentity.DAO
                     {
                         Video video = new Video();
                         video.id = (int)sqlReader["id"];
-                        video.name = (string)sqlReader["name"];
-                        video.author = (string)sqlReader["author"];
-                        video.posterUri = (string)sqlReader["posterUri"];
-                        video.duration = (int)sqlReader["duration"];
-                        video.videoUri = (string)sqlReader["videoUri"];
-                        video.createdAt = (DateTime)sqlReader["createdAt"];
+                        video.name = sqlReader["name"] == DBNull.Value ? string.Empty : (string)sqlReader["name"];
+                        video.author = sqlReader["author"] == DBNull.Value ? string.Empty : (string)sqlReader["author"];
+                        video.posterUri = sqlReader["posterUri"] == DBNull.Value ? string.Empty : (string)sqlReader["posterUri"];
+                        video.duration = sqlReader["duration"] == DBNull.Value ? 0 : (int)sqlReader["duration"];
+                        video.videoUri = sqlReader["videoUri"] == DBNull.Value ? string.Empty : (string)sqlReader["videoUri"];
+                        video.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
 
                         videos.Add(video);
                     }

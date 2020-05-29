@@ -26,12 +26,12 @@ namespace kangfupanda.webapi.Controllers
         [Route("add")]
         public ResponseEntity<string> AddGraphicMessage(GraphicMessage msg)
         {
-            msg.pic01 = ConfigurationManager.AppSettings["UploadUrl"] + msg.pic01;
-            msg.pic02 = ConfigurationManager.AppSettings["UploadUrl"] + msg.pic02;
-            msg.pic03 = ConfigurationManager.AppSettings["UploadUrl"] + msg.pic03;
-            msg.pic04 = ConfigurationManager.AppSettings["UploadUrl"] + msg.pic04;
-            msg.pic05 = ConfigurationManager.AppSettings["UploadUrl"] + msg.pic05;
-            msg.pic06 = ConfigurationManager.AppSettings["UploadUrl"] + msg.pic06;
+            //msg.pic01 = string.IsNullOrEmpty(msg.pic01) ? string.Empty : ConfigurationManager.AppSettings["UploadUrl"] + msg.pic01;
+            //msg.pic02 = string.IsNullOrEmpty(msg.pic02) ? string.Empty : ConfigurationManager.AppSettings["UploadUrl"] + msg.pic02;
+            //msg.pic03 = string.IsNullOrEmpty(msg.pic03) ? string.Empty : ConfigurationManager.AppSettings["UploadUrl"] + msg.pic03;
+            //msg.pic04 = string.IsNullOrEmpty(msg.pic04) ? string.Empty : ConfigurationManager.AppSettings["UploadUrl"] + msg.pic04;
+            //msg.pic05 = string.IsNullOrEmpty(msg.pic05) ? string.Empty : ConfigurationManager.AppSettings["UploadUrl"] + msg.pic05;
+            //msg.pic06 = string.IsNullOrEmpty(msg.pic06) ? string.Empty : ConfigurationManager.AppSettings["UploadUrl"] + msg.pic06;
 
             ResponseEntity<string> response = new ResponseEntity<string>();
 

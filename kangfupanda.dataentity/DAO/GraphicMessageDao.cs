@@ -89,7 +89,7 @@ namespace kangfupanda.dataentity.DAO
                         msg.pic06 = sqlReader["pic06"] == DBNull.Value ? string.Empty : (string)sqlReader["pic06"];
                         msg.openId = sqlReader["openId"] == DBNull.Value ? string.Empty : (string)sqlReader["openId"];
                         msg.author = sqlReader["author"] == DBNull.Value ? string.Empty : (string)sqlReader["author"];
-
+                        msg.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
                         msgList.Add(msg);
                     }
                 }
