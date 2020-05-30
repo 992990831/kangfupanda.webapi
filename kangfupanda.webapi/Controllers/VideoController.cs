@@ -62,6 +62,47 @@ namespace kangfupanda.webapi.Controllers
             }
         }
 
+        public ActionResult UploadSiteVideo()
+        {
+            try
+            {
+                var file = this.Request.Files[0];
+                string strFileExtName = file.FileName;
+
+                string fileUploadPath = "Site";
+                //string fileUplaodUrl = ConfigurationManager.AppSettings["UploadUrl"].ToString();
+
+                string filename = DateTime.Now.ToString("yyyyMMddHHmmssfff") + file.FileName;
+                filename = filename.Replace("+", "");
+                filename = filename.Replace("%", "");
+                filename = filename.Replace(" ", "");
+
+                //string fold = $"{DateTime.Today.ToString("yyyyMMdd")}";
+                //string url = fileUplaodUrl + filename;
+
+                string fullFolder = this.HttpContext.Server.MapPath("/") + fileUploadPath + "\\";
+
+                if (!Directory.Exists(fileUploadPath))
+                {
+                    Directory.CreateDirectory(fullFolder);
+                }
+
+                file.SaveAs(fullFolder + "\\" + filename);
+
+                var response = new ResponseEntity<string>(true, "上传成功", filename);
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                //Loger.LogErr("UploadFile " + ex.ToString());
+
+                var response = new ResponseEntity<string>(false, "上传失败", null);
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult GetVideos()
         {
             try
