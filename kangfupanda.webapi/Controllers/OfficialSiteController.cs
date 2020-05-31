@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -21,7 +22,7 @@ namespace kangfupanda.webapi.Controllers
         {
             string videoStr = JsonConvert.SerializeObject(video);
 
-            string folder = System.Web.Hosting.HostingEnvironment.MapPath("/site/");
+            string folder = ConfigurationManager.AppSettings["SiteFolderPath"]; //System.Web.Hosting.HostingEnvironment.MapPath("/site/");
             string fileName = "video.txt";
 
             File.WriteAllText(folder + fileName, videoStr);
@@ -33,7 +34,7 @@ namespace kangfupanda.webapi.Controllers
         [Route("list/video")]
         public SiteVideo GetVideo()
         {
-            string folder = System.Web.Hosting.HostingEnvironment.MapPath("/site/");
+            string folder = ConfigurationManager.AppSettings["SiteFolderPath"]; //System.Web.Hosting.HostingEnvironment.MapPath("/site/");
             string fileName = "video.txt";
             string videoStr = File.ReadAllText(folder + fileName);
 
@@ -48,7 +49,7 @@ namespace kangfupanda.webapi.Controllers
         {
             string graphicStr = JsonConvert.SerializeObject(graphic);
 
-            string folder = System.Web.Hosting.HostingEnvironment.MapPath("/site/");
+            string folder = ConfigurationManager.AppSettings["SiteFolderPath"]; //System.Web.Hosting.HostingEnvironment.MapPath("/site/");
             string fileName = "graphic.txt";
 
             File.WriteAllText(folder + fileName, graphicStr);
@@ -60,7 +61,7 @@ namespace kangfupanda.webapi.Controllers
         [Route("list/graphic")]
         public SiteGraphic GetGraphic()
         {
-            string folder = System.Web.Hosting.HostingEnvironment.MapPath("/site/");
+            string folder = ConfigurationManager.AppSettings["SiteFolderPath"]; //System.Web.Hosting.HostingEnvironment.MapPath("/site/");
             string fileName = "graphic.txt";
             string graphicStr = File.ReadAllText(folder + fileName);
 
@@ -75,7 +76,7 @@ namespace kangfupanda.webapi.Controllers
         {
             string doctorStr = JsonConvert.SerializeObject(doctor);
 
-            string folder = System.Web.Hosting.HostingEnvironment.MapPath("/site/");
+            string folder = ConfigurationManager.AppSettings["SiteFolderPath"]; //System.Web.Hosting.HostingEnvironment.MapPath("/site/");
             string fileName = "doctor.txt";
 
             File.WriteAllText(folder + fileName, doctorStr);
@@ -87,7 +88,7 @@ namespace kangfupanda.webapi.Controllers
         [Route("list/doctor")]
         public SiteDoctor GetDoctor()
         {
-            string folder = System.Web.Hosting.HostingEnvironment.MapPath("/site/");
+            string folder = ConfigurationManager.AppSettings["SiteFolderPath"]; //System.Web.Hosting.HostingEnvironment.MapPath("/site/");
             string fileName = "doctor.txt";
             string doctorStr = File.ReadAllText(folder + fileName);
 
