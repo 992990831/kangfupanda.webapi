@@ -28,7 +28,7 @@ namespace kangfupanda.webapi.Controllers
                 var file = this.Request.Files[0];
                 string strFileExtName = file.FileName;
 
-                string fileUploadPath = ConfigurationManager.AppSettings["UploadPath"];
+                string fileUploadPath = ConfigurationManager.AppSettings["UploadFolderPath"];
                 //string fileUplaodUrl = ConfigurationManager.AppSettings["UploadUrl"].ToString();
 
                 string filename = DateTime.Now.ToString("yyyyMMddHHmmssfff") + file.FileName;
@@ -39,14 +39,14 @@ namespace kangfupanda.webapi.Controllers
                 //string fold = $"{DateTime.Today.ToString("yyyyMMdd")}";
                 //string url = fileUplaodUrl + filename;
 
-                string fullFolder = this.HttpContext.Server.MapPath("/") + fileUploadPath + "\\";
+                //string fullFolder = this.HttpContext.Server.MapPath("/") + fileUploadPath + "\\";
 
                 if (!Directory.Exists(fileUploadPath))
                 {
-                    Directory.CreateDirectory(fullFolder);
+                    Directory.CreateDirectory(fileUploadPath);
                 }
 
-                file.SaveAs(fullFolder + "\\" + filename);
+                file.SaveAs(fileUploadPath + "\\" + filename);
 
                 var response = new ResponseEntity<string>(true, "上传成功", filename);
 
@@ -69,8 +69,8 @@ namespace kangfupanda.webapi.Controllers
                 var file = this.Request.Files[0];
                 string strFileExtName = file.FileName;
 
-                string fileUploadPath = "Site";
-                //string fileUplaodUrl = ConfigurationManager.AppSettings["UploadUrl"].ToString();
+                //string fileUploadPath = "Site";
+                string fileUploadPath = ConfigurationManager.AppSettings["SiteFolderPath"];
 
                 string filename = DateTime.Now.ToString("yyyyMMddHHmmssfff") + file.FileName;
                 filename = filename.Replace("+", "");
@@ -80,14 +80,14 @@ namespace kangfupanda.webapi.Controllers
                 //string fold = $"{DateTime.Today.ToString("yyyyMMdd")}";
                 //string url = fileUplaodUrl + filename;
 
-                string fullFolder = this.HttpContext.Server.MapPath("/") + fileUploadPath + "\\";
+                //string fullFolder = this.HttpContext.Server.MapPath("/") + fileUploadPath + "\\";
 
                 if (!Directory.Exists(fileUploadPath))
                 {
-                    Directory.CreateDirectory(fullFolder);
+                    Directory.CreateDirectory(fileUploadPath);
                 }
 
-                file.SaveAs(fullFolder + "\\" + filename);
+                file.SaveAs(fileUploadPath + "\\" + filename);
 
                 var response = new ResponseEntity<string>(true, "上传成功", filename);
 
