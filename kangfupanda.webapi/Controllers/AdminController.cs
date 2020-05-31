@@ -84,25 +84,24 @@ namespace kangfupanda.webapi.Controllers
         [System.Web.Http.Route("Admin/Video/Edit")]
         public ActionResult EditVideos(Video video)
         {
-            //try
-            //{
+            try
+            {
                 bool success = true; //new VideoDao(mysqlConnection).EditVideo(video);
                 var responseEntity = new ResponseEntity<string>(true, "修改成功", string.Empty);
-                int lb = 12 / video.id;
                 return new JsonResult()
                 {
                     Data = responseEntity
                 };
-            //}
-            //catch (Exception ex)
-            //{
-            //    logger.Error("视频管理-修改失败！", ex);
-            //    var responseEntity = new ResponseEntity<string>(false, "修改失败", string.Empty);
-            //    return new JsonResult()
-            //    {
-            //        Data = responseEntity
-            //    };
-            //}
+            }
+            catch (Exception ex)
+            {
+                logger.Error("视频管理-修改失败！", ex);
+                var responseEntity = new ResponseEntity<string>(false, "修改失败", string.Empty);
+                return new JsonResult()
+                {
+                    Data = responseEntity
+                };
+            }
 
         }
 
