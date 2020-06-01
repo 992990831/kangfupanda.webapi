@@ -19,7 +19,7 @@ namespace kangfupanda.webapi.Util
         /// 生成前端微信分享所需的签名等参数
         /// </summary>
         /// <returns></returns>
-        public WX_Config_Response GenerateWXConfig()
+        public WX_Config_Response GenerateWXConfig(string pageUrl)
         {
             //生成签名的时间戳
             TimeSpan ts = DateTime.Now - DateTime.Parse("1970-01-01 00:00:00");
@@ -33,10 +33,10 @@ namespace kangfupanda.webapi.Util
             string ticket = GetTicket(token);
 
             //当前网页的URL
-            string pageurl = "http://app.kangfupanda.com/share.html";
+            //string pageUrl = "http://app.kangfupanda.com/share.html";
 
             //对所有待签名参数按照字段名的ASCII 码从小到大排序（字典序）后，使用URL键值对的格式（即key1=value1&key2=value2…）拼接成字符串
-            string str = "jsapi_ticket=" + ticket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url=" + pageurl;
+            string str = "jsapi_ticket=" + ticket + "&noncestr=" + nonceStr + "&timestamp=" + timestamp + "&url=" + pageUrl;
             //签名,使用SHA1生成
             string signature = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str, "SHA1").ToLower();
 

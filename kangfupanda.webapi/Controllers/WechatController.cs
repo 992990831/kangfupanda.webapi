@@ -108,5 +108,22 @@ namespace kangfupanda.webapi.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("config")]
+        /// <summary>
+        /// 生成微信分享所需的config
+        /// </summary>
+        /// <returns></returns>
+        public WX_Config_Response getConfig([FromBody]wxRequest request)
+        {
+            var wxHelper = new WeixinHelper();
+            var response = wxHelper.GenerateWXConfig(request.url);
+
+            return response;
+        }
+
+        public class wxRequest { 
+            public string url { get; set; }
+        }
     }
 }
