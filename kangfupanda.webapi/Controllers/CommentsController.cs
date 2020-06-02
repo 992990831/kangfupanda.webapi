@@ -44,6 +44,23 @@ namespace kangfupanda.webapi.Controllers
             return responseEntity;
         }
 
+        [HttpGet]
+        [Route("list")]
+        public List<Comments> GetList(int postId, string postType)
+        {
+            List<Comments> comments = new List<Comments>();
+            try
+            {
+                comments = new CommentsDao(mysqlConnection).GetList(postId, postType);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("获取评论失败", ex);
+            }
+
+            return comments;
+        }
+
         /// <summary>
         /// 评论管理-审核
         /// </summary>

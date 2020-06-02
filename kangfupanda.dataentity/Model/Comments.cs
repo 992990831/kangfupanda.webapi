@@ -11,20 +11,22 @@ namespace kangfupanda.dataentity.Model
         /// <summary>
         /// 评论的主键
         /// </summary>
-        public BigInteger comment_id { get; set; }
+        public int comment_id { get; set; }
 
         /// <summary>
         /// 帖子的id
         /// </summary>
-        public BigInteger comment_post_id { get; set; }
+        public int comment_post_id { get; set; }
 
         /// <summary>
-        /// 帖子的类型：医生，视频，或是其他
+        /// 帖子的类型：视频，图文 等
+        /// video, graphic
         /// </summary>
-        public int comment_post_type { get; set; }
+        public string comment_post_type { get; set; }
 
         /// <summary>
         /// 评论人的id
+        /// 也就是微信的openid
         /// </summary>
         public int comment_user_id { get; set; }
 
@@ -71,12 +73,12 @@ namespace kangfupanda.dataentity.Model
         /// <summary>
         /// 评论的父ID，也就是支持评论的评论
         /// </summary>
-        public BigInteger comment_parent_id { get; set; }
+        public int comment_parent_id { get; set; }
 
         /// <summary>
         /// 发帖人的ID
         /// </summary>
-        public BigInteger user_id { get; set; }
+        public int user_id { get; set; }
 
         /// <summary>
         /// 发帖人的名字，名字可能包含emoji表情
