@@ -32,6 +32,11 @@ namespace kangfupanda.dataentity.Model
         /// 评论人的名字，名字可能包含emoji表情
         /// </summary>
         public string comment_user_name { get; set; }
+        
+        /// <summary>
+        /// 评论人的头像
+        /// </summary>
+        public string comment_user_pic { get; set; }
 
         /// <summary>
         /// 评论人的IP地址
@@ -77,5 +82,7 @@ namespace kangfupanda.dataentity.Model
         /// 发帖人的名字，名字可能包含emoji表情
         /// </summary>
         public string user_name { get; set; }
+
+
     }
 }

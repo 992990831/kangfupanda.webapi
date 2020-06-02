@@ -22,12 +22,13 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("insert into comments(comment_post_id, comment_post_type, comment_user_id, comment_user_name, comment_user_IP, comment_content,comment_audit_status,comment_like_count,comment_dislike_count,comment_is_recommend,comment_parent_id,user_id,user_name,createdAt,updatedAt) " +
-                        "values(@post_id, @post_type,  @comment_user_id, @comment_user_name, @user_IP,@content,@audit_status,@like_count,@dislike_count,@is_recommend,@parent_id,@user_id,@user_name,now(),now())", conn);
+                    MySqlCommand cmd = new MySqlCommand("insert into comments(comment_post_id, comment_post_type, comment_user_id, comment_user_name, comment_user_pic, comment_user_IP, comment_content,comment_audit_status,comment_like_count,comment_dislike_count,comment_is_recommend,comment_parent_id,user_id,user_name,createdAt,updatedAt) " +
+                        "values(@post_id, @post_type,  @comment_user_id, @comment_user_name, @comment_user_pic, @user_IP,@content,@audit_status,@like_count,@dislike_count,@is_recommend,@parent_id,@user_id,@user_name,now(),now())", conn);
                     cmd.Parameters.Add(new MySqlParameter("post_id", comments.comment_post_id));
                     cmd.Parameters.Add(new MySqlParameter("post_type", comments.comment_post_type));
                     cmd.Parameters.Add(new MySqlParameter("comment_user_id", comments.comment_user_id));
                     cmd.Parameters.Add(new MySqlParameter("comment_user_name", comments.comment_user_name));
+                    cmd.Parameters.Add(new MySqlParameter("comment_user_pic", comments.comment_user_pic));
                     cmd.Parameters.Add(new MySqlParameter("user_IP", comments.comment_user_IP));
                     cmd.Parameters.Add(new MySqlParameter("content", comments.comment_content));
                     cmd.Parameters.Add(new MySqlParameter("audit_status", comments.comment_audit_status));
@@ -37,7 +38,7 @@ namespace kangfupanda.dataentity.DAO
                     cmd.Parameters.Add(new MySqlParameter("parent_id", comments.comment_parent_id));
                     cmd.Parameters.Add(new MySqlParameter("user_id", comments.user_id));
                     cmd.Parameters.Add(new MySqlParameter("user_name", comments.user_name));
-
+                    
                     cmd.ExecuteNonQuery();
 
                     return true;

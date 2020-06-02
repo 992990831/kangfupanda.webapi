@@ -7,11 +7,12 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Web.Http;
-using System.Web.Mvc;
 
 namespace kangfupanda.webapi.Controllers
 {
+    [RoutePrefix("comments")]
     /// <summary>
     /// 评论相关
     /// </summary>
@@ -25,29 +26,22 @@ namespace kangfupanda.webapi.Controllers
         /// </summary>
         /// <param name="video"></param>
         /// <returns></returns>
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("Comments/Add")]
-        public ActionResult AddComments(Comments comments)
+        [HttpPost]
+        [Route("add")]
+        public ResponseEntity<string> AddComments(Comments comments)
         {
+            var responseEntity = new ResponseEntity<string>(true, "添加成功", string.Empty);
             try
             {
-                bool success =  new CommentsDao(mysqlConnection).AddComments(comments);
-                var responseEntity = new ResponseEntity<string>(true, "添加成功", string.Empty);
-                return new JsonResult()
-                {
-                    Data = responseEntity
-                };
+                bool success = new CommentsDao(mysqlConnection).AddComments(comments);
             }
             catch (Exception ex)
             {
                 logger.Error("评论管理-添加失败！", ex);
-                var responseEntity = new ResponseEntity<string>(false, "添加失败", string.Empty);
-                return new JsonResult()
-                {
-                    Data = responseEntity
-                };
+                responseEntity = new ResponseEntity<string>(false, "添加失败", string.Empty);
             }
 
+            return responseEntity;
         }
 
         /// <summary>
@@ -55,28 +49,22 @@ namespace kangfupanda.webapi.Controllers
         /// </summary>
         /// <param name="video"></param>
         /// <returns></returns>
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("Comments/Audit")]
-        public ActionResult AuditComments(Comments comments)
+        [HttpPost]
+        [Route("audit")]
+        public ResponseEntity<string> AuditComments(Comments comments)
         {
+            var responseEntity = new ResponseEntity<string>(true, "审核成功", string.Empty);
             try
             {
                 bool success = new CommentsDao(mysqlConnection).AuditComments(comments);
-                var responseEntity = new ResponseEntity<string>(true, "审核成功", string.Empty);
-                return new JsonResult()
-                {
-                    Data = responseEntity
-                };
             }
             catch (Exception ex)
             {
                 logger.Error("评论管理-审核失败！", ex);
-                var responseEntity = new ResponseEntity<string>(false, "审核失败", string.Empty);
-                return new JsonResult()
-                {
-                    Data = responseEntity
-                };
+                responseEntity = new ResponseEntity<string>(false, "审核失败", string.Empty);
             }
+
+            return responseEntity;
         }
 
         /// <summary>
@@ -84,28 +72,23 @@ namespace kangfupanda.webapi.Controllers
         /// </summary>
         /// <param name="video"></param>
         /// <returns></returns>
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("Comments/Get/ID")]
-        public ActionResult GetCommentsByID(Comments comments)
+        [HttpPost]
+        [Route("get/id")]
+        public ResponseEntity<string> GetCommentsByID(Comments comments)
         {
+            var responseEntity = new ResponseEntity<string>(true, "审核成功", string.Empty);
+
             try
             {
                 bool success = new CommentsDao(mysqlConnection).AuditComments(comments);
-                var responseEntity = new ResponseEntity<string>(true, "审核成功", string.Empty);
-                return new JsonResult()
-                {
-                    Data = responseEntity
-                };
             }
             catch (Exception ex)
             {
                 logger.Error("评论管理-审核失败！", ex);
-                var responseEntity = new ResponseEntity<string>(false, "审核失败", string.Empty);
-                return new JsonResult()
-                {
-                    Data = responseEntity
-                };
+                responseEntity = new ResponseEntity<string>(false, "审核失败", string.Empty);
             }
+
+            return responseEntity;
         }
 
         /// <summary>
@@ -113,28 +96,23 @@ namespace kangfupanda.webapi.Controllers
         /// </summary>
         /// <param name="video"></param>
         /// <returns></returns>
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("Comments/Get/ReplyUserID")]
-        public ActionResult GetCommentsByReplyUserID(Comments comments)
+        [HttpPost]
+        [Route("get/replyUserID")]
+        public ResponseEntity<string> GetCommentsByReplyUserID(Comments comments)
         {
+            var responseEntity = new ResponseEntity<string>(true, "审核成功", string.Empty);
+
             try
             {
                 bool success = new CommentsDao(mysqlConnection).AuditComments(comments);
-                var responseEntity = new ResponseEntity<string>(true, "审核成功", string.Empty);
-                return new JsonResult()
-                {
-                    Data = responseEntity
-                };
             }
             catch (Exception ex)
             {
                 logger.Error("评论管理-审核失败！", ex);
-                var responseEntity = new ResponseEntity<string>(false, "审核失败", string.Empty);
-                return new JsonResult()
-                {
-                    Data = responseEntity
-                };
+                responseEntity = new ResponseEntity<string>(false, "审核失败", string.Empty);
             }
+
+            return responseEntity;
         }
 
 
@@ -143,28 +121,23 @@ namespace kangfupanda.webapi.Controllers
         /// </summary>
         /// <param name="video"></param>
         /// <returns></returns>
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("Comments/Get/PostID")]
-        public ActionResult GetCommentsByPostID(Comments comments)
+        [HttpPost]
+        [Route("get/postID")]
+        public ResponseEntity<string> GetCommentsByPostID(Comments comments)
         {
+            var responseEntity = new ResponseEntity<string>(true, "审核成功", string.Empty);
+
             try
             {
                 bool success = new CommentsDao(mysqlConnection).AuditComments(comments);
-                var responseEntity = new ResponseEntity<string>(true, "审核成功", string.Empty);
-                return new JsonResult()
-                {
-                    Data = responseEntity
-                };
             }
             catch (Exception ex)
             {
                 logger.Error("评论管理-审核失败！", ex);
-                var responseEntity = new ResponseEntity<string>(false, "审核失败", string.Empty);
-                return new JsonResult()
-                {
-                    Data = responseEntity
-                };
+                responseEntity = new ResponseEntity<string>(false, "审核失败", string.Empty);
             }
+
+            return responseEntity;
         }
     }
 }

@@ -46,6 +46,10 @@ namespace kangfupanda.webapi.Controllers
             return response;
         }
 
+        /// <summary>
+        /// 给后台admin portal使用的
+        /// </summary>
+        /// <returns></returns>
         [Route("list")]
         public List<User> GetUserList() {
             var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
