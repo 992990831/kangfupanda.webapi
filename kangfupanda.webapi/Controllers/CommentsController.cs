@@ -61,19 +61,36 @@ namespace kangfupanda.webapi.Controllers
             return comments;
         }
 
+        [HttpGet]
+        [Route("audit/list")]
+        public List<Comments> GetPendingAuditList()
+        {
+            List<Comments> comments = new List<Comments>();
+            try
+            {
+                comments = new CommentsDao(mysqlConnection).GetPendingAuditList();
+            }
+            catch (Exception ex)
+            {
+                logger.Error("获取评论失败", ex);
+            }
+
+            return comments;
+        }
+
         /// <summary>
-        /// 评论管理-审核
+        /// 审核通过
         /// </summary>
         /// <param name="video"></param>
         /// <returns></returns>
-        [HttpPost]
-        [Route("audit")]
-        public ResponseEntity<string> AuditComments(Comments comments)
+        [HttpGet]
+        [Route("audit/approve")]
+        public ResponseEntity<string> Approve(int commentId)
         {
             var responseEntity = new ResponseEntity<string>(true, "审核成功", string.Empty);
             try
             {
-                bool success = new CommentsDao(mysqlConnection).AuditComments(comments);
+                bool success = new CommentsDao(mysqlConnection).AuditApprove(commentId);
             }
             catch (Exception ex)
             {
@@ -85,19 +102,19 @@ namespace kangfupanda.webapi.Controllers
         }
 
         /// <summary>
-        /// 评论管理-获取评论，根据评论ID
+        /// 审核不通过
         /// </summary>
         /// <param name="video"></param>
         /// <returns></returns>
-        [HttpPost]
-        [Route("get/id")]
-        public ResponseEntity<string> GetCommentsByID(Comments comments)
+        [HttpGet]
+        [Route("audit/reject")]
+        public ResponseEntity<string> Reject(int commentId)
         {
-            var responseEntity = new ResponseEntity<string>(true, "审核成功", string.Empty);
+            var responseEntity = new ResponseEntity<string>(true, "拒绝成功", string.Empty);
 
             try
             {
-                bool success = new CommentsDao(mysqlConnection).AuditComments(comments);
+                bool success = new CommentsDao(mysqlConnection).AuditReject(commentId);
             }
             catch (Exception ex)
             {

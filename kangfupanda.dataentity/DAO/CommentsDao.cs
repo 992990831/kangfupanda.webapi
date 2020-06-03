@@ -59,7 +59,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select * from comments where expiredAt is null and comment_post_id=@comment_post_id and comment_post_type=@comment_post_type", conn);
+                    MySqlCommand cmd = new MySqlCommand("select * from comments where expiredAt is null and comment_audit_status=1 and comment_post_id=@comment_post_id and comment_post_type=@comment_post_type", conn);
                     cmd.Parameters.Add(new MySqlParameter("comment_post_id", postId));
                     cmd.Parameters.Add(new MySqlParameter("comment_post_type", postType));
 
@@ -87,8 +87,95 @@ namespace kangfupanda.dataentity.DAO
             return comList;
         }
 
+
+        public List<Comments> GetPendingAuditList()
+        {
+            List<Comments> comList = new List<Comments>();
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("select * from comments where expiredAt is null and comment_audit_status=0", conn);
+                 
+                    var sqlReader = cmd.ExecuteReader();
+                    while (sqlReader.Read())
+                    {
+                        Comments com = new Comments();
+                        com.comment_id = (int)sqlReader["comment_id"];
+                        com.comment_post_id = sqlReader["comment_post_id"] == DBNull.Value ? 0 : (int)sqlReader["comment_post_id"];
+                        com.comment_post_type = sqlReader["comment_post_type"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_post_type"];
+                        com.comment_user_id = sqlReader["comment_user_id"] == DBNull.Value ? 0 : (int)sqlReader["comment_user_id"];
+                        com.comment_user_name = sqlReader["comment_user_name"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_name"];
+                        com.comment_user_pic = sqlReader["comment_user_pic"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_pic"];
+                        com.comment_content = sqlReader["comment_content"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_content"];
+                        com.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
+                        comList.Add(com);
+                    }
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return comList;
+        }
+
         /// <summary>
-        /// 审核状态：0未通过，1通过，2待审核
+        /// 审批拒绝
+        /// </summary>
+        /// <param name="commentId"></param>
+        /// <returns></returns>
+        public bool AuditApprove(int commentId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("update comments set comment_audit_status=1, updatedAt=now() where comment_id=@comment_id", conn);
+                    cmd.Parameters.Add(new MySqlParameter("comment_id", commentId));
+                   
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 审批拒绝
+        /// </summary>
+        /// <param name="commentId"></param>
+        /// <returns></returns>
+        public bool AuditReject(int commentId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("update comments set comment_audit_status=2, updatedAt=now() where comment_id=@comment_id", conn);
+                    cmd.Parameters.Add(new MySqlParameter("comment_id", commentId));
+
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 审核状态：0待审核，1通过，2未通过
         /// </summary>
         /// <param name="comments"></param>
         /// <returns></returns>

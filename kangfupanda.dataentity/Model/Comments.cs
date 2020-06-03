@@ -51,7 +51,7 @@ namespace kangfupanda.dataentity.Model
         public string comment_content { get; set; }
 
         /// <summary>
-        /// 审核状态：0未通过，1通过，2待审核
+        /// 审核状态：0待审核，1通过，2未通过
         /// </summary>
         public int comment_audit_status { get; set; }
 
