@@ -263,6 +263,7 @@
     <Compile Include="Controllers\ClubController.cs" />
     <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LikeController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\OfficialSiteController.cs" />
     <Compile Include="Controllers\UserController.cs" />
