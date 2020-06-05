@@ -52,14 +52,31 @@ namespace kangfupanda.webapi.Controllers
             return response;
         }
 
+        /// <summary>
+        /// 返回点是否点赞过
+        /// </summary>
+        /// <param name="itemType"></param>
+        /// <param name="itemId"></param>
+        /// <param name="openId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{itemType}/{itemId}/{openId}")]
-        public bool HasLiked(string itemType, int itemId, string openId)
+        public bool GetLiked(string itemType, int itemId, string openId)
         {
             var dao = new LikeDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
             var like = dao.GetLike(itemId, itemType, openId);
 
             return like != null;
+        }
+
+        [HttpGet]
+        [Route("{itemType}/{itemId}")]
+        public Int64 GetLikeCount(string itemType, int itemId)
+        {
+            var dao = new LikeDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            var count = dao.GetLikeCount(itemId, itemType);
+
+            return count;
         }
     }
 }

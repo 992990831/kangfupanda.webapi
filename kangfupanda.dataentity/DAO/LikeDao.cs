@@ -22,9 +22,10 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("insert into `like`(itemId, itemUId, likeById, likeByOpenId, createdAt, updatedAt) values(@itemId, @itemUId, @likeById, @likeByOpenId, now(), now())", conn);
+                    MySqlCommand cmd = new MySqlCommand("insert into `like`(itemId, itemUId, itemType, likeById, likeByOpenId, createdAt, updatedAt) values(@itemId, @itemUId, @itemType, @likeById, @likeByOpenId, now(), now())", conn);
                     cmd.Parameters.Add(new MySqlParameter("itemId", like.itemId));
                     cmd.Parameters.Add(new MySqlParameter("itemUId", like.itemUId));
+                    cmd.Parameters.Add(new MySqlParameter("itemType", like.itemType));
                     cmd.Parameters.Add(new MySqlParameter("likeById", like.likeById));
                     cmd.Parameters.Add(new MySqlParameter("likeByOpenId", like.likeByOpenId));
 
@@ -50,10 +51,9 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("update `like` set expiredAt=now() where itemId=@itemId and itemUId=@itemUId and likeById=@likeById and likeByOpenId=@likeByOpenId", conn);
+                    MySqlCommand cmd = new MySqlCommand("update `like` set expiredAt=now() where itemId=@itemId and itemType=@itemType and likeByOpenId=@likeByOpenId", conn);
                     cmd.Parameters.Add(new MySqlParameter("itemId", like.itemId));
-                    cmd.Parameters.Add(new MySqlParameter("itemUId", like.itemUId));
-                    cmd.Parameters.Add(new MySqlParameter("likeById", like.likeById));
+                    cmd.Parameters.Add(new MySqlParameter("itemType", like.itemType));
                     cmd.Parameters.Add(new MySqlParameter("likeByOpenId", like.likeByOpenId));
 
                     cmd.ExecuteNonQuery();
@@ -65,7 +65,6 @@ namespace kangfupanda.dataentity.DAO
                     conn.Close();
                 }
             }
-
         }
 
         /// <summary>
@@ -109,6 +108,30 @@ namespace kangfupanda.dataentity.DAO
             }
 
             return like;
+        }
+
+        public Int64 GetLikeCount(int itemId, string itemType)
+        {
+            Int64 count = 0;
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand($"select count(1) from `like` where expiredat is null and itemId=@itemId and itemType=@itemType", conn);
+                    cmd.Parameters.Add(new MySqlParameter("itemId", itemId));
+                    cmd.Parameters.Add(new MySqlParameter("itemType", itemType));
+
+                    var result = cmd.ExecuteScalar();
+                    count = (Int64)result;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return count;
         }
     }
 }

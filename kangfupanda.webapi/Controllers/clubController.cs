@@ -1,4 +1,5 @@
 ﻿using kangfupanda.dataentity.DAO;
+using kangfupanda.webapi.Common;
 using MySqlX.XDevAPI.Common;
 using Org.BouncyCastle.Asn1;
 using System;
@@ -35,7 +36,7 @@ namespace kangfupanda.webapi.Controllers
                         name = video.name,
                         posterUri = video.posterUri,
                         videoUri = video.videoUri,
-                        itemType = "video",
+                        itemType = ClubItemType.Video,
                         createdAt = video.createdAt
                     });
                 });
@@ -81,7 +82,7 @@ namespace kangfupanda.webapi.Controllers
                         name = msg.text.Length > 20 ? $"{msg.text.Substring(0, 17)}..." : msg.text,
                         posterUri = msg.pic01,
                         pics = pics,
-                        itemType = "graphic",
+                        itemType = ClubItemType.Graphic,
                         text = msg.text,
                         createdAt = msg.createdAt
                     });
@@ -104,6 +105,9 @@ namespace kangfupanda.webapi.Controllers
     {
         public int id { get; set; }
 
+        /// <summary>
+        /// 不同类型的item在各自表中的id
+        /// </summary>
         public int postId { get; set; }
 
         /// <summary>
