@@ -13,7 +13,13 @@ namespace kangfupanda.dataentity.Model
         public string pic04 { get; set; }
         public string pic05 { get; set; }
         public string pic06 { get; set; }
+        /// <summary>
+        /// 作者的openId
+        /// </summary>
         public string openId { get; set; }
+        /// <summary>
+        /// 作者的昵称
+        /// </summary>
         public string author { get; set; }
     }
 }

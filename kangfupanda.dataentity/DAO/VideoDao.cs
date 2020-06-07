@@ -22,9 +22,10 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("insert into video(name, author, posterUri, videoUri, duration, createdAt) values(@name, @author, @posterUri, @videoUri, @duration, now())", conn);
+                    MySqlCommand cmd = new MySqlCommand("insert into video(name, author, openId, posterUri, videoUri, duration, createdAt) values(@name, @author, @openId, @posterUri, @videoUri, @duration, now())", conn);
                     cmd.Parameters.Add(new MySqlParameter("name", video.name));
                     cmd.Parameters.Add(new MySqlParameter("author", video.author));
+                    cmd.Parameters.Add(new MySqlParameter("openId", video.openId));
                     cmd.Parameters.Add(new MySqlParameter("posterUri", video.posterUri));
                     cmd.Parameters.Add(new MySqlParameter("videoUri", video.videoUri));
                     cmd.Parameters.Add(new MySqlParameter("duration", video.duration));
@@ -56,12 +57,13 @@ namespace kangfupanda.dataentity.DAO
                     if (sqlReader.Read())
                     {
                         video.id = (int)sqlReader["id"];
-                        video.name = (string)sqlReader["name"];
-                        video.author = (string)sqlReader["author"];
-                        video.posterUri = (string)sqlReader["posterUri"];
-                        video.duration = (int)sqlReader["duration"];
-                        video.videoUri = (string)sqlReader["videoUri"];
-                        video.createdAt = (DateTime)sqlReader["createdAt"];
+                        video.name = sqlReader["name"] == DBNull.Value ? string.Empty : (string)sqlReader["name"];
+                        video.author = sqlReader["author"] == DBNull.Value ? string.Empty : (string)sqlReader["author"];
+                        video.openId = sqlReader["openId"] == DBNull.Value ? string.Empty : (string)sqlReader["openId"];
+                        video.posterUri = sqlReader["posterUri"] == DBNull.Value ? string.Empty : (string)sqlReader["posterUri"];
+                        video.duration = sqlReader["duration"] == DBNull.Value ? 0 : (int)sqlReader["duration"];
+                        video.videoUri = sqlReader["videoUri"] == DBNull.Value ? string.Empty : (string)sqlReader["videoUri"];
+                        video.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
                     }
                 }
                 finally {
@@ -89,6 +91,7 @@ namespace kangfupanda.dataentity.DAO
                         video.id = (int)sqlReader["id"];
                         video.name = sqlReader["name"] == DBNull.Value ? string.Empty : (string)sqlReader["name"];
                         video.author = sqlReader["author"] == DBNull.Value ? string.Empty : (string)sqlReader["author"];
+                        video.openId = sqlReader["openId"] == DBNull.Value ? string.Empty : (string)sqlReader["openId"];
                         video.posterUri = sqlReader["posterUri"] == DBNull.Value ? string.Empty : (string)sqlReader["posterUri"];
                         video.duration = sqlReader["duration"] == DBNull.Value ? 0 : (int)sqlReader["duration"];
                         video.videoUri = sqlReader["videoUri"] == DBNull.Value ? string.Empty : (string)sqlReader["videoUri"];

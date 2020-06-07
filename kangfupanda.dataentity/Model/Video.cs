@@ -16,7 +16,10 @@ namespace kangfupanda.dataentity.Model
         /// 视频作者
         /// </summary>
         public string author { get; set; }
-
+        /// <summary>
+        /// 作者的openId
+        /// </summary>
+        public string openId { get; set; }
         /// <summary>
         /// 时长
         /// </summary>

@@ -32,6 +32,7 @@ namespace kangfupanda.webapi.Controllers
                     results.Add(new ClubItem()
                     {
                         postId=video.id,
+                        openId = video.openId,
                         author = video.author,
                         name = video.name,
                         posterUri = video.posterUri,
@@ -78,6 +79,7 @@ namespace kangfupanda.webapi.Controllers
                     results.Add(new ClubItem()
                     {
                         postId = msg.id,
+                        openId = msg.openId,
                         author = msg.author,
                         name = msg.text.Length > 20 ? $"{msg.text.Substring(0, 17)}..." : msg.text,
                         posterUri = msg.pic01,
@@ -116,7 +118,11 @@ namespace kangfupanda.webapi.Controllers
         public string name { get; set; }
 
         /// <summary>
-        /// 作者
+        /// 作者openId
+        /// </summary>
+        public string openId { get; set; }
+        /// <summary>
+        /// 作者昵称
         /// </summary>
         public string author { get; set; }
 
