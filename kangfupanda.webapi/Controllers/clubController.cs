@@ -19,7 +19,7 @@ namespace kangfupanda.webapi.Controllers
     public class ClubController : ApiController
     {
         [Route("list")]
-        public List<ClubItem> GetClubList()
+        public List<ClubItem> GetClubList(string openId)
         {
             List<ClubItem> results = new List<ClubItem>();
 
@@ -96,6 +96,17 @@ namespace kangfupanda.webapi.Controllers
             int id = 0;
             results.ForEach(r => { r.id = ++id; });
 
+            //如果传入了Follower的openId
+            if (!string.IsNullOrEmpty(openId))
+            {
+                results.ForEach(r => {
+                    var dao2 = new FollowDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+                    bool isFollowed = dao2.GetFollowed(r.openId, openId);
+
+                    r.followed = isFollowed;
+                });
+            }
+
             return results;
         }
     }
@@ -142,5 +153,10 @@ namespace kangfupanda.webapi.Controllers
 
         public List<string> pics { get; set; }
         public DateTime createdAt { get; set; }
+
+        /// <summary>
+        /// 是否关注
+        /// </summary>
+        public bool followed { get; set; }
     }
 }
