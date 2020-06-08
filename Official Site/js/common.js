@@ -1,4 +1,4 @@
-var SERVER_URL = 'http://106.75.216.135:8004'
+var SERVER_URL = 'http://47.111.166.154:8004'
 var Resource_URL = 'http://47.111.166.154:8004/'
 var $header = `<!-- !Top-bar -->
 <div id="top-bar" role="complementary" class="bit-top-bar"
