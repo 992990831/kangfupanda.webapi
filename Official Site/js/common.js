@@ -1,5 +1,5 @@
-var SERVER_URL = 'http://47.111.166.154:8004'
-var Resource_URL = 'http://47.111.166.154:8004/'
+var SERVER_URL = 'http://47.111.166.154:8004/'
+var Resource_URL = 'http://47.111.166.154:8004/site/'
 var $header = `<!-- !Top-bar -->
 <div id="top-bar" role="complementary" class="bit-top-bar"
     style="line-height:30px;padding-right:0px;padding-left:0px;">
@@ -29,7 +29,7 @@ var $header = `<!-- !Top-bar -->
                 <a class="bitem logo nomarl" style="display: table-cell;"
                     href="/"><span class="logospan"><img class="preload-me"
                             src="image/logo.png"
-                            width="194" height="51" alt="一键点评" /></span></a>
+                            width="194" height="51" alt="一健点评" /></span></a>
 
                 <!-- <div id="site-title" class="assistive-text"></div>
 <div id="site-description" class="assistive-text"></div> -->
@@ -229,7 +229,7 @@ var $footer = `<footer id="footer" class="footer">
                                                 </div>
                                                 <div style="line-height: 26px; letter-spacing: inherit;">
                                                     <span
-                                                        style="font-size: 12px; color: rgb(255, 255, 255);">一键点评
+                                                        style="font-size: 12px; color: rgb(255, 255, 255);">一健点评
                                                         版权所有 ©2014-2020<span
                                                             style="color: rgb(255, 255, 255);">&nbsp; &nbsp;
                                                             &nbsp; &nbsp;</span>备案号：浙ICP备19052964号-1<span
@@ -399,6 +399,6 @@ var $footer = `<footer id="footer" class="footer">
 <!--  ************end************* -->
 </footer>`;
 $(function () {
-  $("#page").prepend($header);
+  //$("#page").prepend($header);
   $("#page").append($footer);
 });
