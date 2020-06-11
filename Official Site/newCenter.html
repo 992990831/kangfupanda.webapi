@@ -538,7 +538,7 @@
 		</div><!-- #main -->
 
 	</div><!-- #page -->
-	<script src="js/common.js?v=1.0.0.3"></script>
+	<script src="js/common.js?v=1.0.0.4"></script>
 	<script>
 
 		$(function () {
@@ -565,7 +565,7 @@
 				for (var i = 0; i < maxNum; i++) {
 					if (data['pic0' + i]) {
 						_temp += render({
-							video: 'http://47.111.166.154:8004/site/' + data['pic0' + i],
+							video: Resource_URL + data['pic0' + i],
 							author: data['text0' + i],
 							text: data['author0' + i],
 						})
