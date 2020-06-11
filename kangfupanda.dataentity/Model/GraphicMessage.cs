@@ -22,4 +22,13 @@ namespace kangfupanda.dataentity.Model
         /// </summary>
         public string author { get; set; }
     }
+
+    public class GraphicMessageExt : GraphicMessage
+    {
+        public string authorHeadPic { get; set; }
+
+        public long likeCount { get; set; }
+
+        public long commentCount { get; set; }
+    }
 }

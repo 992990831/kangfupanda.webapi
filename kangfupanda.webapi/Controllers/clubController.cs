@@ -23,7 +23,8 @@ namespace kangfupanda.webapi.Controllers
         {
             List<ClubItem> results = new List<ClubItem>();
 
-            var videos = (new VideoDao(ConfigurationManager.AppSettings["mysqlConnStr"])).GetList();
+            //var videos = (new VideoDao(ConfigurationManager.AppSettings["mysqlConnStr"])).GetList();
+            var videos = (new VideoDao(ConfigurationManager.AppSettings["mysqlConnStr"])).GetListExt();
 
             if (videos != null)
             {
@@ -34,17 +35,20 @@ namespace kangfupanda.webapi.Controllers
                         postId=video.id,
                         openId = video.openId,
                         author = video.author,
+                        authorHeadPic = video.authorHeadPic,
                         name = video.name,
                         posterUri = video.posterUri,
                         videoUri = video.videoUri,
                         itemType = ClubItemType.Video,
+                        likeCount = video.likeCount,
+                        commentCount = video.commentCount,
                         createdAt = video.createdAt
                     });
                 });
             }
 
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var messages = dao.GetList();
+            var messages = dao.GetListExt();
 
             if (messages != null)
             {
@@ -81,11 +85,14 @@ namespace kangfupanda.webapi.Controllers
                         postId = msg.id,
                         openId = msg.openId,
                         author = msg.author,
+                        authorHeadPic = msg.authorHeadPic,
                         name = msg.text.Length > 20 ? $"{msg.text.Substring(0, 17)}..." : msg.text,
                         posterUri = msg.pic01,
                         pics = pics,
                         itemType = ClubItemType.Graphic,
                         text = msg.text,
+                        likeCount = msg.likeCount,
+                        commentCount = msg.commentCount,
                         createdAt = msg.createdAt
                     });
                 });
@@ -138,6 +145,11 @@ namespace kangfupanda.webapi.Controllers
         public string author { get; set; }
 
         /// <summary>
+        /// 作者头像
+        /// </summary>
+        public string authorHeadPic { get; set; }
+
+        /// <summary>
         /// 封面照
         /// </summary>
         public string posterUri { get; set; }
@@ -158,5 +170,15 @@ namespace kangfupanda.webapi.Controllers
         /// 是否关注
         /// </summary>
         public bool followed { get; set; }
+
+        /// <summary>
+        /// 点赞数
+        /// </summary>
+        public long likeCount { get; set; }
+
+        /// <summary>
+        /// 评论数
+        /// </summary>
+        public long commentCount { get; set; }
     }
 }

@@ -35,4 +35,12 @@ namespace kangfupanda.dataentity.Model
         /// </summary>
         public string posterUri { get; set; }
     }
+
+    public class VideoExt : Video { 
+        public string authorHeadPic { get; set; }
+
+        public long likeCount { get; set; }
+
+        public long commentCount { get; set; }
+    }
 }

@@ -109,6 +109,44 @@ namespace kangfupanda.dataentity.DAO
             return videos;
         }
 
+        public List<VideoExt> GetListExt(string filter = "")
+        {
+            List<VideoExt> videosExt = new List<VideoExt>();
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("select v.*, u.headpic, (select count(1) from `like` where itemId=v.id and itemType='video' and expiredAt is null ) as likeCount, (select count(1) from `comments` where comment_post_id=v.id and comment_post_type='video' and comment_audit_status=1 and expiredAt is null ) as commentCount from video as v left join `user` as u on v.openId=u.openId  where v.expiredAt is null " + filter, conn);
+
+                    var sqlReader = cmd.ExecuteReader();
+                    while (sqlReader.Read())
+                    {
+                        VideoExt videoExt = new VideoExt();
+                        videoExt.id = (int)sqlReader["id"];
+                        videoExt.name = sqlReader["name"] == DBNull.Value ? string.Empty : (string)sqlReader["name"];
+                        videoExt.author = sqlReader["author"] == DBNull.Value ? string.Empty : (string)sqlReader["author"];
+                        videoExt.authorHeadPic = sqlReader["headpic"] == DBNull.Value ? string.Empty : (string)sqlReader["headpic"];
+                        videoExt.openId = sqlReader["openId"] == DBNull.Value ? string.Empty : (string)sqlReader["openId"];
+                        videoExt.posterUri = sqlReader["posterUri"] == DBNull.Value ? string.Empty : (string)sqlReader["posterUri"];
+                        videoExt.duration = sqlReader["duration"] == DBNull.Value ? 0 : (int)sqlReader["duration"];
+                        videoExt.videoUri = sqlReader["videoUri"] == DBNull.Value ? string.Empty : (string)sqlReader["videoUri"];
+                        videoExt.likeCount = sqlReader["likeCount"] == DBNull.Value ? 0 : (long)sqlReader["likeCount"];
+                        videoExt.commentCount = sqlReader["commentCount"] == DBNull.Value ? 0 : (long)sqlReader["commentCount"];
+                        videoExt.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
+
+                        videosExt.Add(videoExt);
+                    }
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return videosExt;
+        }
+
         public bool DeleteById(int id)
         {
             using (MySqlConnection conn = new MySqlConnection(connStr))
