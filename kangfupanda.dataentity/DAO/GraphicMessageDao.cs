@@ -45,6 +45,40 @@ namespace kangfupanda.dataentity.DAO
 
         }
 
+        public bool UpdateGraphicMessage(GraphicMessage msg)
+        {
+            if (msg == null)
+                return false;
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("update graphicmessage set text=@text, pic01=@pic01, pic02=@pic02, pic03=@pic03, pic04=@pic04, pic05=@pic05, pic06=@pic06, openid=@openid, author=@author, updatedAt=now() where id=@id", conn);
+                    cmd.Parameters.Add(new MySqlParameter("id", msg.id));
+                    cmd.Parameters.Add(new MySqlParameter("text", msg.text));
+                    cmd.Parameters.Add(new MySqlParameter("pic01", msg.pic01));
+                    cmd.Parameters.Add(new MySqlParameter("pic02", msg.pic02));
+                    cmd.Parameters.Add(new MySqlParameter("pic03", msg.pic03));
+                    cmd.Parameters.Add(new MySqlParameter("pic04", msg.pic04));
+                    cmd.Parameters.Add(new MySqlParameter("pic05", msg.pic05));
+                    cmd.Parameters.Add(new MySqlParameter("pic06", msg.pic06));
+                    cmd.Parameters.Add(new MySqlParameter("openid", msg.openId));
+                    cmd.Parameters.Add(new MySqlParameter("author", msg.author));
+
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+        }
+
         public bool DeleteById(int id)
         {
             using (MySqlConnection conn = new MySqlConnection(connStr))

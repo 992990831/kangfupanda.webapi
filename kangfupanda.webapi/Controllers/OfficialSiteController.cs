@@ -109,6 +109,11 @@ namespace kangfupanda.webapi.Controllers
         public string text03 { get; set; }
         public string text04 { get; set; }
 
+        public string poster01 { get; set; }
+        public string poster02 { get; set; }
+        public string poster03 { get; set; }
+        public string poster04 { get; set; }
+
         public string video01 { get; set; }
         public string video02 { get; set; }
         public string video03 { get; set; }

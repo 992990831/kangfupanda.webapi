@@ -36,7 +36,16 @@ namespace kangfupanda.webapi.Controllers
             ResponseEntity<string> response = new ResponseEntity<string>();
 
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            bool success = dao.AddGraphicMessage(msg);
+            bool success = true;
+            if (msg.id > 0)
+            {
+                dao.UpdateGraphicMessage(msg);
+            }
+            else
+            {
+                dao.AddGraphicMessage(msg);
+            }
+            
 
             if (success)
             {
