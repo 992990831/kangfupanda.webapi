@@ -488,10 +488,10 @@
 					'	</div>' +
 					'</li>';
 
-				return html.replace('${video}', Resource_URL + obj.video).replace('${author}', obj.author).replace('${text}', obj.text)
+				return html.replace('${video}', 'http://47.111.166.154:8004/site/' + obj.video).replace('${author}', obj.author).replace('${text}', obj.text)
 			}
 
-			$.get(SERVER_URL + '/site/list/video', function (data) {
+			$.get('http://47.111.166.154:8004/' + '/site/list/video', function (data) {
 				var maxNum = 10;
 				var _temp = ''
 				for (var i = 0; i < maxNum; i++) {
