@@ -80,6 +80,20 @@ namespace kangfupanda.webapi.Controllers
                         pics.Add(msg.pic06);
                     }
 
+                    List<string> audioes = new List<string>();
+                    if (!string.IsNullOrEmpty(msg.audio01))
+                    {
+                        audioes.Add(msg.audio01);
+                    }
+                    if (!string.IsNullOrEmpty(msg.audio02))
+                    {
+                        audioes.Add(msg.audio02);
+                    }
+                    if (!string.IsNullOrEmpty(msg.audio03))
+                    {
+                        audioes.Add(msg.audio03);
+                    }
+
                     results.Add(new ClubItem()
                     {
                         postId = msg.id,
@@ -89,6 +103,7 @@ namespace kangfupanda.webapi.Controllers
                         name = msg.text.Length > 20 ? $"{msg.text.Substring(0, 17)}..." : msg.text,
                         posterUri = msg.pic01,
                         pics = pics,
+                        audioes = audioes,
                         itemType = ClubItemType.Graphic,
                         text = msg.text,
                         likeCount = msg.likeCount,
@@ -164,6 +179,12 @@ namespace kangfupanda.webapi.Controllers
         public string videoUri { get; set; }
 
         public List<string> pics { get; set; }
+
+        /// <summary>
+        /// 音频
+        /// </summary>
+        public List<string> audioes { get; set; }
+
         public DateTime createdAt { get; set; }
 
         /// <summary>
