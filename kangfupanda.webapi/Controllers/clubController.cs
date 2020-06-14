@@ -100,7 +100,7 @@ namespace kangfupanda.webapi.Controllers
                         openId = msg.openId,
                         author = msg.author,
                         authorHeadPic = msg.authorHeadPic,
-                        name = msg.text.Length > 20 ? $"{msg.text.Substring(0, 17)}..." : msg.text,
+                        name = msg.name,
                         posterUri = msg.pic01,
                         pics = pics,
                         audioes = audioes,

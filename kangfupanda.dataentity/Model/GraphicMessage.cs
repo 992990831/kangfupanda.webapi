@@ -6,6 +6,7 @@ namespace kangfupanda.dataentity.Model
 {
     public class GraphicMessage : BaseModel
     {
+        public string name { get; set; }
         public string text { get; set; }
         public string pic01 { get; set; }
         public string pic02 { get; set; }
