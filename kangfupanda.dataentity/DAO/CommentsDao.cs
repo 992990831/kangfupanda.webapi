@@ -87,8 +87,12 @@ namespace kangfupanda.dataentity.DAO
             return comList;
         }
 
+        /// <summary>
+        /// 审批列表
+        /// </summary>
+        /// <returns></returns>
 
-        public List<Comments> GetPendingAuditList()
+        public List<Comments> GetAuditList(int statusCode, int pageIndex=1, int pageSize=10 )
         {
             List<Comments> comList = new List<Comments>();
             using (MySqlConnection conn = new MySqlConnection(connStr))
@@ -96,7 +100,8 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select * from comments where expiredAt is null and comment_audit_status=0", conn);
+                    int skip = (pageIndex - 1) * pageSize;
+                    MySqlCommand cmd = new MySqlCommand($"select * from comments where expiredAt is null and comment_audit_status={statusCode} limit {skip},{pageSize} ", conn);
                  
                     var sqlReader = cmd.ExecuteReader();
                     while (sqlReader.Read())
@@ -120,6 +125,28 @@ namespace kangfupanda.dataentity.DAO
             }
 
             return comList;
+        }
+
+        public Int64 GetAuditListCount(int statusCode)
+        {
+            Int64 count = 0;
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand($"select count(1) from comments where expiredAt is null and comment_audit_status={statusCode}", conn);
+
+                    count = (Int64)cmd.ExecuteScalar();
+                  
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return count;
         }
 
         /// <summary>

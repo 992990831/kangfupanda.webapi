@@ -61,14 +61,58 @@ namespace kangfupanda.webapi.Controllers
             return comments;
         }
 
+        /// <summary>
+        /// 获取待审核列表
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("audit/list")]
-        public List<Comments> GetPendingAuditList()
+        public CommentsAuditList GetPendingAuditList(int pageIndex=1, int pageSize=10)
+        {
+            CommentsAuditList result = new CommentsAuditList();
+            List<Comments> comments = new List<Comments>();
+            try
+            {
+                var dao = new CommentsDao(mysqlConnection);
+                comments = dao.GetAuditList(0, pageIndex, pageSize);
+                Int64 count = dao.GetAuditListCount(0);
+
+                result.lists = comments;
+                result.count = count;
+            }
+            catch (Exception ex)
+            {
+                logger.Error("获取评论失败", ex);
+            }
+
+            return result;
+        }
+
+        [HttpGet]
+        [Route("audit/list/approved")]
+        public List<Comments> GetApprovedAuditList()
         {
             List<Comments> comments = new List<Comments>();
             try
             {
-                comments = new CommentsDao(mysqlConnection).GetPendingAuditList();
+                comments = new CommentsDao(mysqlConnection).GetAuditList(1);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("获取评论失败", ex);
+            }
+
+            return comments;
+        }
+
+        [HttpGet]
+        [Route("audit/list/rejected")]
+        public List<Comments> GetRejectedAuditList()
+        {
+            List<Comments> comments = new List<Comments>();
+            try
+            {
+                comments = new CommentsDao(mysqlConnection).GetAuditList(2);
             }
             catch (Exception ex)
             {
@@ -173,5 +217,10 @@ namespace kangfupanda.webapi.Controllers
 
             return responseEntity;
         }
+    }
+
+    public class CommentsAuditList { 
+        public List<Comments> lists { get; set; }
+        public Int64 count { get; set; }
     }
 }
