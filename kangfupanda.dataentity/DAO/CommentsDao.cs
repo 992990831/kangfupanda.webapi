@@ -70,7 +70,7 @@ namespace kangfupanda.dataentity.DAO
                         com.comment_id = (int)sqlReader["comment_id"];
                         com.comment_post_id = sqlReader["comment_post_id"] == DBNull.Value ? 0 : (int)sqlReader["comment_post_id"];
                         com.comment_post_type = sqlReader["comment_post_type"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_post_type"];
-                        com.comment_user_id = sqlReader["comment_user_id"] == DBNull.Value ? 0 : (int)sqlReader["comment_user_id"];
+                        com.comment_user_id = sqlReader["comment_user_id"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_id"];
                         com.comment_user_name = sqlReader["comment_user_name"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_name"];
                         com.comment_user_pic = sqlReader["comment_user_pic"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_pic"];
                         com.comment_content = sqlReader["comment_content"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_content"];
@@ -92,7 +92,7 @@ namespace kangfupanda.dataentity.DAO
         /// </summary>
         /// <returns></returns>
 
-        public List<Comments> GetAuditList(int statusCode, int pageIndex=1, int pageSize=10 )
+        public List<Comments> GetAuditList(int statusCode, int pageIndex=1, int pageSize=10, string filter="" )
         {
             List<Comments> comList = new List<Comments>();
             using (MySqlConnection conn = new MySqlConnection(connStr))
@@ -101,7 +101,7 @@ namespace kangfupanda.dataentity.DAO
                 {
                     conn.Open();
                     int skip = (pageIndex - 1) * pageSize;
-                    MySqlCommand cmd = new MySqlCommand($"select * from comments where expiredAt is null and comment_audit_status={statusCode} limit {skip},{pageSize} ", conn);
+                    MySqlCommand cmd = new MySqlCommand($"select * from comments where expiredAt is null and comment_audit_status={statusCode} {filter} limit {skip},{pageSize} ", conn);
                  
                     var sqlReader = cmd.ExecuteReader();
                     while (sqlReader.Read())
@@ -110,7 +110,7 @@ namespace kangfupanda.dataentity.DAO
                         com.comment_id = (int)sqlReader["comment_id"];
                         com.comment_post_id = sqlReader["comment_post_id"] == DBNull.Value ? 0 : (int)sqlReader["comment_post_id"];
                         com.comment_post_type = sqlReader["comment_post_type"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_post_type"];
-                        com.comment_user_id = sqlReader["comment_user_id"] == DBNull.Value ? 0 : (int)sqlReader["comment_user_id"];
+                        com.comment_user_id = sqlReader["comment_user_id"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_id"];
                         com.comment_user_name = sqlReader["comment_user_name"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_name"];
                         com.comment_user_pic = sqlReader["comment_user_pic"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_pic"];
                         com.comment_content = sqlReader["comment_content"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_content"];
@@ -208,7 +208,7 @@ namespace kangfupanda.dataentity.DAO
         /// <returns></returns>
         public bool AuditComments(Comments comments)
         {
-            if (comments.comment_user_id <= 0)
+            if (string.IsNullOrEmpty(comments.comment_user_id))
             {
                 return false;
             }

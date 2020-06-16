@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 
 namespace kangfupanda.webapi.Controllers
@@ -67,14 +68,21 @@ namespace kangfupanda.webapi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("audit/list")]
-        public CommentsAuditList GetPendingAuditList(int pageIndex=1, int pageSize=10)
+        public CommentsAuditList GetPendingAuditList(int pageIndex=1, int pageSize=10, string openId="")
         {
             CommentsAuditList result = new CommentsAuditList();
             List<Comments> comments = new List<Comments>();
             try
             {
                 var dao = new CommentsDao(mysqlConnection);
-                comments = dao.GetAuditList(0, pageIndex, pageSize);
+
+                StringBuilder sb = new StringBuilder();
+                if (!string.IsNullOrEmpty(openId))
+                {
+                    sb.Append($" comment_user_id='{openId}'");
+                }
+
+                comments = dao.GetAuditList(0, pageIndex, pageSize, sb.ToString());
                 Int64 count = dao.GetAuditListCount(0);
 
                 result.lists = comments;

@@ -28,7 +28,7 @@ namespace kangfupanda.dataentity.Model
         /// 评论人的id
         /// 也就是微信的openid
         /// </summary>
-        public int comment_user_id { get; set; }
+        public string comment_user_id { get; set; }
 
         /// <summary>
         /// 评论人的名字，名字可能包含emoji表情
