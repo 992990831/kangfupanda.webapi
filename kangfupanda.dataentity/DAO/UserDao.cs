@@ -58,7 +58,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("insert into user(openId, nickName, province, city, phone, sex, headpic, usertype, note, createdAt, updatedAt) values(@openId, @nickName, @province, @city, @phone, @sex, @headpic, @usertype, @note, now(), now())", conn);
+                    MySqlCommand cmd = new MySqlCommand("insert into user(openId, nickName, province, city, phone, sex, headpic, usertype, note, detailimage, createdAt, updatedAt) values(@openId, @nickName, @province, @city, @phone, @sex, @headpic, @usertype, @note, @detailimage, now(), now())", conn);
                     cmd.Parameters.Add(new MySqlParameter("openId", user.openId));
                     cmd.Parameters.Add(new MySqlParameter("nickName", user.nickName));
                     cmd.Parameters.Add(new MySqlParameter("province", user.province));
@@ -68,6 +68,7 @@ namespace kangfupanda.dataentity.DAO
                     cmd.Parameters.Add(new MySqlParameter("headpic", user.headpic));
                     cmd.Parameters.Add(new MySqlParameter("note", user.note));
                     cmd.Parameters.Add(new MySqlParameter("usertype", user.usertype));
+                    cmd.Parameters.Add(new MySqlParameter("detailimage", user.detailimage));
 
                     cmd.ExecuteNonQuery();
 
@@ -91,7 +92,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("update user set nickName=@nickName, province=@province, city=@city, phone=@phone, sex=@sex, headpic=@headpic, usertype=@usertype, note=@note, updatedAt=now() where openId=@openId", conn);
+                    MySqlCommand cmd = new MySqlCommand("update user set nickName=@nickName, province=@province, city=@city, phone=@phone, sex=@sex, headpic=@headpic, usertype=@usertype, note=@note, detailimage=@detailimage, updatedAt=now() where openId=@openId", conn);
                     cmd.Parameters.Add(new MySqlParameter("openId", user.openId));
                     cmd.Parameters.Add(new MySqlParameter("nickName", user.nickName));
                     cmd.Parameters.Add(new MySqlParameter("province", user.province));
@@ -101,6 +102,7 @@ namespace kangfupanda.dataentity.DAO
                     cmd.Parameters.Add(new MySqlParameter("headpic", user.headpic));
                     cmd.Parameters.Add(new MySqlParameter("note", user.note));
                     cmd.Parameters.Add(new MySqlParameter("usertype", user.usertype));
+                    cmd.Parameters.Add(new MySqlParameter("detailimage", user.detailimage));
 
                     cmd.ExecuteNonQuery();
 
@@ -146,6 +148,7 @@ namespace kangfupanda.dataentity.DAO
                         user.note = sqlReader["note"] == DBNull.Value ? string.Empty : (string)sqlReader["note"];
                         user.verified = sqlReader["verified"] == DBNull.Value ? false : ((ulong)sqlReader["verified"] == 1);
                         user.displayinapp = sqlReader["displayinapp"] == DBNull.Value ? false : ((ulong)sqlReader["displayinapp"] == 1);
+                        user.detailimage = sqlReader["detailimage"] == DBNull.Value ? string.Empty : (string)sqlReader["detailimage"];
                         user.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
 
                         users.Add(user);

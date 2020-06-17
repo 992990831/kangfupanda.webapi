@@ -37,5 +37,10 @@ namespace kangfupanda.dataentity.Model
         /// 是否在app中显示
         /// </summary>
         public bool displayinapp { get; set; }
+
+        /// <summary>
+        /// 用户详情二级页面的图片
+        /// </summary>
+        public string detailimage { get; set; }
     }
 }
