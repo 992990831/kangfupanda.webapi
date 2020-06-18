@@ -46,6 +46,16 @@ namespace kangfupanda.webapi.Controllers
             return response;
         }
 
+        [Route("{openId}")]
+        [HttpGet]
+        public User GetUser(string openId)
+        {
+            var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            var user = dao.GetUser(openId);
+
+            return user;
+        }
+
         /// <summary>
         /// 给后台admin portal使用的
         /// </summary>
