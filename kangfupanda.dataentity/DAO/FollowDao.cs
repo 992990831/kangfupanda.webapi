@@ -61,5 +61,32 @@ namespace kangfupanda.dataentity.DAO
 
             return false;
         }
+
+        public List<string> GetFollowersList(string followerOpenId)
+        {
+            List<string> followers = new List<string>();
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("select followee from `follow` where follower=@follower and expiredat is null", conn);
+                    cmd.Parameters.Add(new MySqlParameter("follower", followerOpenId));
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        followers.Add(reader["followee"].ToString());
+                    }
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return followers;
+        }
     }
 }
