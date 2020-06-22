@@ -78,7 +78,6 @@ namespace kangfupanda.dataentity.DAO
                     {
                         followers.Add(reader["followee"].ToString());
                     }
-
                 }
                 finally
                 {

@@ -64,7 +64,7 @@ namespace kangfupanda.webapi.Controllers
             sb.Append(" and g.openid in (''");
             followees.ForEach(followeeOpenId =>
             {
-                sb.Append($",'{followerOpenId}'");
+                sb.Append($",'{followeeOpenId}'");
             });
             sb.Append(")");
             var messages = dao.GetListExt(sb.ToString());
