@@ -9,6 +9,9 @@ namespace kangfupanda.dataentity.Model
         public int itemId { get; set; }
         public string itemType { get; set; }
 
+        //投诉人的手机号
+        public string phone { get; set; }
+
         public string title { get; set; }
 
         public string complain { get; set; }

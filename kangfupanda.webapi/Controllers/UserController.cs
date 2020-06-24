@@ -116,8 +116,20 @@ namespace kangfupanda.webapi.Controllers
 
             ResponseEntity<string> response = new ResponseEntity<string>();
 
-            var responseEntity = new ResponseEntity<string>(true, "删除成功", string.Empty);
+            var responseEntity = new ResponseEntity<string>(true, "更新成功", string.Empty);
             (new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"])).UpdateUser(userDTO);
+
+            return response;
+        }
+
+        [Route("profile")]
+        [HttpPost]
+        public ResponseEntity<string> UpdateUserProfile(User userDTO)
+        {
+            ResponseEntity<string> response = new ResponseEntity<string>();
+
+            var responseEntity = new ResponseEntity<string>(true, "更新成功", string.Empty);
+            (new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"])).UpdateUserProfile(userDTO);
 
             return response;
         }

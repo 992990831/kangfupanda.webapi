@@ -35,6 +35,7 @@ namespace kangfupanda.dataentity.DAO
                         user.headpic = sqlReader["headpic"] == DBNull.Value ? string.Empty : (string)sqlReader["headpic"];
                         user.usertype = sqlReader["usertype"] == DBNull.Value ? string.Empty : (string)sqlReader["usertype"];
                         user.note = sqlReader["note"] == DBNull.Value ? string.Empty : (string)sqlReader["note"];
+                        user.expertise = sqlReader["expertise"] == DBNull.Value ? string.Empty : (string)sqlReader["expertise"];
                         user.verified = sqlReader["verified"] == DBNull.Value ? false : ((ulong)sqlReader["verified"] == 1);
                         user.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
                     }
@@ -103,6 +104,34 @@ namespace kangfupanda.dataentity.DAO
                     cmd.Parameters.Add(new MySqlParameter("note", user.note));
                     cmd.Parameters.Add(new MySqlParameter("usertype", user.usertype));
                     cmd.Parameters.Add(new MySqlParameter("detailimage", user.detailimage));
+
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+        }
+
+        public bool UpdateUserProfile(User user)
+        {
+            if (user == null)
+                return false;
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("update user set city=@city, expertise=@expertise, note=@note, updatedAt=now() where openId=@openId", conn);
+                    cmd.Parameters.Add(new MySqlParameter("openId", user.openId));
+                    cmd.Parameters.Add(new MySqlParameter("city", user.city));
+                    cmd.Parameters.Add(new MySqlParameter("expertise", user.expertise));
+                    cmd.Parameters.Add(new MySqlParameter("note", user.note));
 
                     cmd.ExecuteNonQuery();
 

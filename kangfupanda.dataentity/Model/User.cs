@@ -29,6 +29,11 @@ namespace kangfupanda.dataentity.Model
         public string note { get; set; }
 
         /// <summary>
+        /// 特长
+        /// </summary>
+        public string expertise { get; set; }
+
+        /// <summary>
         /// 是否认证
         /// </summary>
         public bool verified { get; set; }

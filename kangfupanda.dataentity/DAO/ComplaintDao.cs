@@ -22,11 +22,12 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("insert into complaint(itemid, itemtype, title, complain, status, createdAt,updatedAt) " +
-                        "values(@itemid, @itemtype, @title, @complain, @status,now(),now())", conn);
+                    MySqlCommand cmd = new MySqlCommand("insert into complain(itemid, itemtype, title, phone, complain, status, createdAt,updatedAt) " +
+                        "values(@itemid, @itemtype, @title, @phone, @complain, @status,now(),now())", conn);
                     cmd.Parameters.Add(new MySqlParameter("itemid", complaint.itemId));
                     cmd.Parameters.Add(new MySqlParameter("itemtype", complaint.itemType));
                     cmd.Parameters.Add(new MySqlParameter("title", complaint.title));
+                    cmd.Parameters.Add(new MySqlParameter("phone", complaint.phone));
                     cmd.Parameters.Add(new MySqlParameter("complain", complaint.complain));
                     cmd.Parameters.Add(new MySqlParameter("status", 0));
                     cmd.ExecuteNonQuery();
