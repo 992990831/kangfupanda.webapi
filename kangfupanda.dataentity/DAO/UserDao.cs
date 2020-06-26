@@ -129,8 +129,9 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("update user set city=@city, expertise=@expertise, note=@note, updatedAt=now() where openId=@openId", conn);
+                    MySqlCommand cmd = new MySqlCommand("update user set nickName=@nickName, city=@city, expertise=@expertise, note=@note, updatedAt=now() where openId=@openId", conn);
                     cmd.Parameters.Add(new MySqlParameter("openId", user.openId));
+                    cmd.Parameters.Add(new MySqlParameter("nickName", user.nickName));
                     cmd.Parameters.Add(new MySqlParameter("city", user.city));
                     cmd.Parameters.Add(new MySqlParameter("expertise", user.expertise));
                     cmd.Parameters.Add(new MySqlParameter("note", user.note));

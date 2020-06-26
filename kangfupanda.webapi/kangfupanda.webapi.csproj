@@ -265,6 +265,7 @@
     <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\ComplainController.cs" />
     <Compile Include="Controllers\FollowController.cs" />
+    <Compile Include="Controllers\FoundController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LikeController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
@@ -365,6 +366,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Upload\" />
     <Folder Include="Views\Complain\" />
+    <Folder Include="Views\Found\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
