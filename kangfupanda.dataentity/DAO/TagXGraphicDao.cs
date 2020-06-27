@@ -47,7 +47,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand($"select * from tagxgraphic where expiredat is null ", conn);
+                    MySqlCommand cmd = new MySqlCommand($"select * from tagxgraphic where expiredat is null order by createdat asc", conn);
 
                     var sqlReader = cmd.ExecuteReader();
                     while (sqlReader.Read())
