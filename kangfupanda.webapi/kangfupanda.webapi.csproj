@@ -270,6 +270,8 @@
     <Compile Include="Controllers\LikeController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\OfficialSiteController.cs" />
+    <Compile Include="Controllers\TagController.cs" />
+    <Compile Include="Controllers\TagXGraphicController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\VideoController.cs" />
@@ -367,6 +369,7 @@
     <Folder Include="Upload\" />
     <Folder Include="Views\Complain\" />
     <Folder Include="Views\Found\" />
+    <Folder Include="Views\Tag\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
