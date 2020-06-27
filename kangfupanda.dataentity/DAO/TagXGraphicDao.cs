@@ -13,6 +13,26 @@ namespace kangfupanda.dataentity.DAO
 
         }
 
+        public bool DeleteTags(int graphicId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("update tagxgraphic set expiredAt=now() where graphicid=@graphicId", conn);
+                    cmd.Parameters.Add(new MySqlParameter("graphicId", graphicId));
+
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
         public bool AddTagXGraphic(TagXGraphic tag)
         {
             if (tag == null)
@@ -47,7 +67,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand($"select * from tagxgraphic where expiredat is null order by createdat asc", conn);
+                    MySqlCommand cmd = new MySqlCommand($"select * from tagxgraphic where expiredat is null and graphicid={graphicId} order by createdat asc", conn);
 
                     var sqlReader = cmd.ExecuteReader();
                     while (sqlReader.Read())
