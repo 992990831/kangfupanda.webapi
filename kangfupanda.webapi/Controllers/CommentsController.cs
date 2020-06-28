@@ -47,19 +47,25 @@ namespace kangfupanda.webapi.Controllers
 
         [HttpGet]
         [Route("list")]
-        public List<Comments> GetList(int postId, string postType)
+        public List<Comments> GetList(int postId, string postType, string openId="")
         {
             List<Comments> comments = new List<Comments>();
             try
             {
-                comments = new CommentsDao(mysqlConnection).GetList(postId, postType);
+                var dao = new CommentsDao(mysqlConnection);
+                comments.AddRange(dao.GetList(postId, postType));
+
+                if (!string.IsNullOrEmpty(openId))
+                {
+                    comments.AddRange(dao.GetPendingList(postId, postType, openId));
+                }
             }
             catch (Exception ex)
             {
                 logger.Error("获取评论失败", ex);
             }
 
-            return comments;
+            return comments.OrderByDescending(comm => comm.createdAt).ToList();
         }
 
         /// <summary>

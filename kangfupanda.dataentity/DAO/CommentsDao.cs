@@ -74,6 +74,45 @@ namespace kangfupanda.dataentity.DAO
                         com.comment_user_name = sqlReader["comment_user_name"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_name"];
                         com.comment_user_pic = sqlReader["comment_user_pic"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_pic"];
                         com.comment_content = sqlReader["comment_content"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_content"];
+                        com.comment_audit_status = sqlReader["comment_audit_status"] == DBNull.Value ? 0 : (int)sqlReader["comment_audit_status"];
+                        com.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
+                        comList.Add(com);
+                    }
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return comList;
+        }
+
+        public List<Comments> GetPendingList(int postId, string postType, string openId)
+        {
+            List<Comments> comList = new List<Comments>();
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("select * from comments where expiredAt is null and comment_audit_status=0 and comment_post_id=@comment_post_id and comment_post_type=@comment_post_type and comment_user_id=@openId", conn);
+                    cmd.Parameters.Add(new MySqlParameter("comment_post_id", postId));
+                    cmd.Parameters.Add(new MySqlParameter("comment_post_type", postType));
+                    cmd.Parameters.Add(new MySqlParameter("openId", openId));
+
+                    var sqlReader = cmd.ExecuteReader();
+                    while (sqlReader.Read())
+                    {
+                        Comments com = new Comments();
+                        com.comment_id = (int)sqlReader["comment_id"];
+                        com.comment_post_id = sqlReader["comment_post_id"] == DBNull.Value ? 0 : (int)sqlReader["comment_post_id"];
+                        com.comment_post_type = sqlReader["comment_post_type"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_post_type"];
+                        com.comment_user_id = sqlReader["comment_user_id"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_id"];
+                        com.comment_user_name = sqlReader["comment_user_name"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_name"];
+                        com.comment_user_pic = sqlReader["comment_user_pic"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_pic"];
+                        com.comment_content = sqlReader["comment_content"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_content"];
+                        com.comment_audit_status = sqlReader["comment_audit_status"] == DBNull.Value ? 0 : (int)sqlReader["comment_audit_status"];
                         com.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
                         comList.Add(com);
                     }
