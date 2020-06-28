@@ -24,7 +24,7 @@ namespace kangfupanda.webapi.Controllers
         }
 
         [Route("add")]
-        public ResponseEntity<string> AddGraphicMessage(GraphicMessage msg)
+        public ResponseEntity<long> AddGraphicMessage(GraphicMessage msg)
         {
             //msg.pic01 = string.IsNullOrEmpty(msg.pic01) ? string.Empty : ConfigurationManager.AppSettings["UploadUrl"] + msg.pic01;
             //msg.pic02 = string.IsNullOrEmpty(msg.pic02) ? string.Empty : ConfigurationManager.AppSettings["UploadUrl"] + msg.pic02;
@@ -33,27 +33,29 @@ namespace kangfupanda.webapi.Controllers
             //msg.pic05 = string.IsNullOrEmpty(msg.pic05) ? string.Empty : ConfigurationManager.AppSettings["UploadUrl"] + msg.pic05;
             //msg.pic06 = string.IsNullOrEmpty(msg.pic06) ? string.Empty : ConfigurationManager.AppSettings["UploadUrl"] + msg.pic06;
 
-            ResponseEntity<string> response = new ResponseEntity<string>();
+            ResponseEntity<long> response = new ResponseEntity<long>();
 
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
             bool success = true;
+            long id = 0; 
             if (msg.id > 0)
             {
                 dao.UpdateGraphicMessage(msg);
+                id = msg.id;
             }
             else
             {
-                dao.AddGraphicMessage(msg);
+                id=  (long)dao.AddGraphicMessage(msg);
             }
             
 
             if (success)
             {
-                response = new ResponseEntity<string>(true, "添加图文成功", "添加图文成功");
+                response = new ResponseEntity<long>(true, "添加图文成功", id);
             }
             else
             {
-                response = new ResponseEntity<string>(true, "添加图文失败", "添加图文失败");
+                response = new ResponseEntity<long>(true, "添加图文失败", id);
             }
 
             return response;

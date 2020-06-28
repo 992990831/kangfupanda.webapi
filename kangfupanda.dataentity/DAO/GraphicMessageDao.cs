@@ -12,17 +12,17 @@ namespace kangfupanda.dataentity.DAO
         {            
         }
 
-        public bool AddGraphicMessage(GraphicMessage msg)
+        public ulong AddGraphicMessage(GraphicMessage msg)
         {
             if (msg == null)
-                return false;
+                return 0;
 
             using (MySqlConnection conn = new MySqlConnection(connStr))
             {
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("insert into graphicmessage(name, text, pic01, pic02, pic03, pic04, pic05, pic06, audio01, audio02, audio03, openid, author, createdAt, updatedAt) values(@name, @text, @pic01, @pic02, @pic03, @pic04, @pic05, @pic06, @audio01, @audio02, @audio03, @openid, @author, now(), now())", conn);
+                    MySqlCommand cmd = new MySqlCommand("insert into graphicmessage(name, text, pic01, pic02, pic03, pic04, pic05, pic06, audio01, audio02, audio03, openid, author, createdAt, updatedAt) values(@name, @text, @pic01, @pic02, @pic03, @pic04, @pic05, @pic06, @audio01, @audio02, @audio03, @openid, @author, now(), now()); select @@identity;", conn);
                     cmd.Parameters.Add(new MySqlParameter("name", msg.name));
                     cmd.Parameters.Add(new MySqlParameter("text", msg.text));
                     cmd.Parameters.Add(new MySqlParameter("pic01", msg.pic01));
@@ -37,9 +37,9 @@ namespace kangfupanda.dataentity.DAO
                     cmd.Parameters.Add(new MySqlParameter("openid", msg.openId));
                     cmd.Parameters.Add(new MySqlParameter("author", msg.author));
 
-                    cmd.ExecuteNonQuery();
+                    ulong id = (ulong)cmd.ExecuteScalar();
 
-                    return true;
+                    return id;
                 }
                 finally
                 {
