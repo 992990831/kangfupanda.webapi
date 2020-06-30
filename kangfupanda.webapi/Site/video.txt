@@ -1,1 +1,1 @@
-{"author01":"Andy","author02":null,"author03":null,"author04":null,"text01":"<p><strong>12</strong>3456</p>","text02":null,"text03":null,"text04":null,"video01":"","video02":"","video03":"","video04":""}
+{"author01":"Andy","author02":null,"author03":null,"author04":null,"text01":"<p><strong>12</strong>3456</p>","text02":null,"text03":null,"text04":null,"poster01":"20200630210232784brands.png","poster02":null,"poster03":null,"poster04":null,"video01":"20200630210237317putclub.mp3","video02":"","video03":"","video04":""}

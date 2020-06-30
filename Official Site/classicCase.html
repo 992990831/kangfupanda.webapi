@@ -90,9 +90,9 @@
 							<li class=" menu-item menu-item-type-post_type menu-item-object-page bit-menu-post-id-7388 menu-item-6632">
 								<a href="doctor.html"><span>合作专家<i class="underline"></i></span></a>
 							</li>
-							<li class=" menu-item menu-item-type-post_type menu-item-object-page bit-menu-post-id-7388 menu-item-6632">
+							<!-- <li class=" menu-item menu-item-type-post_type menu-item-object-page bit-menu-post-id-7388 menu-item-6632">
 								<a href="newCenter.html"><span>资讯中心<i class="underline"></i></span></a>
-							</li>
+							</li> -->
 							<li class=" menu-item menu-item-type-post_type menu-item-object-page bit-menu-post-id-6633 menu-item-6634">
 								<a href="contact.html"><span>联系我们<i class="underline"></i></span></a>
 							</li>
@@ -468,77 +468,49 @@
 
 	</div><!-- #page -->
 
-	<div class="bg_mask">
-		<div class="post-thumb blog-media wf-td" style="overflow:hidden;display:block;width: 100%;text-align: center;vertical-align:middle;">
-			<!--<video controls src="${video}"></video>-->		
-			<div style="padding-bottom: 5%; padding-right: 5%; padding-left: 95%">
-				<img class="closevideo" onclick="videoClose(this);" />
-			</div>
-		</div>
-	</div>
+	<script src="js/common.js?v=1.0.4"></script>
+	<script>
 
-		<script src="js/common.js?v=1.0.5"></script>
-		<script>
-			function posterImageClick(sender) {
-				var html = '<video controls src="${video}"></video>';
-				var src = $(sender).attr("data");
-				html = html.replace('${video}', src);
-                $(".bg_mask div.post-thumb").append(html);      
-				$(".bg_mask").show();
-				//$(".bg_mask video").play();
+		$(function () {
+			function render(obj) {
+				var html = '<li data-postid="7561" data-animaleinbegin="90%" data-animalename="qfyfadeInUp" data-delay="0.2" data-duration="" class="isotope-item qfy_item_post vc_span4 vc_span_mobile vc_span_mobile12 grid-cat-1 " style="max-width:50%;margin-bottom:0px;padding-bottom:0px;padding:20px;">' +
+					'	<div class="itembody  itempcbody " style="border-top:1px solid rgba(214,214,214,1);border-bottom:1px solid rgba(214,214,214,1);border-left:1px solid rgba(214,214,214,1);border-right:1px solid rgba(214,214,214,1);background-color:#f4f4f4;">' +
+					'		<div class="post-thumb blog-media wf-td" style="overflow:hidden;display:block;width: 100%;text-align: center;padding-bottom:10px;vertical-align:middle;background:url(${poster})  no-repeat;background-size:100% auto;height:230px">' +
+					'			<i></i></div>' +
+					'			<audio controls controlsList="nodownload" src="${audio}" style="margin-top:5px"></audio>' +
+					'		<div class="post-title" style="padding-top:15px;padding-left:20px;padding-right:20px;font-weight:normal;color:#494949;line-height:16px; vertical-align: top; text-align:left;width:100%; ">' +
+					'		<a data-title="true" style="color:#494949;font-size:16px;line-height:22px" href="javascript:void(0)">${text}</a>' +
+					'		</div>' +
+					'		<div class="entry-content post_excerpt" style="color:#7c7c7c;font-size:13px;line-height:24px;padding-top:10px;padding-bottom:10px;padding-left:20px;padding-right:30px;">' +
+					'			<p>${author}</p><br>' +
+					'		</div>' +
+					'		<span style="clear:both"></span>' +
+					'	</div>' +
+					'</li>';
+
+				return html.replace('${poster}', 'https://api.kangfupanda.com/site/' + obj.poster).replace('${audio}', 'https://api.kangfupanda.com/site/' + obj.video).replace('${author}', obj.author).replace('${text}', obj.text)
 			}
 
-            function videoClose(sender) {
-                var bgmask = $(sender).parent().parent().parent();
-				$(bgmask).hide();
-				$(bgmask).find("video").remove();
-            }
-
-			$(function () {
-
-
-				function render(obj) {
-					var html = '<li data-postid="7561" data-animaleinbegin="90%" data-animalename="qfyfadeInUp" data-delay="0.2" data-duration="" class="isotope-item qfy_item_post vc_span4 vc_span_mobile vc_span_mobile12 grid-cat-1 " style="max-width:50%;margin-bottom:0px;padding-bottom:0px;padding:20px;">' +
-						'	<div class="itembody  itempcbody " style="border-top:1px solid rgba(214,214,214,1);border-bottom:1px solid rgba(214,214,214,1);border-left:1px solid rgba(214,214,214,1);border-right:1px solid rgba(214,214,214,1);background-color:#f4f4f4;">' +
-						'		<div class="post-thumb blog-media wf-td" style="overflow:hidden;display:block;width: 100%;text-align: center;padding-bottom:10px;vertical-align:middle;">' +
-						//'			<video controls src="${video}"></video>' +
-						'			<div><img src="${posterImage}" class="classicCaseImg" data="${video}" onclick="posterImageClick(this);"></img></div>' +
-						'			<i class="video"></i>	' +
-						'		</div>' +
-						'		<div class="post-title" style="padding-top:15px;padding-left:20px;padding-right:20px;font-weight:normal;color:#494949;line-height:16px; vertical-align: top; text-align:left;width:100%; ">' +
-						'			<a data-title="true" style="color:#494949;font-size:16px;line-height:22px" href="javascript:void(0)">${text}</a>' +
-						'		</div>' +
-						'		<div class="entry-content post_excerpt" style="color:#7c7c7c;font-size:13px;line-height:24px;padding-top:10px;padding-bottom:10px;padding-left:20px;padding-right:30px;">' +
-						'			<p>${author}</p><br>' +
-						'		</div>' +
-						'		<span style="clear:both"></span>' +
-						'	</div>' +
-						'</li>';
-
-					return html.replace('${posterImage}', 'https://api.kangfupanda.com/site/' + obj.posterImage).replace('${author}', obj.author).replace('${text}', obj.text).replace('${video}', 'https://api.kangfupanda.com/site/' + obj.video)
+			$.get('https://api.kangfupanda.com/' + '/site/list/video', function (data) {
+			var maxNum = 10;
+			var _temp = ''
+			for (var i = 0; i < maxNum; i++) {
+				if (data['video0' + i]) {
+					_temp += render({
+						video: data['video0' + i],
+						author: data['author0' + i],
+						text: data['text0' + i],
+						poster: data['poster0'+i]
+					})
 				}
-
-				$.get('https://api.kangfupanda.com' + '/site/list/video', function (data) {
-					var maxNum = 10;
-					var _temp = ''
-					for (var i = 0; i < maxNum; i++) {
-						if (data['video0' + i]) {
-							_temp += render({
-								video: data['video0' + i],
-								author: data['author0' + i],
-								text: data['text0' + i],
-								posterImage: data['poster0' + i]
-							})
-						}
-					}
-					$("#video-list").append(_temp)
-					console.log(_temp)
-				})
-
-
+			}
+				$("#video-list").append(_temp)
+				console.log(_temp)
 			})
-		</script>
-		<link rel="stylesheet" href="css/index2.css" type="text/css" media="all" /> <!-- Cache! -->
+		})
+	</script>
+	<link rel="stylesheet" href="css/index2.css" type="text/css" media="all" /> <!-- Cache! -->
+	
 </body>
 
 </html>

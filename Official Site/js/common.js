@@ -218,8 +218,7 @@ var $footer = `<footer id="footer" class="footer">
                                                 <div style="line-height: 24px;"><span
                                                         style="font-size: 14px; color: rgb(255, 255, 255);">&nbsp;</span><span
                                                         style="font-size: 13px; color: rgb(255, 255, 255);">关于我们 &nbsp; | &nbsp; 研习社 &nbsp; |
-                                                        &nbsp; 经典案例 &nbsp; | &nbsp; 合作专家 &nbsp; | &nbsp;
-                                                        资讯中心 &nbsp; | &nbsp; 联系我们</span></div>
+                                                        &nbsp; 经典案例 &nbsp; | &nbsp; 合作专家 &nbsp; | &nbsp; 联系我们</span></div>
                                                 <div style="line-height: 24px;"><br></div>
                                                 <div style="line-height: 26px; letter-spacing: inherit;">
                                                     <span
