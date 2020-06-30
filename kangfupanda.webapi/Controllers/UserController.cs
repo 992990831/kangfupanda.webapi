@@ -60,6 +60,19 @@ namespace kangfupanda.webapi.Controllers
         /// 给后台admin portal使用的
         /// </summary>
         /// <returns></returns>
+        [Route("list")]
+        public List<User> GetUsersList()
+        {
+            var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            var users = dao.GetList();
+
+            return users;
+        }
+
+        /// <summary>
+        /// 给后台admin portal使用的
+        /// </summary>
+        /// <returns></returns>
         [Route("admin/list/doctor")]
         public List<User> GetAdminDoctorList() {
             var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
