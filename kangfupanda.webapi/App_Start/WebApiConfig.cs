@@ -1,4 +1,5 @@
 ﻿using kangfupanda.webapi.Filter;
+using kangfupanda.webapi.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,9 @@ namespace kangfupanda.webapi
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+
+            GlobalConfiguration.Configuration.MessageHandlers.Add(new WebAPIHandler());
         }
     }
 }
