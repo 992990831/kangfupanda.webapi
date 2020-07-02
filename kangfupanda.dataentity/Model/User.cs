@@ -48,4 +48,10 @@ namespace kangfupanda.dataentity.Model
         /// </summary>
         public string detailimage { get; set; }
     }
+
+    public class UserExt : User {
+        public string lastVisitedAt { get; set; }
+
+        public long visitCountLastWeek { get; set; }
+    }
 }

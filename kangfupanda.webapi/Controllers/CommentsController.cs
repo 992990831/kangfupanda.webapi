@@ -103,6 +103,26 @@ namespace kangfupanda.webapi.Controllers
         }
 
         [HttpGet]
+        [Route("audit/pending/count")]
+        public Int64 GetPendingAuditCount()
+        {
+            try
+            {
+                var dao = new CommentsDao(mysqlConnection);
+
+                Int64 count = dao.GetAuditListCount(0);
+                return count;
+            }
+            catch (Exception ex)
+            {
+                logger.Error("获取评论失败", ex);
+            }
+
+            return 0;
+        }
+
+
+        [HttpGet]
         [Route("audit/list/approved")]
         public List<Comments> GetApprovedAuditList()
         {

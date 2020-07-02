@@ -40,6 +40,37 @@ namespace kangfupanda.dataentity.DAO
             }
         }
 
+        public VisitLog GetByOpenId(string openId)
+        {
+            VisitLog log = new VisitLog();
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    var weekAgo = DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd");
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand($"SELECT openid, nickname, max(createdat) as lastVisitedAt, count(1) as count"
+                    + " FROM demo.apilog"
+                    + $" where createdat > '{weekAgo}' and openid='{openId}'", conn);
+
+                    var sqlReader = cmd.ExecuteReader();
+                    if (sqlReader.Read())
+                    {
+                        log.openId = sqlReader["openid"] == DBNull.Value ? string.Empty : (string)sqlReader["openid"];
+                        log.nickName = sqlReader["nickname"] == DBNull.Value ? string.Empty : (string)sqlReader["nickname"];
+                        log.lastVisitedAt = sqlReader["lastVisitedAt"] == DBNull.Value ? string.Empty : ((DateTime)sqlReader["lastVisitedAt"]).ToString("yyyy-MM-dd HH:mm:ss");
+                        log.visitCountLastWeek = sqlReader["count"] == DBNull.Value ? 0 : (long)sqlReader["count"];
+                    }
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return log;
+        }
+
         public List<VisitLog> GetList(int pageIndex = 1, int pageSize = 10)
         {
             List<VisitLog> logs = new List<VisitLog>();
@@ -78,7 +109,6 @@ namespace kangfupanda.dataentity.DAO
 
         public Int64 GetListCount()
         {
-            List<VisitLog> logs = new List<VisitLog>();
             using (MySqlConnection conn = new MySqlConnection(connStr))
             {
                 try

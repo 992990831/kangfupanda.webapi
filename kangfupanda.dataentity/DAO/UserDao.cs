@@ -148,21 +148,23 @@ namespace kangfupanda.dataentity.DAO
 
         }
 
-        public List<User> GetList() {
-            var users = GetList(string.Empty);
+        public List<User> GetList(int pageIndex = 1, int pageSize = 10) {
+            var users = GetList(pageIndex, pageSize, string.Empty);
 
             return users;
         }
 
-        public List<User> GetList(string filter)
+        public List<User> GetList(int pageIndex = 1, int pageSize = 10, string filter="" )
         {
             List<User> users = new List<User>();
             using (MySqlConnection conn = new MySqlConnection(connStr))
             {
                 try
                 {
+                    int skip = (pageIndex - 1) * pageSize;
+
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand($"select * from user where expiredat is null {filter}", conn);
+                    MySqlCommand cmd = new MySqlCommand($"select * from user where expiredat is null {filter} limit {skip},{pageSize}", conn);
 
                     var sqlReader = cmd.ExecuteReader();
                     while (sqlReader.Read())
@@ -194,6 +196,26 @@ namespace kangfupanda.dataentity.DAO
             }
 
             return users;
+        }
+
+        public Int64 GetListCount(string filter="")
+        {
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    var weekAgo = DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd");
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand($"select count(1) from user where expiredat is null { filter }", conn);
+
+                    var count = (Int64)cmd.ExecuteScalar();
+                    return count;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
         }
 
         public bool DeleteById(string openId)

@@ -57,14 +57,14 @@ namespace kangfupanda.webapi.Controllers
         }
 
         /// <summary>
-        /// 给后台admin portal使用的
+        /// 后台的用户下拉列表数据源
         /// </summary>
         /// <returns></returns>
         [Route("list")]
         public List<User> GetUsersList()
         {
             var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var users = dao.GetList();
+            var users = dao.GetList(1, int.MaxValue);
 
             return users;
         }
@@ -74,11 +74,44 @@ namespace kangfupanda.webapi.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("admin/list/doctor")]
-        public List<User> GetAdminDoctorList() {
+        public UserList GetAdminDoctorList(int pageIndex = 1, int pageSize = 10) {
             var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var users = dao.GetList("and (usertype is null or usertype!='普通用户')");
+            var users = dao.GetList(pageIndex, pageSize, "and (usertype is null or usertype!='普通用户')");
+            var count = dao.GetListCount("and (usertype is null or usertype!='普通用户')");
 
-            return users;
+            var usersExt = new List<UserExt>();
+            var apiLogDao = new ApiLogDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            users.ForEach(user =>
+            {
+                if (!string.IsNullOrEmpty(user.openId))
+                {
+                    var log = apiLogDao.GetByOpenId(user.openId);
+                    UserExt userExt = new UserExt();
+                    userExt.id = user.id;
+                    userExt.openId = user.openId;
+                    userExt.nickName = user.nickName;
+                    userExt.province = user.province;
+                    userExt.city = user.city;
+                    userExt.phone = user.phone;
+                    userExt.sex = user.sex;
+                    userExt.headpic = user.headpic;
+                    userExt.usertype = user.usertype;
+                    userExt.note = user.note;
+                    userExt.expertise = user.expertise;
+                    userExt.verified = user.verified;
+                    userExt.displayinapp = user.displayinapp;
+                    userExt.detailimage = user.detailimage;
+                    userExt.createdAt = user.createdAt;
+
+                    userExt.lastVisitedAt = log.lastVisitedAt;
+                    userExt.visitCountLastWeek = log.visitCountLastWeek;
+
+                    usersExt.Add(userExt);
+                }
+                
+            });
+
+            return new UserList() { list= usersExt, count=count };
         }
 
         /// <summary>
@@ -86,12 +119,45 @@ namespace kangfupanda.webapi.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("admin/list/user")]
-        public List<User> GetAdminUserList()
+        public UserList GetAdminUserList(int pageIndex = 1, int pageSize = 10)
         {
             var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var users = dao.GetList("and usertype='普通用户'");
+            var users = dao.GetList(pageIndex, pageSize, "and usertype='普通用户'");
+            var count = dao.GetListCount("and usertype='普通用户'");
 
-            return users;
+            var usersExt = new List<UserExt>();
+            var apiLogDao = new ApiLogDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            users.ForEach(user =>
+            {
+                if (!string.IsNullOrEmpty(user.openId))
+                {
+                    var log = apiLogDao.GetByOpenId(user.openId);
+                    UserExt userExt = new UserExt();
+                    userExt.id = user.id;
+                    userExt.openId = user.openId;
+                    userExt.nickName = user.nickName;
+                    userExt.province = user.province;
+                    userExt.city = user.city;
+                    userExt.phone = user.phone;
+                    userExt.sex = user.sex;
+                    userExt.headpic = user.headpic;
+                    userExt.usertype = user.usertype;
+                    userExt.note = user.note;
+                    userExt.expertise = user.expertise;
+                    userExt.verified = user.verified;
+                    userExt.displayinapp = user.displayinapp;
+                    userExt.detailimage = user.detailimage;
+                    userExt.createdAt = user.createdAt;
+
+                    userExt.lastVisitedAt = log.lastVisitedAt;
+                    userExt.visitCountLastWeek = log.visitCountLastWeek;
+
+                    usersExt.Add(userExt);
+                }
+
+            });
+
+            return new UserList() { list = usersExt, count = count };
         }
 
 
@@ -103,7 +169,7 @@ namespace kangfupanda.webapi.Controllers
         public List<User> GetDoctorList()
         {
             var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var users = dao.GetList(" and displayinapp=1");
+            var users = dao.GetList(1, int.MaxValue, " and displayinapp=1");
 
             return users;
         }
@@ -210,5 +276,11 @@ namespace kangfupanda.webapi.Controllers
 
             return response;
         }
+    }
+
+    public class UserList
+    {
+        public List<UserExt> list { get; set; }
+        public Int64 count { get; set; }
     }
 }
