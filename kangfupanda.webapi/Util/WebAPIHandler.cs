@@ -13,6 +13,8 @@ namespace kangfupanda.webapi.Util
 {
     public class WebAPIHandler : DelegatingHandler
     {
+        static readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(WebAPIHandler));
+
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             try
@@ -35,8 +37,8 @@ namespace kangfupanda.webapi.Util
                 var dao = new ApiLogDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
                 dao.Add(log);
             }
-            catch { 
-            
+            catch (Exception ex){
+                logger.Error(ex.Message);
             }
             
 
