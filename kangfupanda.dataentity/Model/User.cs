@@ -49,6 +49,24 @@ namespace kangfupanda.dataentity.Model
         public string detailimage { get; set; }
     }
 
+    public class UserProfile : User { 
+        
+        /// <summary>
+        /// 粉丝数
+        /// </summary>
+        public Int64 fansCount { get; set; }
+
+        /// <summary>
+        /// 关注数
+        /// </summary>
+        public Int64 followerCount { get; set; }
+
+        /// <summary>
+        /// 获赞数
+        /// </summary>
+        public Int64 likeCount { get; set; }
+    }
+
     public class UserExt : User {
         public string lastVisitedAt { get; set; }
 

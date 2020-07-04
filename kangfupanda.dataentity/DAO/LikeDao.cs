@@ -133,5 +133,46 @@ namespace kangfupanda.dataentity.DAO
 
             return count;
         }
+
+        public Int64 GetLikeCount(string openId)
+        {
+            Int64 count = 0;
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand($"select count(1) from `like` as l left join `graphicmessage` as g on l.itemType='graphic' and itemid=g.id "
+                    +" where l.expiredAt is null and g.expiredAt is null and g.openId = @openId; ", conn);
+                    cmd.Parameters.Add(new MySqlParameter("openId", openId));
+
+                    var graphicLikeCount = (Int64)cmd.ExecuteScalar();
+
+                    count += graphicLikeCount;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand($"select count(1) from `like` as l left join `video` as v on l.itemType='video' and itemid=v.id "
+                    + " where l.expiredAt is null and v.expiredAt is null and v.openId = @openId; ", conn);
+                    cmd.Parameters.Add(new MySqlParameter("openId", openId));
+
+                    var videoLikeCount = (Int64)cmd.ExecuteScalar();
+
+                    count += videoLikeCount;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return count;
+        }
     }
 }

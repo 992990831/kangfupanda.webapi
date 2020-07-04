@@ -57,7 +57,7 @@ namespace kangfupanda.webapi.Controllers
             List<ClubItem> results = new List<ClubItem>();
 
             var followDao = new FollowDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var followees = followDao.GetFollowersList(followerOpenId);
+            var followees = followDao.GetFolloweesList(followerOpenId);
 
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
             StringBuilder sb = new StringBuilder();

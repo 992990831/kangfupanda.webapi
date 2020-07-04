@@ -1,6 +1,7 @@
 ﻿using kangfupanda.dataentity.DAO;
 using kangfupanda.dataentity.Model;
 using kangfupanda.webapi.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -48,12 +49,21 @@ namespace kangfupanda.webapi.Controllers
 
         [Route("{openId}")]
         [HttpGet]
-        public User GetUser(string openId)
+        public UserProfile GetUser(string openId)
         {
             var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
             var user = dao.GetUser(openId);
+            var userProfile = new UserProfile();
 
-            return user;
+            userProfile = JsonConvert.DeserializeObject<UserProfile>(JsonConvert.SerializeObject(user));
+
+            var likeDao = new LikeDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            var followDao = new FollowDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+
+            userProfile.likeCount = likeDao.GetLikeCount(openId);
+            userProfile.followerCount = followDao.GetFollowerCount(openId);
+
+            return userProfile;
         }
 
         /// <summary>
