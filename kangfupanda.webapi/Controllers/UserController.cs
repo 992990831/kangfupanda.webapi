@@ -61,7 +61,8 @@ namespace kangfupanda.webapi.Controllers
             var followDao = new FollowDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
 
             userProfile.likeCount = likeDao.GetLikeCount(openId);
-            userProfile.followerCount = followDao.GetFollowerCount(openId);
+            userProfile.fansCount = followDao.GetFollowerCount(openId);
+            userProfile.followeeCount = followDao.GetFolloweeCount(openId);
 
             return userProfile;
         }

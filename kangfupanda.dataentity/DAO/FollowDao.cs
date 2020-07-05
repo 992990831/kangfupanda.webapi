@@ -95,7 +95,7 @@ namespace kangfupanda.dataentity.DAO
         }
 
         /// <summary>
-        /// 获取关注数
+        /// 获取粉丝数 (关注我的人)
         /// </summary>
         /// <param name="followeeOpenId"></param>
         /// <returns></returns>
@@ -109,6 +109,34 @@ namespace kangfupanda.dataentity.DAO
                     conn.Open();
                     MySqlCommand cmd = new MySqlCommand($"select count(1) from `follow` where expiredat is null and followee=@followeeOpenId", conn);
                     cmd.Parameters.Add(new MySqlParameter("followeeOpenId", followeeOpenId));
+
+                    var result = cmd.ExecuteScalar();
+                    count = (Int64)result;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return count;
+        }
+
+        /// <summary>
+        /// 获取关注数 (我关注的人)
+        /// </summary>
+        /// <param name="followerOpenId"></param>
+        /// <returns></returns>
+        public Int64 GetFolloweeCount(string followerOpenId)
+        {
+            Int64 count = 0;
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand($"select count(1) from `follow` where expiredat is null and follower=@followerOpenId", conn);
+                    cmd.Parameters.Add(new MySqlParameter("followerOpenId", followerOpenId));
 
                     var result = cmd.ExecuteScalar();
                     count = (Int64)result;

@@ -59,7 +59,7 @@ namespace kangfupanda.dataentity.Model
         /// <summary>
         /// 关注数
         /// </summary>
-        public Int64 followerCount { get; set; }
+        public Int64 followeeCount { get; set; }
 
         /// <summary>
         /// 获赞数
