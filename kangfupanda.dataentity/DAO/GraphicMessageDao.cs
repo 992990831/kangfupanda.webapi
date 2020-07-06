@@ -22,9 +22,10 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("insert into graphicmessage(name, text, pic01, pic02, pic03, pic04, pic05, pic06, audio01, audio02, audio03, openid, author, createdAt, updatedAt) values(@name, @text, @pic01, @pic02, @pic03, @pic04, @pic05, @pic06, @audio01, @audio02, @audio03, @openid, @author, now(), now()); select @@identity;", conn);
+                    MySqlCommand cmd = new MySqlCommand("insert into graphicmessage(name, text, poster, pic01, pic02, pic03, pic04, pic05, pic06, audio01, audio02, audio03, openid, author, createdAt, updatedAt) values(@name, @text, @poster, @pic01, @pic02, @pic03, @pic04, @pic05, @pic06, @audio01, @audio02, @audio03, @openid, @author, now(), now()); select @@identity;", conn);
                     cmd.Parameters.Add(new MySqlParameter("name", msg.name));
                     cmd.Parameters.Add(new MySqlParameter("text", msg.text));
+                    cmd.Parameters.Add(new MySqlParameter("poster", msg.poster));
                     cmd.Parameters.Add(new MySqlParameter("pic01", msg.pic01));
                     cmd.Parameters.Add(new MySqlParameter("pic02", msg.pic02));
                     cmd.Parameters.Add(new MySqlParameter("pic03", msg.pic03));
@@ -59,10 +60,11 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("update graphicmessage set name=@name, text=@text, pic01=@pic01, pic02=@pic02, pic03=@pic03, pic04=@pic04, pic05=@pic05, pic06=@pic06, audio01=@audio01, audio02=@audio02, audio03=@audio03, openid=@openid, author=@author, updatedAt=now() where id=@id", conn);
+                    MySqlCommand cmd = new MySqlCommand("update graphicmessage set name=@name, text=@text, poster=@poster, pic01=@pic01, pic02=@pic02, pic03=@pic03, pic04=@pic04, pic05=@pic05, pic06=@pic06, audio01=@audio01, audio02=@audio02, audio03=@audio03, openid=@openid, author=@author, updatedAt=now() where id=@id", conn);
                     cmd.Parameters.Add(new MySqlParameter("id", msg.id));
                     cmd.Parameters.Add(new MySqlParameter("name", msg.name));
                     cmd.Parameters.Add(new MySqlParameter("text", msg.text));
+                    cmd.Parameters.Add(new MySqlParameter("poster", msg.poster));
                     cmd.Parameters.Add(new MySqlParameter("pic01", msg.pic01));
                     cmd.Parameters.Add(new MySqlParameter("pic02", msg.pic02));
                     cmd.Parameters.Add(new MySqlParameter("pic03", msg.pic03));
@@ -124,6 +126,7 @@ namespace kangfupanda.dataentity.DAO
                         msg.id = (int)sqlReader["id"];
                         msg.name = sqlReader["name"] == DBNull.Value ? string.Empty : (string)sqlReader["name"];
                         msg.text = sqlReader["text"] == DBNull.Value ? string.Empty : (string)sqlReader["text"];
+                        msg.poster = sqlReader["poster"] == DBNull.Value ? string.Empty : (string)sqlReader["poster"];
                         msg.pic01 = sqlReader["pic01"] == DBNull.Value ? string.Empty : (string)sqlReader["pic01"];
                         msg.pic02 = sqlReader["pic02"] == DBNull.Value ? string.Empty : (string)sqlReader["pic02"];
                         msg.pic03 = sqlReader["pic03"] == DBNull.Value ? string.Empty : (string)sqlReader["pic03"];
@@ -165,6 +168,7 @@ namespace kangfupanda.dataentity.DAO
                         msg.id = (int)sqlReader["id"];
                         msg.name = sqlReader["name"] == DBNull.Value ? string.Empty : (string)sqlReader["name"];
                         msg.text = sqlReader["text"] == DBNull.Value ? string.Empty : (string)sqlReader["text"];
+                        msg.poster = sqlReader["poster"] == DBNull.Value ? string.Empty : (string)sqlReader["poster"];
                         msg.pic01 = sqlReader["pic01"] == DBNull.Value ? string.Empty : (string)sqlReader["pic01"];
                         msg.pic02 = sqlReader["pic02"] == DBNull.Value ? string.Empty : (string)sqlReader["pic02"];
                         msg.pic03 = sqlReader["pic03"] == DBNull.Value ? string.Empty : (string)sqlReader["pic03"];

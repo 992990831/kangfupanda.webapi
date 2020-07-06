@@ -101,7 +101,7 @@ namespace kangfupanda.webapi.Controllers
                         author = msg.author,
                         authorHeadPic = msg.authorHeadPic,
                         name = msg.name,
-                        posterUri = msg.pic01,
+                        posterUri = !string.IsNullOrEmpty(msg.poster)? msg.poster : msg.pic01,
                         pics = pics,
                         audioes = audioes,
                         itemType = ClubItemType.Graphic,

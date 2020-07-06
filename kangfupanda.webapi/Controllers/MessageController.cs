@@ -1,12 +1,16 @@
 ﻿using kangfupanda.dataentity.DAO;
 using kangfupanda.dataentity.Model;
+using kangfupanda.webapi.Common;
 using kangfupanda.webapi.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Web.Http;
 
 namespace kangfupanda.webapi.Controllers
@@ -14,11 +18,26 @@ namespace kangfupanda.webapi.Controllers
     [RoutePrefix("message")]
     public class MessageController : ApiController
     {
+        static readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(MessageController));
+
+        /// <summary>
+        /// 后台管理网站使用
+        /// </summary>
+        /// <returns></returns>
         [Route("list")]
-        public List<GraphicMessage> GetUserList()
+        public List<GraphicMessage> GetMessageList()
         {
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
             var messages = dao.GetList();
+
+            messages.ForEach(msg =>
+            {
+                if (!string.IsNullOrEmpty(msg.poster))
+                {
+                    Bitmap bitmap = new Bitmap(ConfigurationManager.AppSettings["UploadFolderPath"] + msg.poster);
+                    msg.poster = Utils.ConvertBitmap2Base64(bitmap);
+                }
+            });
 
             return messages;
         }
@@ -32,6 +51,24 @@ namespace kangfupanda.webapi.Controllers
             //msg.pic04 = string.IsNullOrEmpty(msg.pic04) ? string.Empty : ConfigurationManager.AppSettings["UploadUrl"] + msg.pic04;
             //msg.pic05 = string.IsNullOrEmpty(msg.pic05) ? string.Empty : ConfigurationManager.AppSettings["UploadUrl"] + msg.pic05;
             //msg.pic06 = string.IsNullOrEmpty(msg.pic06) ? string.Empty : ConfigurationManager.AppSettings["UploadUrl"] + msg.pic06;
+
+            if (!string.IsNullOrEmpty(msg.poster) && msg.poster.IndexOf("base64,") > -1)
+            {
+                try
+                {
+                    var img = Utils.GetImageFromBase64(msg.poster.Substring(msg.poster.IndexOf("base64,")+7));
+                    string fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".jpg";
+                    string fullPath = ConfigurationManager.AppSettings["UploadFolderPath"] + fileName;
+                    img.Save(fullPath);
+
+                    msg.poster = fileName;
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.Message);
+                }
+            }
+            
 
             ResponseEntity<long> response = new ResponseEntity<long>();
 

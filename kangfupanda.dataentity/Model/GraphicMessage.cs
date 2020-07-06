@@ -8,6 +8,12 @@ namespace kangfupanda.dataentity.Model
     {
         public string name { get; set; }
         public string text { get; set; }
+
+        /// <summary>
+        /// 封面照
+        /// </summary>
+        public string poster { get; set; }
+
         public string pic01 { get; set; }
         public string pic02 { get; set; }
         public string pic03 { get; set; }
