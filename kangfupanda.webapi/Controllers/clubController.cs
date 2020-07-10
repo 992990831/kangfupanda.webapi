@@ -19,7 +19,7 @@ namespace kangfupanda.webapi.Controllers
     public class ClubController : ApiController
     {
         [Route("list")]
-        public List<ClubItem> GetClubList(string openId)
+        public List<ClubItem> GetClubList(string openId, int count=10)
         {
             List<ClubItem> results = new List<ClubItem>();
 
@@ -48,7 +48,7 @@ namespace kangfupanda.webapi.Controllers
             }
 
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var messages = dao.GetListExt();
+            var messages = dao.GetListExt(count: count);
 
             if (messages != null)
             {

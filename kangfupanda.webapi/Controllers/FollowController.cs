@@ -52,7 +52,7 @@ namespace kangfupanda.webapi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("list/{followerOpenId}")]
-        public List<ClubItem> GetFollowerPost(string followerOpenId)
+        public List<ClubItem> GetFolloweePost(string followerOpenId)
         {
             List<ClubItem> results = new List<ClubItem>();
 
@@ -67,7 +67,7 @@ namespace kangfupanda.webapi.Controllers
                 sb.Append($",'{followeeOpenId}'");
             });
             sb.Append(")");
-            var messages = dao.GetListExt(sb.ToString());
+            var messages = dao.GetListExt(sb.ToString(), 9999);
 
             if (messages != null)
             {
