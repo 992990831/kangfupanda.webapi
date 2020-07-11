@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web;
 
 namespace kangfupanda.dataentity.DAO
 {
@@ -95,6 +96,8 @@ namespace kangfupanda.dataentity.DAO
                         log.nickName = sqlReader["nickname"] == DBNull.Value ? string.Empty : (string)sqlReader["nickname"];
                         log.lastVisitedAt = sqlReader["lastVisitedAt"] == DBNull.Value ? string.Empty : ((DateTime)sqlReader["lastVisitedAt"]).ToString("yyyy-MM-dd HH:mm:ss");
                         log.visitCountLastWeek = sqlReader["count"] == DBNull.Value ? 0 : (long)sqlReader["count"];
+
+                        log.nickName = HttpUtility.UrlDecode(log.nickName);
                         logs.Add(log);
                     }
                 }

@@ -8,7 +8,9 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
+using WebGrease.Css.Extensions;
 
 namespace kangfupanda.webapi.Controllers
 {
@@ -48,7 +50,21 @@ namespace kangfupanda.webapi.Controllers
             }
 
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var messages = dao.GetListExt(count: count);
+
+            var ids = IDCache.AllIDs; //dao.GetAllIds();
+            var idArray = ids.ToArray();
+            var randomIds = new int[count];
+
+            RandomFetch(idArray, randomIds, count);
+            StringBuilder sb = new StringBuilder();
+            sb.Append(" and g.id in ('' ");
+            randomIds.ForEach((randomId) =>
+            {
+                sb.Append($",'{randomId}'");
+            });
+            sb.Append(") ");
+
+            var messages = dao.GetListExt(filter: sb.ToString(), count: count);
 
             if (messages != null)
             {
@@ -131,6 +147,64 @@ namespace kangfupanda.webapi.Controllers
 
             return results;
         }
+
+        /// <summary>
+        /// 从Id数组中随机抽取若干个
+        /// </summary>
+        /// <param name="inputIds"></param>
+        /// <param name="outputIds"></param>
+        /// <param name="count"></param>
+        void RandomFetch(int[] inputIds, int[] outputIds, int count)
+        {
+            if (inputIds.Length == 0 || count == 0)
+            {
+                return;
+            }
+
+            if (count-- > 0)
+            {
+                var randomId = (new Random(Guid.NewGuid().ToString().GetHashCode())).Next(0, inputIds.Length - 1);
+
+                outputIds[outputIds.Length - count - 1] = inputIds[randomId];
+
+                if (randomId == 0)
+                {
+                    var newArray = new int[inputIds.Length - 1];
+                    for (int i = 0; i < newArray.Length; i++)
+                    {
+                        newArray[i] = inputIds[i + 1];
+                    }
+                    inputIds = newArray;
+                }
+                else
+                {
+                    var leftArray = new int[randomId];
+                    for (int i = 0; i < randomId; i++)
+                    {
+                        leftArray[i] = inputIds[i];
+                    }
+                    var rightArray = new int[inputIds.Length - randomId - 1];
+                    for (int i = randomId + 1; i < inputIds.Length; i++)
+                    {
+                        rightArray[i - randomId - 1] = inputIds[i];
+                    }
+                    //inputIds.CopyTo(rightArray, randomId+1);
+
+                    var newArray = leftArray.Concat(rightArray).ToArray();
+
+                    inputIds = newArray;
+                }
+
+
+            }
+
+            if (inputIds.Count() > 0 && count > 0)
+            {
+                RandomFetch(inputIds, outputIds, count);
+            }
+
+        }
+
     }
 
     /// <summary>

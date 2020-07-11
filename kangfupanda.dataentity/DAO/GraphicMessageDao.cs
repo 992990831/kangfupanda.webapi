@@ -159,7 +159,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand($"select g.*, u.headpic, (select count(1) from `like` where itemId=g.id and itemType='graphic' and expiredAt is null ) as likeCount,  (select count(1) from `comments` where comment_post_id=g.id and comment_post_type='graphic' and comment_audit_status=1 and expiredAt is null ) as commentCount from graphicmessage as g left join `user` as u on g.openId=u.openId  where g.expiredAt is null limit {count} " + filter, conn);
+                    MySqlCommand cmd = new MySqlCommand($"select g.*, u.headpic, (select count(1) from `like` where itemId=g.id and itemType='graphic' and expiredAt is null ) as likeCount,  (select count(1) from `comments` where comment_post_id=g.id and comment_post_type='graphic' and comment_audit_status=1 and expiredAt is null ) as commentCount from graphicmessage as g left join `user` as u on g.openId=u.openId  where g.expiredAt is null {filter} limit {count} ", conn);
 
                     var sqlReader = cmd.ExecuteReader();
                     while (sqlReader.Read())
@@ -194,6 +194,32 @@ namespace kangfupanda.dataentity.DAO
             }
 
             return msgListExt;
+        }
+
+        public List<int> GetAllIds()
+        {
+            List<int> msgIds = new List<int>();
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand($"select id from graphicmessage ", conn);
+
+                    var sqlReader = cmd.ExecuteReader();
+                    while (sqlReader.Read())
+                    {
+                        int id = (int)sqlReader["id"];
+                        msgIds.Add(id);
+                    }
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return msgIds;
         }
     }
 }
