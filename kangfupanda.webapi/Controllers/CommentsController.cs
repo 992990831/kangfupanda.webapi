@@ -124,36 +124,50 @@ namespace kangfupanda.webapi.Controllers
 
         [HttpGet]
         [Route("audit/list/approved")]
-        public List<Comments> GetApprovedAuditList()
+        public CommentsAuditList GetApprovedAuditList(int pageIndex = 1, int pageSize = 10)
         {
+            CommentsAuditList result = new CommentsAuditList();
             List<Comments> comments = new List<Comments>();
             try
             {
-                comments = new CommentsDao(mysqlConnection).GetAuditList(1);
+                var dao = new CommentsDao(mysqlConnection);
+
+                comments = dao.GetAuditList(1, pageIndex, pageSize);
+                Int64 count = dao.GetAuditListCount(1);
+
+                result.lists = comments;
+                result.count = count;
             }
             catch (Exception ex)
             {
                 logger.Error("获取评论失败", ex);
             }
 
-            return comments;
+            return result;
         }
 
         [HttpGet]
         [Route("audit/list/rejected")]
-        public List<Comments> GetRejectedAuditList()
+        public CommentsAuditList GetRejectedAuditList(int pageIndex = 1, int pageSize = 10)
         {
+            CommentsAuditList result = new CommentsAuditList();
             List<Comments> comments = new List<Comments>();
             try
             {
-                comments = new CommentsDao(mysqlConnection).GetAuditList(2);
+                var dao = new CommentsDao(mysqlConnection);
+
+                comments = dao.GetAuditList(2, pageIndex, pageSize);
+                Int64 count = dao.GetAuditListCount(2);
+
+                result.lists = comments;
+                result.count = count;
             }
             catch (Exception ex)
             {
                 logger.Error("获取评论失败", ex);
             }
 
-            return comments;
+            return result;
         }
 
         /// <summary>
