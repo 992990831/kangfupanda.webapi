@@ -39,7 +39,7 @@ namespace kangfupanda.webapi.Controllers
                         author = video.author,
                         authorHeadPic = video.authorHeadPic,
                         name = video.name,
-                        posterUri = video.posterUri,
+                        poster = video.posterUri,
                         videoUri = video.videoUri,
                         itemType = ClubItemType.Video,
                         likeCount = video.likeCount,
@@ -117,7 +117,7 @@ namespace kangfupanda.webapi.Controllers
                         author = msg.author,
                         authorHeadPic = msg.authorHeadPic,
                         name = msg.name,
-                        posterUri = !string.IsNullOrEmpty(msg.poster)? msg.poster : msg.pic01,
+                        poster = !string.IsNullOrEmpty(msg.poster)? msg.poster : msg.pic01,
                         pics = pics,
                         audioes = audioes,
                         itemType = ClubItemType.Graphic,
@@ -241,7 +241,7 @@ namespace kangfupanda.webapi.Controllers
         /// <summary>
         /// 封面照
         /// </summary>
-        public string posterUri { get; set; }
+        public string poster { get; set; }
 
         public string text { get; set; }
 

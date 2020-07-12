@@ -120,7 +120,7 @@ namespace kangfupanda.webapi.Controllers
                         author = msg.author,
                         authorHeadPic = msg.authorHeadPic,
                         name = msg.name,
-                        posterUri = msg.pic01,
+                        poster = msg.poster,
                         pics = pics,
                         audioes = audioes,
                         itemType = ClubItemType.Graphic,

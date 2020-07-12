@@ -126,14 +126,14 @@ namespace kangfupanda.webapi.Controllers
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
             var messages = dao.GetListExt(filter: $" and g.openid='{openId}'");
 
-            messages.ForEach(msg =>
-            {
-                if (!string.IsNullOrEmpty(msg.poster))
-                {
-                    Bitmap bitmap = new Bitmap(ConfigurationManager.AppSettings["UploadFolderPath"] + msg.poster);
-                    msg.poster = Utils.ConvertBitmap2Base64(bitmap);
-                }
-            });
+            //messages.ForEach(msg =>
+            //{
+            //    if (!string.IsNullOrEmpty(msg.poster))
+            //    {
+            //        Bitmap bitmap = new Bitmap(ConfigurationManager.AppSettings["UploadFolderPath"] + msg.poster);
+            //        msg.poster = Utils.ConvertBitmap2Base64(bitmap);
+            //    }
+            //});
 
             return messages;
         }
