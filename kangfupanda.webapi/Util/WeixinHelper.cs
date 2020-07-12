@@ -14,11 +14,11 @@ namespace kangfupanda.webapi.Util
     {
         //一健点评：wx496e5a01291ad836
         //快熊康复：wxc10ff63ecf588c90
-        public const string AppId = "wx496e5a01291ad836";
+        public const string AppId = "wxc10ff63ecf588c90";
 
         //一健点评：5a544217123aca4505f8a680de415a35
         //快熊康复：7289786fae8511cbe9e94a8aec93e125
-        public const string AppSecret = "5a544217123aca4505f8a680de415a35";
+        public const string AppSecret = "7289786fae8511cbe9e94a8aec93e125";
 
         /// <summary>
         /// 生成前端微信分享所需的签名等参数
