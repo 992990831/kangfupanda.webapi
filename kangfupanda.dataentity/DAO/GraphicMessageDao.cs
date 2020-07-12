@@ -166,6 +166,7 @@ namespace kangfupanda.dataentity.DAO
                     {
                         GraphicMessageExt msg = new GraphicMessageExt();
                         msg.id = (int)sqlReader["id"];
+                        msg.postId = msg.id.ToString();
                         msg.name = sqlReader["name"] == DBNull.Value ? string.Empty : (string)sqlReader["name"];
                         msg.text = sqlReader["text"] == DBNull.Value ? string.Empty : (string)sqlReader["text"];
                         msg.poster = sqlReader["poster"] == DBNull.Value ? string.Empty : (string)sqlReader["poster"];

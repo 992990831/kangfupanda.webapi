@@ -39,6 +39,8 @@ namespace kangfupanda.dataentity.Model
     {
         public string authorHeadPic { get; set; }
 
+        public string postId { get; set; }
+
         public long likeCount { get; set; }
 
         public long commentCount { get; set; }

@@ -148,6 +148,67 @@ namespace kangfupanda.webapi.Controllers
             return results;
         }
 
+        [Route("{postId}")]
+        public ClubItem GetPostById(string postId)
+        {
+            ClubItem result = new ClubItem();
+
+            var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+
+            var messages = dao.GetListExt(filter: $" and g.id={postId}");
+
+            if (messages.Count > 0)
+            {
+                messages.ForEach(msg =>
+                {
+                    List<string> pics = new List<string>();
+                    if (!string.IsNullOrEmpty(msg.pic01))
+                    {
+                        pics.Add(msg.pic01);
+                    }
+                    if (!string.IsNullOrEmpty(msg.pic02))
+                    {
+                        pics.Add(msg.pic02);
+                    }
+                    if (!string.IsNullOrEmpty(msg.pic03))
+                    {
+                        pics.Add(msg.pic03);
+                    }
+                    if (!string.IsNullOrEmpty(msg.pic04))
+                    {
+                        pics.Add(msg.pic04);
+                    }
+                    if (!string.IsNullOrEmpty(msg.pic05))
+                    {
+                        pics.Add(msg.pic05);
+                    }
+                    if (!string.IsNullOrEmpty(msg.pic06))
+                    {
+                        pics.Add(msg.pic06);
+                    }
+
+                    result = new ClubItem()
+                    {
+                        postId = msg.id,
+                        openId = msg.openId,
+                        author = msg.author,
+                        authorHeadPic = msg.authorHeadPic,
+                        name = msg.name,
+                        poster = !string.IsNullOrEmpty(msg.poster) ? msg.poster : msg.pic01,
+                        pics = pics,
+                        itemType = ClubItemType.Graphic,
+                        text = msg.text,
+                        likeCount = msg.likeCount,
+                        commentCount = msg.commentCount,
+                        createdAt = msg.createdAt
+                    };
+                });
+            }
+
+            return result;
+        }
+
+
         /// <summary>
         /// 从Id数组中随机抽取若干个
         /// </summary>
