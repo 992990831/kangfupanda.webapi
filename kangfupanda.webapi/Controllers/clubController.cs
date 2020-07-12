@@ -26,28 +26,28 @@ namespace kangfupanda.webapi.Controllers
             List<ClubItem> results = new List<ClubItem>();
 
             //var videos = (new VideoDao(ConfigurationManager.AppSettings["mysqlConnStr"])).GetList();
-            var videos = (new VideoDao(ConfigurationManager.AppSettings["mysqlConnStr"])).GetListExt();
+            //var videos = (new VideoDao(ConfigurationManager.AppSettings["mysqlConnStr"])).GetListExt();
 
-            if (videos != null)
-            {
-                videos.ForEach(video =>
-                {
-                    results.Add(new ClubItem()
-                    {
-                        postId=video.id,
-                        openId = video.openId,
-                        author = video.author,
-                        authorHeadPic = video.authorHeadPic,
-                        name = video.name,
-                        poster = video.posterUri,
-                        videoUri = video.videoUri,
-                        itemType = ClubItemType.Video,
-                        likeCount = video.likeCount,
-                        commentCount = video.commentCount,
-                        createdAt = video.createdAt
-                    });
-                });
-            }
+            //if (videos != null)
+            //{
+            //    videos.ForEach(video =>
+            //    {
+            //        results.Add(new ClubItem()
+            //        {
+            //            postId=video.id,
+            //            openId = video.openId,
+            //            author = video.author,
+            //            authorHeadPic = video.authorHeadPic,
+            //            name = video.name,
+            //            poster = video.posterUri,
+            //            videoUri = video.videoUri,
+            //            itemType = ClubItemType.Video,
+            //            likeCount = video.likeCount,
+            //            commentCount = video.commentCount,
+            //            createdAt = video.createdAt
+            //        });
+            //    });
+            //}
 
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
 
