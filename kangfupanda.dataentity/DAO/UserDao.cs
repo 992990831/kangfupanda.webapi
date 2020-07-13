@@ -154,7 +154,7 @@ namespace kangfupanda.dataentity.DAO
             return users;
         }
 
-        public List<User> GetList(int pageIndex = 1, int pageSize = 10, string filter="" )
+        public List<User> GetList(int pageIndex = 1, int pageSize = 10, string filter="", string orderBy="")
         {
             List<User> users = new List<User>();
             using (MySqlConnection conn = new MySqlConnection(connStr))
@@ -164,7 +164,7 @@ namespace kangfupanda.dataentity.DAO
                     int skip = (pageIndex - 1) * pageSize;
 
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand($"select * from user where expiredat is null {filter} limit {skip},{pageSize}", conn);
+                    MySqlCommand cmd = new MySqlCommand($"select * from user where expiredat is null {filter} limit {skip},{pageSize} {orderBy}", conn);
 
                     var sqlReader = cmd.ExecuteReader();
                     while (sqlReader.Read())

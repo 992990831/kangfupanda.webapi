@@ -85,10 +85,11 @@ namespace kangfupanda.webapi.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("admin/list/doctor")]
-        public UserList GetAdminDoctorList(int pageIndex = 1, int pageSize = 10) {
+        public UserList GetAdminDoctorList(int pageIndex = 1, int pageSize = 10, string order="") {
             var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var users = dao.GetList(pageIndex, pageSize, "and (usertype is null or usertype!='普通用户')");
-            var count = dao.GetListCount("and (usertype is null or usertype!='普通用户')");
+
+            var users = dao.GetList(pageIndex, pageSize, "and usertype is not null and usertype!='普通用户'");
+            var count = dao.GetListCount("and usertype is not null and usertype!='普通用户'");
 
             var usersExt = new List<UserExt>();
             var apiLogDao = new ApiLogDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
@@ -118,9 +119,17 @@ namespace kangfupanda.webapi.Controllers
                     userExt.visitCountLastWeek = log.visitCountLastWeek;
 
                     usersExt.Add(userExt);
-                }
-                
+                }                
             });
+
+            if (order == "descend")
+            {
+                usersExt = usersExt.OrderByDescending(user => user.lastVisitedAt).ToList();
+            }
+            else if (order == "ascend")
+            {
+                usersExt = usersExt.OrderBy(user => user.lastVisitedAt).ToList();
+            }
 
             return new UserList() { list= usersExt, count=count };
         }
@@ -130,7 +139,7 @@ namespace kangfupanda.webapi.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("admin/list/user")]
-        public UserList GetAdminUserList(int pageIndex = 1, int pageSize = 10)
+        public UserList GetAdminUserList(int pageIndex = 1, int pageSize = 10, string order = "")
         {
             var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
             var users = dao.GetList(pageIndex, pageSize, "and (usertype='普通用户' or usertype is null) ");
@@ -167,6 +176,15 @@ namespace kangfupanda.webapi.Controllers
                 }
 
             });
+
+            if (order == "descend")
+            {
+                usersExt = usersExt.OrderByDescending(user => user.lastVisitedAt).ToList();
+            }
+            else if (order == "ascend")
+            {
+                usersExt = usersExt.OrderBy(user => user.lastVisitedAt).ToList();
+            }
 
             return new UserList() { list = usersExt, count = count };
         }
