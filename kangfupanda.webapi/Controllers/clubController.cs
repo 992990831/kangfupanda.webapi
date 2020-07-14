@@ -163,70 +163,64 @@ namespace kangfupanda.webapi.Controllers
 
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
 
-            var messages = dao.GetListExt(filter: $" and g.id={postId}");
+            var msg = dao.GetById(postId);
 
-            if (messages.Count > 0)
+            List<string> pics = new List<string>();
+            if (!string.IsNullOrEmpty(msg.pic01))
             {
-                messages.ForEach(msg =>
-                {
-                    List<string> pics = new List<string>();
-                    if (!string.IsNullOrEmpty(msg.pic01))
-                    {
-                        pics.Add(msg.pic01);
-                    }
-                    if (!string.IsNullOrEmpty(msg.pic02))
-                    {
-                        pics.Add(msg.pic02);
-                    }
-                    if (!string.IsNullOrEmpty(msg.pic03))
-                    {
-                        pics.Add(msg.pic03);
-                    }
-                    if (!string.IsNullOrEmpty(msg.pic04))
-                    {
-                        pics.Add(msg.pic04);
-                    }
-                    if (!string.IsNullOrEmpty(msg.pic05))
-                    {
-                        pics.Add(msg.pic05);
-                    }
-                    if (!string.IsNullOrEmpty(msg.pic06))
-                    {
-                        pics.Add(msg.pic06);
-                    }
-
-                    List<string> audioes = new List<string>();
-                    if (!string.IsNullOrEmpty(msg.audio01))
-                    {
-                        audioes.Add(msg.audio01);
-                    }
-                    if (!string.IsNullOrEmpty(msg.audio02))
-                    {
-                        audioes.Add(msg.audio02);
-                    }
-                    if (!string.IsNullOrEmpty(msg.audio03))
-                    {
-                        audioes.Add(msg.audio03);
-                    }
-
-                    result = new ClubItem()
-                    {
-                        postId = msg.id,
-                        openId = msg.openId,
-                        author = msg.author,
-                        authorHeadPic = msg.authorHeadPic,
-                        name = msg.name,
-                        poster = !string.IsNullOrEmpty(msg.poster) ? msg.poster : msg.pic01,
-                        pics = pics,
-                        audioes = audioes,
-                        itemType = ClubItemType.Graphic,
-                        text = msg.text,
-                        likeCount = msg.likeCount,
-                        commentCount = msg.commentCount,
-                        createdAt = msg.createdAt
-                    };
-                });
+                pics.Add(msg.pic01);
             }
+            if (!string.IsNullOrEmpty(msg.pic02))
+            {
+                pics.Add(msg.pic02);
+            }
+            if (!string.IsNullOrEmpty(msg.pic03))
+            {
+                pics.Add(msg.pic03);
+            }
+            if (!string.IsNullOrEmpty(msg.pic04))
+            {
+                pics.Add(msg.pic04);
+            }
+            if (!string.IsNullOrEmpty(msg.pic05))
+            {
+                pics.Add(msg.pic05);
+            }
+            if (!string.IsNullOrEmpty(msg.pic06))
+            {
+                pics.Add(msg.pic06);
+            }
+
+            List<string> audioes = new List<string>();
+            if (!string.IsNullOrEmpty(msg.audio01))
+            {
+                audioes.Add(msg.audio01);
+            }
+            if (!string.IsNullOrEmpty(msg.audio02))
+            {
+                audioes.Add(msg.audio02);
+            }
+            if (!string.IsNullOrEmpty(msg.audio03))
+            {
+                audioes.Add(msg.audio03);
+            }
+
+            result = new ClubItem()
+            {
+                postId = msg.id,
+                openId = msg.openId,
+                author = msg.author,
+                authorHeadPic = msg.authorHeadPic,
+                name = msg.name,
+                poster = !string.IsNullOrEmpty(msg.poster) ? msg.poster : msg.pic01,
+                pics = pics,
+                audioes = audioes,
+                itemType = ClubItemType.Graphic,
+                text = msg.text,
+                likeCount = msg.likeCount,
+                commentCount = msg.commentCount,
+                createdAt = msg.createdAt
+            };
 
             return result;
         }
