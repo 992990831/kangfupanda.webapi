@@ -67,7 +67,7 @@ namespace kangfupanda.webapi.Controllers
                 sb.Append($",'{followeeOpenId}'");
             });
             sb.Append(")");
-            var messages = dao.GetListExt(sb.ToString(), 9999);
+            var messages = dao.GetListExt(sb.ToString(), count: int.MaxValue, endId: int.MaxValue);
 
             if (messages != null)
             {
