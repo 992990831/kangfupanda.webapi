@@ -21,7 +21,7 @@ namespace kangfupanda.webapi.Controllers
     public class ClubController : ApiController
     {
         [Route("list")]
-        public List<ClubItem> GetClubList(string openId, int count=10)
+        public List<ClubItem> GetClubList(string openId, int count=10, int endId=int.MaxValue)
         {
             List<ClubItem> results = new List<ClubItem>();
 
@@ -51,20 +51,26 @@ namespace kangfupanda.webapi.Controllers
 
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
 
-            var ids = IDCache.AllIDs; //dao.GetAllIds();
-            var idArray = ids.ToArray();
-            var randomIds = new int[count];
+            //var ids = IDCache.AllIDs; //dao.GetAllIds();
+            //var idArray = ids.ToArray();
+            //var randomIds = new int[count];
 
-            RandomFetch(idArray, randomIds, count);
-            StringBuilder sb = new StringBuilder();
-            sb.Append(" and g.id in ('' ");
-            randomIds.ForEach((randomId) =>
+            //RandomFetch(idArray, randomIds, count);
+            //StringBuilder sb = new StringBuilder();
+            //sb.Append(" and g.id in ('' ");
+            //randomIds.ForEach((randomId) =>
+            //{
+            //    sb.Append($",'{randomId}'");
+            //});
+            //sb.Append(") ");
+
+            var messages = dao.GetListExt(count: count, endId: endId);
+
+            if (messages.Count < count) //如果取出的数量不够，就从头再取，补足不够的数量
             {
-                sb.Append($",'{randomId}'");
-            });
-            sb.Append(") ");
-
-            var messages = dao.GetListExt(filter: sb.ToString(), count: count);
+                var compensateMsgs = dao.GetListExt(count: count - messages.Count, endId: int.MaxValue);
+                messages.AddRange(compensateMsgs);
+            }
 
             if (messages != null)
             {
@@ -129,7 +135,9 @@ namespace kangfupanda.webapi.Controllers
                 });
             }
 
-            results = results.OrderByDescending(r => r.createdAt).ToList();
+            //SQL里面已经有order by g.id desc，所以这里不用排序了
+            //results = results.OrderByDescending(r => r.createdAt).ToList();
+           
 
             int id = 0;
             results.ForEach(r => { r.id = ++id; });
