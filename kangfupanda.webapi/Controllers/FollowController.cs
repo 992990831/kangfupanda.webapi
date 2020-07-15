@@ -2,6 +2,7 @@
 using kangfupanda.dataentity.Model;
 using kangfupanda.webapi.Common;
 using kangfupanda.webapi.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -16,6 +17,8 @@ namespace kangfupanda.webapi.Controllers
     [RoutePrefix("follow")]
     public class FollowController : ApiController
     {
+        static readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(FollowController));
+
         [HttpPost]
         [Route("")]
         public ResponseEntity<string> Follow(Follow follow)
@@ -54,6 +57,7 @@ namespace kangfupanda.webapi.Controllers
         [Route("list/{followerOpenId}")]
         public List<ClubItem> GetFolloweePost(string followerOpenId)
         {
+            logger.Info($"GetFolloweePost -> followerOpenId:{followerOpenId}");
             List<ClubItem> results = new List<ClubItem>();
 
             var followDao = new FollowDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
@@ -134,6 +138,7 @@ namespace kangfupanda.webapi.Controllers
 
             results = results.OrderByDescending(r => r.createdAt).ToList();
 
+            logger.Info($"GetFolloweePost -> return:{results.Count} items");
             return results;
         }
 
