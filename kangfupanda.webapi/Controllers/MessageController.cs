@@ -124,7 +124,11 @@ namespace kangfupanda.webapi.Controllers
         public List<GraphicMessageExt> GetMyMessageList(string openId)
         {
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var messages = dao.GetListExt(filter: $" and g.openid='{openId}'");
+            var messages = dao.GetListExt(filter: $" and g.openid='{openId}'", count: int.MaxValue, endId: int.MaxValue);
+
+            messages.ForEach(msg => {
+                msg.itemType = "graphic";
+            });
 
             //messages.ForEach(msg =>
             //{

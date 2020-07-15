@@ -41,6 +41,8 @@ namespace kangfupanda.dataentity.Model
 
         public string postId { get; set; }
 
+        public string itemType { get; set; }
+
         public long likeCount { get; set; }
 
         public long commentCount { get; set; }

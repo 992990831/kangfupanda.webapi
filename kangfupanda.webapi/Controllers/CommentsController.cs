@@ -57,7 +57,7 @@ namespace kangfupanda.webapi.Controllers
 
                 if (!string.IsNullOrEmpty(openId))
                 {
-                    comments.AddRange(dao.GetPendingList(postId, postType, openId));
+                    comments.AddRange(dao.GetPendingList(postId, postType, openId)); //发表评论的人可以看到自己发表但未审核的评论
                 }
             }
             catch (Exception ex)
@@ -66,6 +66,54 @@ namespace kangfupanda.webapi.Controllers
             }
 
             return comments.OrderByDescending(comm => comm.createdAt).ToList();
+        }
+
+        /// <summary>
+        /// 个人主页上的评论
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <param name="postType"></param>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("list/profile")]
+        public List<Comments> GetListForMyProfile(int postId, string postType)
+        {
+            List<Comments> comments = new List<Comments>();
+            try
+            {
+                var dao = new CommentsDao(mysqlConnection);
+                comments.AddRange(dao.GetListForMyProfile(postId, postType));
+            }
+            catch (Exception ex)
+            {
+                logger.Error("获取评论失败", ex);
+            }
+
+            return comments.OrderByDescending(comm => comm.createdAt).ToList();
+        }
+
+        /// <summary>
+        /// 前台 - 个人主页 - 待审核评论数 (评论右上角的角标)
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("pending/{openId}")]
+        public long GetPendingCount(string openId = "")
+        {
+            long count=0;
+            try
+            {
+                var dao = new CommentsDao(mysqlConnection);
+                count = dao.GetPendingCount(openId);
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+
+            return count;
         }
 
         /// <summary>

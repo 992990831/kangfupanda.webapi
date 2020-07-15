@@ -88,6 +88,75 @@ namespace kangfupanda.dataentity.DAO
             return comList;
         }
 
+        /// <summary>
+        /// 个人主页上的评论，包括后台还未审核的评论
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <param name="postType"></param>
+        /// <returns></returns>
+        public List<Comments> GetListForMyProfile(int postId, string postType)
+        {
+            List<Comments> comList = new List<Comments>();
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("select * from comments where expiredAt is null and (comment_audit_status=0 or comment_audit_status=1) and comment_post_id=@comment_post_id and comment_post_type=@comment_post_type", conn);
+                    cmd.Parameters.Add(new MySqlParameter("comment_post_id", postId));
+                    cmd.Parameters.Add(new MySqlParameter("comment_post_type", postType));
+
+                    var sqlReader = cmd.ExecuteReader();
+                    while (sqlReader.Read())
+                    {
+                        Comments com = new Comments();
+                        com.comment_id = (int)sqlReader["comment_id"];
+                        com.comment_post_id = sqlReader["comment_post_id"] == DBNull.Value ? 0 : (int)sqlReader["comment_post_id"];
+                        com.comment_post_type = sqlReader["comment_post_type"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_post_type"];
+                        com.comment_user_id = sqlReader["comment_user_id"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_id"];
+                        com.comment_user_name = sqlReader["comment_user_name"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_name"];
+                        com.comment_user_pic = sqlReader["comment_user_pic"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_pic"];
+                        com.comment_content = sqlReader["comment_content"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_content"];
+                        com.comment_audit_status = sqlReader["comment_audit_status"] == DBNull.Value ? 0 : (int)sqlReader["comment_audit_status"];
+                        com.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
+                        comList.Add(com);
+                    }
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return comList;
+        }
+
+
+        /// <summary>
+        /// 获得待审核的评论数
+        /// </summary>
+        public Int64 GetPendingCount(string openId)
+        {
+            Int64 count = 0;
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand($"select count(1) from comments as c left join graphicmessage as g on c.comment_post_id=g.id and comment_post_type='graphic' where g.expiredAt is null and c.expiredAt is null and comment_audit_status=0 and g.openid='{openId}'", conn);
+
+                    count = (Int64)cmd.ExecuteScalar();
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return count;
+        }
+
         public List<Comments> GetPendingList(int postId, string postType, string openId)
         {
             List<Comments> comList = new List<Comments>();
