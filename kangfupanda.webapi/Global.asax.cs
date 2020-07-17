@@ -25,16 +25,16 @@ namespace kangfupanda.webapi
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            IDCache.UpdateRandomIDs();
-            Task.Factory.StartNew(() =>
-            {
-                while(true)
-                {
-                    IDCache.UpdateRandomIDs();
-                    Thread.Sleep(60 * 1000);
-                }
+            //IDCache.UpdateRandomIDs();
+            //Task.Factory.StartNew(() =>
+            //{
+            //    while(true)
+            //    {
+            //        IDCache.UpdateRandomIDs();
+            //        Thread.Sleep(60 * 1000);
+            //    }
                 
-            });
+            //});
         }
 
         protected void Application_BeginRequest()
