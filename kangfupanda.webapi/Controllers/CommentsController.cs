@@ -45,11 +45,41 @@ namespace kangfupanda.webapi.Controllers
             return responseEntity;
         }
 
+        /// <summary>
+        /// 作者对一个评论进行回复
+        /// </summary>
+        /// <param name="comments"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("author/add")]
+        public ResponseEntity<string> AddAuthorComments(Comments comments)
+        {
+            var responseEntity = new ResponseEntity<string>(true, "添加成功", string.Empty);
+            try
+            {
+                bool success = new CommentsDao(mysqlConnection).AddAuthorComment(comments);
+            }
+            catch (Exception ex)
+            {
+                logger.Error("评论管理-添加失败！", ex);
+                responseEntity = new ResponseEntity<string>(false, "添加失败", string.Empty);
+            }
+
+            return responseEntity;
+        }
+
+        /// <summary>
+        /// 作品明细页
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <param name="postType"></param>
+        /// <param name="openId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("list")]
-        public List<Comments> GetList(int postId, string postType, string openId="")
+        public List<CommentNReplies> GetList(int postId, string postType, string openId="")
         {
-            List<Comments> comments = new List<Comments>();
+            List<CommentNReplies> comments = new List<CommentNReplies>();
             try
             {
                 var dao = new CommentsDao(mysqlConnection);
@@ -59,6 +89,12 @@ namespace kangfupanda.webapi.Controllers
                 {
                     comments.AddRange(dao.GetPendingList(postId, postType, openId)); //发表评论的人可以看到自己发表但未审核的评论
                 }
+
+                //读取作者对评论的回复
+                comments.ForEach(comment =>
+                {
+                    comment.Replies = dao.GetAuthorReplies(comment.comment_id);
+                });
             }
             catch (Exception ex)
             {
@@ -77,13 +113,19 @@ namespace kangfupanda.webapi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("list/profile")]
-        public List<Comments> GetListForMyProfile(int postId, string postType)
+        public List<CommentNReplies> GetListForMyProfile(int postId, string postType)
         {
-            List<Comments> comments = new List<Comments>();
+            List<CommentNReplies> comments = new List<CommentNReplies>();
             try
             {
                 var dao = new CommentsDao(mysqlConnection);
                 comments.AddRange(dao.GetListForMyProfile(postId, postType));
+
+                //读取作者对评论的回复
+                comments.ForEach(comment =>
+                {
+                    comment.Replies = dao.GetAuthorReplies(comment.comment_id);
+                });
             }
             catch (Exception ex)
             {

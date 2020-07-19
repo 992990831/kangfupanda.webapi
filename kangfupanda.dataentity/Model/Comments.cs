@@ -71,9 +71,9 @@ namespace kangfupanda.dataentity.Model
         public bool comment_is_recommend { get; set; }
 
         /// <summary>
-        /// 评论的父ID，也就是支持评论的评论
+        /// 有该字段说明该评论是作者加的，需要关联到另一个评论上
         /// </summary>
-        public int comment_parent_id { get; set; }
+        public int parentId { get; set; }
 
         /// <summary>
         /// 发帖人的ID
@@ -85,6 +85,18 @@ namespace kangfupanda.dataentity.Model
         /// </summary>
         public string user_name { get; set; }
 
+
+    }
+
+    /// <summary>
+    /// 评论和作者的回复
+    /// </summary>
+    public class CommentNReplies : Comments
+    {
+        /// <summary>
+        /// 作者对评论的回复
+        /// </summary>
+        public List<Comments> Replies { get; set; }
 
     }
 }
