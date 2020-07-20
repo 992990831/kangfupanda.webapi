@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Web.Http;
 
@@ -142,5 +143,30 @@ namespace kangfupanda.webapi.Controllers
             return results;
         }
 
+        /// <summary>
+        /// 根据postId找到作者，然后关注该作者
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <param name="followerId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("post/{postId}/{followerId}")]
+        public void FollowByPost(string postId, string followerId)
+        {
+            var graphicMessageDao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            var graphicMsg = graphicMessageDao.GetById(postId);
+
+            if (graphicMsg != null && !string.IsNullOrEmpty(graphicMsg.openId))
+            {
+                var followDao = new FollowDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+
+                bool isFollowed = followDao.GetFollowed(graphicMsg.openId, followerId);
+
+                if(!isFollowed)
+                {
+                    followDao.Add(new dataentity.Model.Follow() { followee = graphicMsg.openId, follower = followerId });
+                }
+            }
+        }
     }
 }

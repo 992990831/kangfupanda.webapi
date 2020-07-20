@@ -42,6 +42,22 @@ namespace kangfupanda.webapi.Controllers
             return messages;
         }
 
+        [Route("settop/{id}")]
+        public ResponseEntity<bool> SetTop(int id)
+        {
+            ResponseEntity<bool> response = new ResponseEntity<bool>();
+            try
+            {
+                var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex.Message);
+            }
+
+            return response;
+        }
+
         [Route("add")]
         public ResponseEntity<long> AddGraphicMessage(GraphicMessage msg)
         {

@@ -33,6 +33,8 @@ namespace kangfupanda.dataentity.Model
         /// 作者的昵称
         /// </summary>
         public string author { get; set; }
+
+        public bool isTop { get; set; }
     }
 
     public class GraphicMessageExt : GraphicMessage

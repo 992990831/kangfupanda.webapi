@@ -89,6 +89,58 @@ namespace kangfupanda.dataentity.DAO
 
         }
 
+        /// <summary>
+        /// 置顶
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool SetTop(int id)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("update graphicmessage set isTop=1 where id=@id", conn);
+                    cmd.Parameters.Add(new MySqlParameter("id", id));
+                  
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 取消置顶
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool UnsetTop(int id)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("update graphicmessage set isTop=0 where id=@id", conn);
+                    cmd.Parameters.Add(new MySqlParameter("id", id));
+
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
         public bool DeleteById(int id)
         {
             using (MySqlConnection conn = new MySqlConnection(connStr))
@@ -137,6 +189,7 @@ namespace kangfupanda.dataentity.DAO
                         msg.audio02 = sqlReader["audio02"] == DBNull.Value ? string.Empty : (string)sqlReader["audio02"];
                         msg.audio03 = sqlReader["audio03"] == DBNull.Value ? string.Empty : (string)sqlReader["audio03"];
                         msg.openId = sqlReader["openId"] == DBNull.Value ? string.Empty : (string)sqlReader["openId"];
+                        msg.isTop = sqlReader["isTop"] == DBNull.Value ? false : (UInt64)sqlReader["isTop"] == 1;
                         msg.author = sqlReader["author"] == DBNull.Value ? string.Empty : (string)sqlReader["author"];
                         msg.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
                         msgList.Add(msg);
@@ -231,6 +284,7 @@ namespace kangfupanda.dataentity.DAO
                         msg.audio02 = sqlReader["audio02"] == DBNull.Value ? string.Empty : (string)sqlReader["audio02"];
                         msg.audio03 = sqlReader["audio03"] == DBNull.Value ? string.Empty : (string)sqlReader["audio03"];
                         msg.openId = sqlReader["openId"] == DBNull.Value ? string.Empty : (string)sqlReader["openId"];
+                        msg.isTop = sqlReader["isTop"] == DBNull.Value ? false : (UInt64)sqlReader["isTop"] == 1;
                         msg.author = sqlReader["author"] == DBNull.Value ? string.Empty : (string)sqlReader["author"];
                         msg.authorHeadPic = sqlReader["headpic"] == DBNull.Value ? string.Empty : (string)sqlReader["headpic"];
                         msg.likeCount = sqlReader["likeCount"] == DBNull.Value ? 0 : (long)sqlReader["likeCount"];
