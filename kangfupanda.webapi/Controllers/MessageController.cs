@@ -28,8 +28,8 @@ namespace kangfupanda.webapi.Controllers
         public List<GraphicMessage> GetMessageList()
         {
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var messages = dao.GetList();
-
+            var messages = dao.GetList(" order by isTop desc ");
+           
             messages.ForEach(msg =>
             {
                 if (!string.IsNullOrEmpty(msg.poster))
@@ -42,13 +42,43 @@ namespace kangfupanda.webapi.Controllers
             return messages;
         }
 
+        /// <summary>
+        /// 设置置顶
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Route("settop/{id}")]
+        [HttpGet]
         public ResponseEntity<bool> SetTop(int id)
         {
             ResponseEntity<bool> response = new ResponseEntity<bool>();
             try
             {
                 var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+                dao.SetTop(id);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex.Message);
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// 设置置顶
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("unsettop/{id}")]
+        [HttpGet]
+        public ResponseEntity<bool> UnsetTop(int id)
+        {
+            ResponseEntity<bool> response = new ResponseEntity<bool>();
+            try
+            {
+                var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+                dao.UnsetTop(id);
             }
             catch (Exception ex)
             {

@@ -25,50 +25,18 @@ namespace kangfupanda.webapi.Controllers
         {
             List<ClubItem> results = new List<ClubItem>();
 
-            //var videos = (new VideoDao(ConfigurationManager.AppSettings["mysqlConnStr"])).GetList();
-            //var videos = (new VideoDao(ConfigurationManager.AppSettings["mysqlConnStr"])).GetListExt();
-
-            //if (videos != null)
-            //{
-            //    videos.ForEach(video =>
-            //    {
-            //        results.Add(new ClubItem()
-            //        {
-            //            postId=video.id,
-            //            openId = video.openId,
-            //            author = video.author,
-            //            authorHeadPic = video.authorHeadPic,
-            //            name = video.name,
-            //            poster = video.posterUri,
-            //            videoUri = video.videoUri,
-            //            itemType = ClubItemType.Video,
-            //            likeCount = video.likeCount,
-            //            commentCount = video.commentCount,
-            //            createdAt = video.createdAt
-            //        });
-            //    });
-            //}
-
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
 
-            //var ids = IDCache.AllIDs; //dao.GetAllIds();
-            //var idArray = ids.ToArray();
-            //var randomIds = new int[count];
-
-            //RandomFetch(idArray, randomIds, count);
-            //StringBuilder sb = new StringBuilder();
-            //sb.Append(" and g.id in ('' ");
-            //randomIds.ForEach((randomId) =>
-            //{
-            //    sb.Append($",'{randomId}'");
-            //});
-            //sb.Append(") ");
-
-            var messages = dao.GetListExt(count: count, endId: endId);
+            var messages = dao.GetListExt(filter: " and isTop=0 ", count: count, endId: endId);
 
             if (messages.Count < count) //如果取出的数量不够，就从头再取，补足不够的数量
             {
-                var compensateMsgs = dao.GetListExt(count: count - messages.Count, endId: int.MaxValue);
+                //简单起见，每次到头部的时候，就把置顶文章给带上
+                var topMsgs = dao.GetTopExt();
+
+                var compensateMsgs = dao.GetListExt(filter: " and isTop=0 ", count: count - messages.Count, endId: int.MaxValue);
+
+                messages.AddRange(topMsgs);
                 messages.AddRange(compensateMsgs);
             }
 

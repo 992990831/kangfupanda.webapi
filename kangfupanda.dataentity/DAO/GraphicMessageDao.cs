@@ -302,6 +302,53 @@ namespace kangfupanda.dataentity.DAO
             return msgListExt;
         }
 
+        public List<GraphicMessageExt> GetTopExt()
+        {
+            List<GraphicMessageExt> msgListExt = new List<GraphicMessageExt>();
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand($"select g.*, u.headpic, (select count(1) from `like` where itemId=g.id and itemType='graphic' and expiredAt is null ) as likeCount,  (select count(1) from `comments` where comment_post_id=g.id and comment_post_type='graphic' and comment_audit_status=1 and expiredAt is null ) as commentCount from graphicmessage as g left join `user` as u on g.openId=u.openId  where g.expiredAt is null and g.isTop=1 order by g.isTop desc, g.id desc ", conn);
+
+                    var sqlReader = cmd.ExecuteReader();
+                    while (sqlReader.Read())
+                    {
+                        GraphicMessageExt msg = new GraphicMessageExt();
+                        msg.id = (int)sqlReader["id"];
+                        msg.postId = msg.id.ToString();
+                        msg.name = sqlReader["name"] == DBNull.Value ? string.Empty : (string)sqlReader["name"];
+                        msg.text = sqlReader["text"] == DBNull.Value ? string.Empty : (string)sqlReader["text"];
+                        msg.poster = sqlReader["poster"] == DBNull.Value ? string.Empty : (string)sqlReader["poster"];
+                        msg.pic01 = sqlReader["pic01"] == DBNull.Value ? string.Empty : (string)sqlReader["pic01"];
+                        msg.pic02 = sqlReader["pic02"] == DBNull.Value ? string.Empty : (string)sqlReader["pic02"];
+                        msg.pic03 = sqlReader["pic03"] == DBNull.Value ? string.Empty : (string)sqlReader["pic03"];
+                        msg.pic04 = sqlReader["pic04"] == DBNull.Value ? string.Empty : (string)sqlReader["pic04"];
+                        msg.pic05 = sqlReader["pic05"] == DBNull.Value ? string.Empty : (string)sqlReader["pic05"];
+                        msg.pic06 = sqlReader["pic06"] == DBNull.Value ? string.Empty : (string)sqlReader["pic06"];
+                        msg.audio01 = sqlReader["audio01"] == DBNull.Value ? string.Empty : (string)sqlReader["audio01"];
+                        msg.audio02 = sqlReader["audio02"] == DBNull.Value ? string.Empty : (string)sqlReader["audio02"];
+                        msg.audio03 = sqlReader["audio03"] == DBNull.Value ? string.Empty : (string)sqlReader["audio03"];
+                        msg.openId = sqlReader["openId"] == DBNull.Value ? string.Empty : (string)sqlReader["openId"];
+                        msg.isTop = sqlReader["isTop"] == DBNull.Value ? false : (UInt64)sqlReader["isTop"] == 1;
+                        msg.author = sqlReader["author"] == DBNull.Value ? string.Empty : (string)sqlReader["author"];
+                        msg.authorHeadPic = sqlReader["headpic"] == DBNull.Value ? string.Empty : (string)sqlReader["headpic"];
+                        msg.likeCount = sqlReader["likeCount"] == DBNull.Value ? 0 : (long)sqlReader["likeCount"];
+                        msg.commentCount = sqlReader["commentCount"] == DBNull.Value ? 0 : (long)sqlReader["commentCount"];
+                        msg.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
+                        msgListExt.Add(msg);
+                    }
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return msgListExt;
+        }
+
         public List<int> GetAllIds()
         {
             List<int> msgIds = new List<int>();
