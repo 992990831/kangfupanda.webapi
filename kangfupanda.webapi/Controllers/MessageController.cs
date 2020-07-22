@@ -30,16 +30,25 @@ namespace kangfupanda.webapi.Controllers
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
             var messages = dao.GetList(" order by isTop desc ");
            
-            messages.ForEach(msg =>
-            {
-                if (!string.IsNullOrEmpty(msg.poster))
-                {
-                    Bitmap bitmap = new Bitmap(ConfigurationManager.AppSettings["UploadFolderPath"] + msg.poster);
-                    msg.poster = Utils.ConvertBitmap2Base64(bitmap);
-                }
-            });
+            //messages.ForEach(msg =>
+            //{
+            //    if (!string.IsNullOrEmpty(msg.poster))
+            //    {
+            //        Bitmap bitmap = new Bitmap(ConfigurationManager.AppSettings["UploadFolderPath"] + msg.poster);
+            //        msg.poster = Utils.ConvertBitmap2Base64(bitmap);
+            //    }
+            //});
 
             return messages;
+        }
+
+        [Route("{id}")]
+        public GraphicMessage GetGraphicById(int id)
+        {
+            var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            var msg = dao.GetById(id.ToString());
+
+            return msg;
         }
 
         /// <summary>
@@ -165,6 +174,11 @@ namespace kangfupanda.webapi.Controllers
             return response;
         }
 
+        /// <summary>
+        /// 前端使用
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <returns></returns>
         [Route("list/my")]
         [HttpGet]
         public List<GraphicMessageExt> GetMyMessageList(string openId)
