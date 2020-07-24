@@ -89,6 +89,13 @@ namespace kangfupanda.dataentity.Model
     }
 
     /// <summary>
+    /// 后台使用
+    /// </summary>
+    public class CommentsEx : Comments { 
+        public string title { get; set; }
+    }
+
+    /// <summary>
     /// 评论和作者的回复
     /// </summary>
     public class CommentNReplies : Comments

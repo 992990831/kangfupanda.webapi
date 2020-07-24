@@ -273,21 +273,21 @@ namespace kangfupanda.dataentity.DAO
         /// </summary>
         /// <returns></returns>
 
-        public List<Comments> GetAuditList(int statusCode, int pageIndex=1, int pageSize=10, string filter="" )
+        public List<CommentsEx> GetAuditList(int statusCode, int pageIndex=1, int pageSize=10, string filter="" )
         {
-            List<Comments> comList = new List<Comments>();
+            List<CommentsEx> comList = new List<CommentsEx>();
             using (MySqlConnection conn = new MySqlConnection(connStr))
             {
                 try
                 {
                     conn.Open();
                     int skip = (pageIndex - 1) * pageSize;
-                    MySqlCommand cmd = new MySqlCommand($"select * from comments where expiredAt is null and comment_audit_status={statusCode} {filter} limit {skip},{pageSize} ", conn);
+                    MySqlCommand cmd = new MySqlCommand($"select c.*, g.name from comments as c left join graphicmessage as g on c.comment_post_id=g.id where c.expiredAt is null and comment_audit_status={statusCode} {filter} limit {skip},{pageSize} ", conn);
                  
                     var sqlReader = cmd.ExecuteReader();
                     while (sqlReader.Read())
                     {
-                        Comments com = new Comments();
+                        CommentsEx com = new CommentsEx();
                         com.comment_id = (int)sqlReader["comment_id"];
                         com.comment_post_id = sqlReader["comment_post_id"] == DBNull.Value ? 0 : (int)sqlReader["comment_post_id"];
                         com.comment_post_type = sqlReader["comment_post_type"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_post_type"];
@@ -295,6 +295,8 @@ namespace kangfupanda.dataentity.DAO
                         com.comment_user_name = sqlReader["comment_user_name"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_name"];
                         com.comment_user_pic = sqlReader["comment_user_pic"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_user_pic"];
                         com.comment_content = sqlReader["comment_content"] == DBNull.Value ? string.Empty : (string)sqlReader["comment_content"];
+                        com.title = sqlReader["name"] == DBNull.Value ? string.Empty : (string)sqlReader["name"];
+
                         com.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
                         comList.Add(com);
                     }

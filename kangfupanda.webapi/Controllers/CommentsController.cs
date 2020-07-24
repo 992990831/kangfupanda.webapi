@@ -167,7 +167,7 @@ namespace kangfupanda.webapi.Controllers
         public CommentsAuditList GetPendingAuditList(int pageIndex=1, int pageSize=10, string openId="")
         {
             CommentsAuditList result = new CommentsAuditList();
-            List<Comments> comments = new List<Comments>();
+            List<CommentsEx> comments = new List<CommentsEx>();
             try
             {
                 var dao = new CommentsDao(mysqlConnection);
@@ -217,7 +217,7 @@ namespace kangfupanda.webapi.Controllers
         public CommentsAuditList GetApprovedAuditList(int pageIndex = 1, int pageSize = 10)
         {
             CommentsAuditList result = new CommentsAuditList();
-            List<Comments> comments = new List<Comments>();
+            List<CommentsEx> comments = new List<CommentsEx>();
             try
             {
                 var dao = new CommentsDao(mysqlConnection);
@@ -241,7 +241,7 @@ namespace kangfupanda.webapi.Controllers
         public CommentsAuditList GetRejectedAuditList(int pageIndex = 1, int pageSize = 10)
         {
             CommentsAuditList result = new CommentsAuditList();
-            List<Comments> comments = new List<Comments>();
+            List<CommentsEx> comments = new List<CommentsEx>();
             try
             {
                 var dao = new CommentsDao(mysqlConnection);
@@ -358,7 +358,7 @@ namespace kangfupanda.webapi.Controllers
     }
 
     public class CommentsAuditList { 
-        public List<Comments> lists { get; set; }
+        public List<CommentsEx> lists { get; set; }
         public Int64 count { get; set; }
     }
 }
