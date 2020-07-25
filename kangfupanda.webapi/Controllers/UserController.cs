@@ -1,6 +1,7 @@
 ﻿using kangfupanda.dataentity.DAO;
 using kangfupanda.dataentity.Model;
 using kangfupanda.webapi.Models;
+using kangfupanda.webapi.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.WebSockets;
 
 namespace kangfupanda.webapi.Controllers
 {
@@ -304,6 +306,38 @@ namespace kangfupanda.webapi.Controllers
             (new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"])).DisplayUser(openId, false);
 
             return response;
+        }
+
+        /// <summary>
+        /// 获取用户的小程序二维码, 如果不存在就新建一个
+        /// </summary>
+        [Route("mini/qrcode")]
+        [HttpGet]
+        public ResponseEntity<string> GetMiniQRCode(string openId)
+        {
+            ResponseEntity<string> response = new ResponseEntity<string>(true, "小程序QR Code", string.Empty);
+            var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            var userDao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            string QRCode = dao.GetQRCode(openId);
+
+            if(!string.IsNullOrEmpty(QRCode))
+            {
+                response.Data = QRCode;
+                return response;
+            }
+            else
+            {
+                var weixinHelper = new WeixinHelper();
+                string token = weixinHelper.GetMiniToken();
+
+                var path = $"pages/index/index?url={ "profile/doctor/" + openId }";
+                var newQRCode = weixinHelper.GenerateMiniQR(token, path);
+                dao.UpdateQRCode(newQRCode, openId);
+
+                response.Data = newQRCode;
+                return response;
+            }
+
         }
     }
 

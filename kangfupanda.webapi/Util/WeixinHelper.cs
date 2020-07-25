@@ -12,13 +12,25 @@ namespace kangfupanda.webapi.Util
 {
     public class WeixinHelper
     {
-        //一健点评：wx496e5a01291ad836
+        //一健点评(服务号)：wx496e5a01291ad836
+        //一健点评(小程序): wx0bfa43c76629368d
         //快熊康复：wxc10ff63ecf588c90
         public const string AppId = "wxc10ff63ecf588c90";
 
+        /// <summary>
+        /// 小程序的AppId
+        /// </summary>
+        public const string MiniProgramAppId = "wx0bfa43c76629368d";
+
         //一健点评：5a544217123aca4505f8a680de415a35
+        //一健点评(小程序): 8db4aeac6f14921b8a7087daeba81f7a
         //快熊康复：7289786fae8511cbe9e94a8aec93e125
         public const string AppSecret = "7289786fae8511cbe9e94a8aec93e125";
+
+        /// <summary>
+        /// 小程序的AppSecret
+        /// </summary>
+        public const string MiniProgramAppSecret = "8db4aeac6f14921b8a7087daeba81f7a";
 
         /// <summary>
         /// 生成前端微信分享所需的签名等参数
@@ -49,6 +61,49 @@ namespace kangfupanda.webapi.Util
 
             return response;
         }
+
+        /// <summary>
+        /// 微信小程序的token
+        /// </summary>
+        /// <returns></returns>
+        public string GetMiniToken()
+        {
+            string tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + MiniProgramAppId + "&secret=" + MiniProgramAppSecret;
+            string jsonresult = HttpGet(tokenUrl, "UTF-8");
+            WX_Token wx = JsonDeserialize<WX_Token>(jsonresult);
+            return wx.access_token;
+        }
+
+        public string GenerateMiniQR(string accessToken, string path)
+        {
+            string postUrl = "https://api.weixin.qq.com/wxa/getwxacode?access_token=" + accessToken;
+            HttpWebRequest request = WebRequest.Create(postUrl) as HttpWebRequest;
+            request.Method = "POST";
+            request.ContentType = "application/json;charset=UTF-8";
+
+            string options = $"{{\"path\":\"{path}\"}}";
+            byte[] payload = Encoding.UTF8.GetBytes(options);
+            request.ContentLength = payload.Length;
+
+            Stream writer = request.GetRequestStream();
+            writer.Write(payload, 0, payload.Length);
+            writer.Close();
+
+            System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)request.GetResponse();
+            System.IO.Stream stream = response.GetResponseStream();
+            List<byte> bytes = new List<byte>();
+            int temp = stream.ReadByte();
+            while (temp != -1)
+            {
+                bytes.Add((byte)temp);
+                temp = stream.ReadByte();
+            }
+            byte[] result = bytes.ToArray();
+            string base64 = Convert.ToBase64String(result);//将byte[]转为base64
+
+            return base64;
+        }
+
 
         /// <summary>
         /// 获取微信jsapi_ticket

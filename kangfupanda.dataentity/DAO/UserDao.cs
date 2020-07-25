@@ -284,5 +284,56 @@ namespace kangfupanda.dataentity.DAO
             }
 
         }
+
+        /// <summary>
+        /// 获取QR Code
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        public string GetQRCode(string openId)
+        {
+            string qrcode = string.Empty;
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("select qrcode from user where openid=@openid and expiredat is null limit 1", conn);
+                    cmd.Parameters.Add(new MySqlParameter("openid", openId));
+
+                    var result = cmd.ExecuteScalar();
+                    if (result != null)
+                    {
+                        qrcode = result.ToString();
+                    }
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return qrcode;
+        }
+
+        public void UpdateQRCode(string qrCode, string openId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("update user set qrcode=@qrCode where openId=@openId", conn);
+                    cmd.Parameters.Add(new MySqlParameter("openId", openId));
+                    cmd.Parameters.Add(new MySqlParameter("qrCode", qrCode));
+
+                    cmd.ExecuteNonQuery();
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
     }
 }

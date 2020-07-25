@@ -47,6 +47,11 @@ namespace kangfupanda.dataentity.Model
         /// 用户详情二级页面的图片
         /// </summary>
         public string detailimage { get; set; }
+
+        /// <summary>
+        /// 小程序二维码
+        /// </summary>
+        public string qrcode { get; set; }
     }
 
     public class UserProfile : User { 

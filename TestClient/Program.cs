@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,84 +12,38 @@ namespace TestClient
     {
         static void Main(string[] args)
         {
-            for (int x = 0; x < 100; x++)
+            string access_token = "35_EwDiuIMKB2ZVwEKC0KYGGceJZ25yvhFVAB6YgmMazLUBFNC0XCssbDQq_3yJ8M9O8kgs5vJGKSVppH0oW9sJs4iyc5L6iS-htqGfX3UlFM9bOVBVDaFp3Ct4IlfYW_GhPrZ0euiUOqaNym3UDWSaACAWPL"; //这里写你调用token的方法
+          
+
+            string postUrl = "https://api.weixin.qq.com/wxa/getwxacode?access_token=" + access_token;
+            HttpWebRequest request = WebRequest.Create(postUrl) as HttpWebRequest;
+            request.Method = "POST";
+            request.ContentType = "application/json;charset=UTF-8";
+
+            string options = "{\"path\":\"pages/index/index\"}";
+            byte[] payload = Encoding.UTF8.GetBytes(options);
+            request.ContentLength = payload.Length;
+
+            Stream writer = request.GetRequestStream();
+            writer.Write(payload, 0, payload.Length);
+            writer.Close();
+
+            System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)request.GetResponse();
+            System.IO.Stream stream = response.GetResponseStream();
+            List<byte> bytes = new List<byte>();
+            int temp = stream.ReadByte();
+            while (temp != -1)
             {
-                int count = 5;
-                var inputIds = new int[100];
-
-                for (int y = 0; y < inputIds.Length; y++)
-                {
-                    inputIds[y] = y + 1;
-                }
-
-                var outputIds = new int[count];
-
-                RandomFetch(inputIds, outputIds, count);
-
-
-                StringBuilder sb = new StringBuilder();
-                outputIds.ToList().ForEach((id) =>
-                {
-                    sb.Append(id.ToString() + "  ");
-                });
-
-                Console.WriteLine(sb.ToString());
+                bytes.Add((byte)temp);
+                temp = stream.ReadByte();
             }
+            byte[] result = bytes.ToArray();
+            string base64 = Convert.ToBase64String(result);//将byte[]转为base64
+
+            File.WriteAllText(@"C:\Users\Administrator\Desktop\1.txt", base64);
 
             Console.ReadLine();
         }
-
-        static void RandomFetch(int[] inputIds, int[] outputIds, int count)
-        {
-            if (inputIds.Length == 0 || count == 0)
-            {
-                return;
-            }
-
-            if (count-- > 0)
-            {
-                var randomId = (new Random(Guid.NewGuid().ToString().GetHashCode())).Next(0, inputIds.Length - 1);
-
-                outputIds[outputIds.Length - count - 1] = inputIds[randomId];
-
-                if (randomId == 0)
-                {
-                    var newArray = new int[inputIds.Length - 1];
-                    for (int i = 0; i < newArray.Length; i++)
-                    {
-                        newArray[i] = inputIds[i+1];
-                    }
-                    inputIds = newArray;
-                }
-                else
-                {
-                    var leftArray = new int[randomId];
-                    for (int i = 0; i < randomId; i++)
-                    {
-                        leftArray[i] = inputIds[i];
-                    }
-                    var rightArray = new int[inputIds.Length - randomId - 1];
-                    for (int i = randomId + 1; i < inputIds.Length; i++)
-                    {
-                        rightArray[i-randomId - 1] = inputIds[i];
-                    }
-                    //inputIds.CopyTo(rightArray, randomId+1);
-
-                    var newArray = leftArray.Concat(rightArray).ToArray();
-
-                    inputIds = newArray;
-                }
-
-                
-            }
-
-            if (inputIds.Count() > 0 && count > 0)
-            {
-                RandomFetch(inputIds, outputIds, count);
-            }
-            
-        }
-
 
     }
 }
