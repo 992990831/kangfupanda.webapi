@@ -144,6 +144,106 @@ namespace kangfupanda.webapi.Controllers
         }
 
         /// <summary>
+        /// 根据被关注人进行分组
+        /// </summary>
+        /// <param name="followerOpenId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("list/v2/{followerOpenId}")]
+        public List<PostsByDoctor> GetFolloweePostV2(string followerOpenId)
+        {
+            List<PostsByDoctor> result = new List<PostsByDoctor>();
+
+            var followDao = new FollowDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            var userDao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+
+            var followees = followDao.GetFolloweesList(followerOpenId);
+
+            followees.ForEach(followeeOpenId =>
+            {
+                PostsByDoctor post = new PostsByDoctor();
+                var author = userDao.GetUser(followeeOpenId);
+                post.author = author;
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append($" and g.openid='{followeeOpenId}' ");
+                var messages = dao.GetListExt(sb.ToString(), count: int.MaxValue, endId: int.MaxValue);
+
+                var clubItems = new List<ClubItem>();
+                if (messages != null)
+                {
+                    messages.ForEach(msg =>
+                    {
+                        List<string> pics = new List<string>();
+                        if (!string.IsNullOrEmpty(msg.pic01))
+                        {
+                            pics.Add(msg.pic01);
+                        }
+                        if (!string.IsNullOrEmpty(msg.pic02))
+                        {
+                            pics.Add(msg.pic02);
+                        }
+                        if (!string.IsNullOrEmpty(msg.pic03))
+                        {
+                            pics.Add(msg.pic03);
+                        }
+                        if (!string.IsNullOrEmpty(msg.pic04))
+                        {
+                            pics.Add(msg.pic04);
+                        }
+                        if (!string.IsNullOrEmpty(msg.pic05))
+                        {
+                            pics.Add(msg.pic05);
+                        }
+                        if (!string.IsNullOrEmpty(msg.pic06))
+                        {
+                            pics.Add(msg.pic06);
+                        }
+
+                        List<string> audioes = new List<string>();
+                        if (!string.IsNullOrEmpty(msg.audio01))
+                        {
+                            audioes.Add(msg.audio01);
+                        }
+                        if (!string.IsNullOrEmpty(msg.audio02))
+                        {
+                            audioes.Add(msg.audio02);
+                        }
+                        if (!string.IsNullOrEmpty(msg.audio03))
+                        {
+                            audioes.Add(msg.audio03);
+                        }
+
+                        clubItems.Add(new ClubItem()
+                        {
+                            postId = msg.id,
+                            openId = msg.openId,
+                            author = msg.author,
+                            authorHeadPic = msg.authorHeadPic,
+                            name = msg.name,
+                            poster = msg.poster,
+                            pics = pics,
+                            audioes = audioes,
+                            itemType = ClubItemType.Graphic,
+                            text = msg.text,
+                            likeCount = msg.likeCount,
+                            commentCount = msg.commentCount,
+                            createdAt = msg.createdAt
+                        });
+                    });
+                }
+
+                post.posts = clubItems;
+
+                result.Add(post);
+            });
+
+            return result;
+        }
+
+
+        /// <summary>
         /// 根据postId找到作者，然后关注该作者
         /// </summary>
         /// <param name="postId"></param>
@@ -168,5 +268,15 @@ namespace kangfupanda.webapi.Controllers
                 }
             }
         }
+    }
+
+    /// <summary>
+    ///  前台  发现 -> 关注 页面的对象模型。
+    ///  由所关注的作者进行分组
+    /// </summary>
+    public class PostsByDoctor { 
+        public User author { get; set; }
+
+        public List<ClubItem> posts { get; set; }
     }
 }

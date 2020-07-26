@@ -77,7 +77,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select followee from `follow` where follower=@follower and expiredat is null", conn);
+                    MySqlCommand cmd = new MySqlCommand("select distinct(followee) from `follow` where follower=@follower and expiredat is null", conn);
                     cmd.Parameters.Add(new MySqlParameter("follower", followerOpenId));
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
