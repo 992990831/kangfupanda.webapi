@@ -158,7 +158,7 @@ namespace kangfupanda.webapi.Controllers
             var userDao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
 
-            var followees = followDao.GetFolloweesList(followerOpenId);
+            var followees = followDao.GetFolloweesList(followerOpenId); 
 
             followees.ForEach(followeeOpenId =>
             {
@@ -168,7 +168,7 @@ namespace kangfupanda.webapi.Controllers
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append($" and g.openid='{followeeOpenId}' ");
-                var messages = dao.GetListExt(sb.ToString(), count: int.MaxValue, endId: int.MaxValue);
+                var messages = dao.GetListExt(sb.ToString(), count: 2, endId: int.MaxValue); //每个作者只取前两个作品
 
                 var clubItems = new List<ClubItem>();
                 if (messages != null)
