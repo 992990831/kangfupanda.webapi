@@ -22,8 +22,8 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("insert into comments(comment_post_id, comment_post_type, comment_user_id, comment_user_name, comment_user_pic, comment_user_IP, comment_content,comment_audit_status,comment_like_count,comment_dislike_count,comment_is_recommend,comment_parent_id,user_id,user_name,createdAt,updatedAt) " +
-                        "values(@comment_post_id, @comment_post_type,  @comment_user_id, @comment_user_name, @comment_user_pic, @user_IP,@content,@audit_status,@like_count,@dislike_count,@is_recommend,@parent_id,@user_id,@user_name,now(),now())", conn);
+                    MySqlCommand cmd = new MySqlCommand("insert into comments(comment_post_id, comment_post_type, comment_user_id, comment_user_name, comment_user_pic, comment_user_IP, comment_content,comment_audit_status,comment_like_count,comment_dislike_count,comment_is_recommend,user_id,user_name,createdAt,updatedAt) " +
+                        "values(@comment_post_id, @comment_post_type,  @comment_user_id, @comment_user_name, @comment_user_pic, @user_IP,@content,@audit_status,@like_count,@dislike_count,@is_recommend,@user_id,@user_name,now(),now())", conn);
                     cmd.Parameters.Add(new MySqlParameter("comment_post_id", comments.comment_post_id));
                     cmd.Parameters.Add(new MySqlParameter("comment_post_type", comments.comment_post_type));
                     cmd.Parameters.Add(new MySqlParameter("comment_user_id", comments.comment_user_id));
