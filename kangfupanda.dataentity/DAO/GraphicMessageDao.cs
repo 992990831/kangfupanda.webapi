@@ -302,7 +302,7 @@ namespace kangfupanda.dataentity.DAO
             return msgListExt;
         }
 
-        public List<GraphicMessageExt> GetTopExt()
+        public List<GraphicMessageExt> GetTopExt(string filter)
         {
             List<GraphicMessageExt> msgListExt = new List<GraphicMessageExt>();
             using (MySqlConnection conn = new MySqlConnection(connStr))
@@ -310,7 +310,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand($"select g.*, u.headpic, (select count(1) from `like` where itemId=g.id and itemType='graphic' and expiredAt is null ) as likeCount,  (select count(1) from `comments` where comment_post_id=g.id and comment_post_type='graphic' and comment_audit_status=1 and expiredAt is null ) as commentCount from graphicmessage as g left join `user` as u on g.openId=u.openId  where g.expiredAt is null and g.isTop=1 order by g.isTop desc, g.id desc ", conn);
+                    MySqlCommand cmd = new MySqlCommand($"select g.*, u.headpic, (select count(1) from `like` where itemId=g.id and itemType='graphic' and expiredAt is null ) as likeCount,  (select count(1) from `comments` where comment_post_id=g.id and comment_post_type='graphic' and comment_audit_status=1 and expiredAt is null ) as commentCount from graphicmessage as g left join `user` as u on g.openId=u.openId  where g.expiredAt is null and g.isTop=1 {filter} order by g.isTop desc, g.id desc ", conn);
 
                     var sqlReader = cmd.ExecuteReader();
                     while (sqlReader.Read())

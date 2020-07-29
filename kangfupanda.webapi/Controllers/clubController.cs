@@ -21,20 +21,26 @@ namespace kangfupanda.webapi.Controllers
     public class ClubController : ApiController
     {
         [Route("list")]
-        public List<ClubItem> GetClubList(string openId, int count=10, int endId=int.MaxValue)
+        public List<ClubItem> GetClubList(string openId, int count=10, int endId=int.MaxValue, string filter="")
         {
             List<ClubItem> results = new List<ClubItem>();
 
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
 
-            var messages = dao.GetListExt(filter: " and isTop=0 ", count: count, endId: endId);
+            string nameFilter = "";
+            if(!string.IsNullOrEmpty(filter))
+            {
+                nameFilter = $" and name like '%{filter}%' ";
+            }
+
+            var messages = dao.GetListExt(filter: $" and isTop=0 {nameFilter} ", count: count, endId: endId);
 
             if (messages.Count < count) //如果取出的数量不够，就从头再取，补足不够的数量
             {
                 //简单起见，每次到头部的时候，就把置顶文章给带上
-                var topMsgs = dao.GetTopExt();
+                var topMsgs = dao.GetTopExt(nameFilter);
 
-                var compensateMsgs = dao.GetListExt(filter: " and isTop=0 ", count: count - messages.Count, endId: int.MaxValue);
+                var compensateMsgs = dao.GetListExt(filter: $" and isTop=0 {nameFilter} ", count: count - messages.Count, endId: int.MaxValue);
 
                 messages.AddRange(topMsgs);
                 messages.AddRange(compensateMsgs);
