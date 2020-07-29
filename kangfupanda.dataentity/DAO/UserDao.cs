@@ -198,6 +198,45 @@ namespace kangfupanda.dataentity.DAO
             return users;
         }
 
+        /// <summary>
+        /// 按最后访问时间给用户排序
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public List<string> GetUserOpenIdListByApiLog(int pageIndex = 1, int pageSize = 10, string filter = "")
+        {
+            List<string> openIds = new List<string>();
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    int skip = (pageIndex - 1) * pageSize;
+
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand("select u.openid, max(a.createdat) FROM demo.user as u left join demo.apilog as a on u.openid = a.openid"
+                     + $" where 1=1 {filter} "
+                     + " group by u.openid "
+                     + " order by max(a.createdat) desc "
+                     + $" limit {skip}, {pageSize}", conn);
+
+                    var sqlReader = cmd.ExecuteReader();
+                    while (sqlReader.Read())
+                    {
+                        openIds.Add(sqlReader["openid"].ToString());
+                    }
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return openIds;
+        }
+
         public Int64 GetListCount(string filter="")
         {
             using (MySqlConnection conn = new MySqlConnection(connStr))

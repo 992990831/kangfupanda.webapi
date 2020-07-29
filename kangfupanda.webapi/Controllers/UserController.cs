@@ -90,16 +90,19 @@ namespace kangfupanda.webapi.Controllers
         public UserList GetAdminDoctorList(int pageIndex = 1, int pageSize = 10, string order="") {
             var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
 
-            var users = dao.GetList(pageIndex, pageSize, "and usertype is not null and usertype!='普通用户'");
+            var userOpenIds = dao.GetUserOpenIdListByApiLog(pageIndex, pageSize, "and usertype is not null and usertype!='普通用户'");
+
             var count = dao.GetListCount("and usertype is not null and usertype!='普通用户'");
 
             var usersExt = new List<UserExt>();
             var apiLogDao = new ApiLogDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            users.ForEach(user =>
+            userOpenIds.ForEach(openId =>
             {
-                if (!string.IsNullOrEmpty(user.openId))
+                if (!string.IsNullOrEmpty(openId))
                 {
-                    var log = apiLogDao.GetByOpenId(user.openId);
+                    var user = dao.GetUser(openId);
+
+                    //var log = apiLogDao.GetByOpenId(user.openId);
                     UserExt userExt = new UserExt();
                     userExt.id = user.id;
                     userExt.openId = user.openId;
@@ -117,8 +120,8 @@ namespace kangfupanda.webapi.Controllers
                     userExt.detailimage = user.detailimage;
                     userExt.createdAt = user.createdAt;
 
-                    userExt.lastVisitedAt = log.lastVisitedAt;
-                    userExt.visitCountLastWeek = log.visitCountLastWeek;
+                    userExt.lastVisitedAt = apiLogDao.GetLastVisitedTime(user.openId); //log.lastVisitedAt;
+                    userExt.visitCountLastWeek = apiLogDao.GetLastWeekCount(user.openId); //log.visitCountLastWeek;
 
                     usersExt.Add(userExt);
                 }                
@@ -144,15 +147,17 @@ namespace kangfupanda.webapi.Controllers
         public UserList GetAdminUserList(int pageIndex = 1, int pageSize = 10, string order = "")
         {
             var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var users = dao.GetList(pageIndex, pageSize, "and (usertype='普通用户' or usertype is null) ");
+            var userOpenIds = dao.GetUserOpenIdListByApiLog(pageIndex, pageSize, "and (usertype='普通用户' or usertype is null) ");
             var count = dao.GetListCount("and (usertype='普通用户' or usertype is null) ");
 
             var usersExt = new List<UserExt>();
             var apiLogDao = new ApiLogDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            users.ForEach(user =>
+            userOpenIds.ForEach(openId =>
             {
-                if (!string.IsNullOrEmpty(user.openId))
+                if (!string.IsNullOrEmpty(openId))
                 {
+                    var user = dao.GetUser(openId);
+
                     var log = apiLogDao.GetByOpenId(user.openId);
                     UserExt userExt = new UserExt();
                     userExt.id = user.id;
@@ -171,8 +176,8 @@ namespace kangfupanda.webapi.Controllers
                     userExt.detailimage = user.detailimage;
                     userExt.createdAt = user.createdAt;
 
-                    userExt.lastVisitedAt = log.lastVisitedAt;
-                    userExt.visitCountLastWeek = log.visitCountLastWeek;
+                    userExt.lastVisitedAt = apiLogDao.GetLastVisitedTime(user.openId); //log.lastVisitedAt;
+                    userExt.visitCountLastWeek = apiLogDao.GetLastWeekCount(user.openId); //log.visitCountLastWeek;
 
                     usersExt.Add(userExt);
                 }

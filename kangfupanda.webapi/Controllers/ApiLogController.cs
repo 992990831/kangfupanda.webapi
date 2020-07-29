@@ -15,12 +15,19 @@ namespace kangfupanda.webapi.Controllers
     {
         [HttpGet]
         [Route("list")]
-        public VisitLogList GetTagList(int pageIndex = 1, int pageSize = 10)
+        public VisitLogList GetApiLogList(int pageIndex = 1, int pageSize = 10)
         {
             List<VisitLog> logs = new List<VisitLog>();
             var dao = new ApiLogDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
 
             logs = dao.GetList(pageIndex, pageSize);
+
+            logs.ForEach(log =>
+            {
+                log.visitCountLastWeek = dao.GetLastWeekCount(log.openId);
+                //log.lastVisitedAt = dao.GetLastVisitedTime(log.openId);
+            });
+
             long count = dao.GetListCount();
             return new VisitLogList()
             {
