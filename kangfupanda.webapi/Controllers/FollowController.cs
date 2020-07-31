@@ -242,6 +242,27 @@ namespace kangfupanda.webapi.Controllers
             return result;
         }
 
+        [HttpGet]
+        [Route("list/all")]
+        public AllFollows GetAllFollows(int pageIndex, int pageSize, string followerName)
+        {
+            AllFollows result = new AllFollows();
+
+            var followDao = new FollowDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            string filter = string.Empty;
+
+            if(!string.IsNullOrEmpty(followerName))
+            {
+                filter = $" and u2.nickName like '%{followerName}%' ";
+            }
+            var allFollows = followDao.GetFollows(pageIndex, pageSize, filter);
+            var count = followDao.GetFollowsCount(filter);
+
+            result.follows = allFollows;
+            result.count = count;
+
+            return result;
+        }
 
         /// <summary>
         /// 根据postId找到作者，然后关注该作者
@@ -268,6 +289,20 @@ namespace kangfupanda.webapi.Controllers
                 }
             }
         }
+
+        /// <summary>
+        /// 取消关注
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <param name="followerId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("unfollow/{followId}")]
+        public void Unfollow(int followId)
+        {
+            var followDao = new FollowDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            followDao.UnFollow(followId);
+        }
     }
 
     /// <summary>
@@ -278,5 +313,10 @@ namespace kangfupanda.webapi.Controllers
         public User author { get; set; }
 
         public List<ClubItem> posts { get; set; }
+    }
+
+    public class AllFollows {
+        public List<FollowEx> follows { get; set; }
+        public long count { get; set; }
     }
 }
