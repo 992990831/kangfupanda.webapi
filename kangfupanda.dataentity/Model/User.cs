@@ -52,6 +52,11 @@ namespace kangfupanda.dataentity.Model
         /// 小程序二维码
         /// </summary>
         public string qrcode { get; set; }
+
+        /// <summary>
+        /// 专家证书
+        /// </summary>
+        public string certificate { get; set; }
     }
 
     public class UserProfile : User { 

@@ -118,6 +118,7 @@ namespace kangfupanda.webapi.Controllers
                     userExt.verified = user.verified;
                     userExt.displayinapp = user.displayinapp;
                     userExt.detailimage = user.detailimage;
+                    userExt.certificate = user.certificate;
                     userExt.createdAt = user.createdAt;
 
                     userExt.lastVisitedAt = apiLogDao.GetLastVisitedTime(user.openId); //log.lastVisitedAt;
