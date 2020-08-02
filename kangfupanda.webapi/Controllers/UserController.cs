@@ -49,15 +49,60 @@ namespace kangfupanda.webapi.Controllers
             return response;
         }
 
+        /// <summary>
+        /// 前端查看个人主页
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <returns></returns>
         [Route("{openId}")]
         [HttpGet]
         public UserProfile GetUser(string openId)
         {
             var dao = new UserDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
             var user = dao.GetUser(openId);
-            var userProfile = new UserProfile();
+            var userProfile = JsonConvert.DeserializeObject<UserProfile>(JsonConvert.SerializeObject(user));
 
-            userProfile = JsonConvert.DeserializeObject<UserProfile>(JsonConvert.SerializeObject(user));
+            userProfile.certs = new List<DoctorCert>();
+            if (!string.IsNullOrEmpty(userProfile.certificate) || !string.IsNullOrEmpty(userProfile.certText))
+            {
+                userProfile.certs.Add(new DoctorCert() { cert=userProfile.certificate, text= userProfile.certText });
+            }
+
+            if (!string.IsNullOrEmpty(userProfile.certificate1) || !string.IsNullOrEmpty(userProfile.cert1Text))
+            {
+                userProfile.certs.Add(new DoctorCert() { cert = userProfile.certificate1, text = userProfile.cert1Text });
+            }
+
+            if (!string.IsNullOrEmpty(userProfile.certificate2) || !string.IsNullOrEmpty(userProfile.cert2Text))
+            {
+                userProfile.certs.Add(new DoctorCert() { cert = userProfile.certificate2, text = userProfile.cert2Text });
+            }
+
+            if (!string.IsNullOrEmpty(userProfile.certificate3) || !string.IsNullOrEmpty(userProfile.cert3Text))
+            {
+                userProfile.certs.Add(new DoctorCert() { cert = userProfile.certificate3, text = userProfile.cert3Text });
+            }
+
+            if (!string.IsNullOrEmpty(userProfile.certificate4) || !string.IsNullOrEmpty(userProfile.cert4Text))
+            {
+                userProfile.certs.Add(new DoctorCert() { cert = userProfile.certificate4, text = userProfile.cert4Text });
+            }
+
+            if (!string.IsNullOrEmpty(userProfile.certificate5) || !string.IsNullOrEmpty(userProfile.cert5Text))
+            {
+                userProfile.certs.Add(new DoctorCert() { cert = userProfile.certificate5, text = userProfile.cert5Text });
+            }
+
+            if (!string.IsNullOrEmpty(userProfile.certificate6) || !string.IsNullOrEmpty(userProfile.cert6Text))
+            {
+                userProfile.certs.Add(new DoctorCert() { cert = userProfile.certificate6, text = userProfile.cert6Text });
+            }
+
+            if (!string.IsNullOrEmpty(userProfile.certificate7) || !string.IsNullOrEmpty(userProfile.cert7Text))
+            {
+                userProfile.certs.Add(new DoctorCert() { cert = userProfile.certificate7, text = userProfile.cert7Text });
+            }
+
 
             var likeDao = new LikeDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
             var followDao = new FollowDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
@@ -118,7 +163,26 @@ namespace kangfupanda.webapi.Controllers
                     userExt.verified = user.verified;
                     userExt.displayinapp = user.displayinapp;
                     userExt.detailimage = user.detailimage;
+
+                    #region 证书
                     userExt.certificate = user.certificate;
+                    userExt.certText = user.certText;
+                    userExt.certificate1 = user.certificate1;
+                    userExt.cert1Text = user.cert1Text;
+                    userExt.certificate2 = user.certificate2;
+                    userExt.cert2Text = user.cert2Text;
+                    userExt.certificate3 = user.certificate3;
+                    userExt.cert3Text = user.cert3Text;
+                    userExt.certificate4 = user.certificate4;
+                    userExt.cert4Text = user.cert4Text;
+                    userExt.certificate5 = user.certificate5;
+                    userExt.cert5Text = user.cert5Text;
+                    userExt.certificate6 = user.certificate6;
+                    userExt.cert6Text = user.cert6Text;
+                    userExt.certificate7 = user.certificate7;
+                    userExt.cert7Text = user.cert7Text;
+                    #endregion
+
                     userExt.createdAt = user.createdAt;
 
                     userExt.lastVisitedAt = apiLogDao.GetLastVisitedTime(user.openId); //log.lastVisitedAt;

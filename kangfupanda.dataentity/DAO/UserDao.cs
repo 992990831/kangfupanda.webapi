@@ -36,7 +36,24 @@ namespace kangfupanda.dataentity.DAO
                         user.usertype = sqlReader["usertype"] == DBNull.Value ? string.Empty : (string)sqlReader["usertype"];
                         user.note = sqlReader["note"] == DBNull.Value ? string.Empty : (string)sqlReader["note"];
                         user.expertise = sqlReader["expertise"] == DBNull.Value ? string.Empty : (string)sqlReader["expertise"];
+
                         user.certificate = sqlReader["certificate"] == DBNull.Value ? string.Empty : (string)sqlReader["certificate"];
+                        user.certificate1 = sqlReader["certificate1"] == DBNull.Value ? string.Empty : (string)sqlReader["certificate1"];
+                        user.certificate2 = sqlReader["certificate2"] == DBNull.Value ? string.Empty : (string)sqlReader["certificate2"];
+                        user.certificate3 = sqlReader["certificate3"] == DBNull.Value ? string.Empty : (string)sqlReader["certificate3"];
+                        user.certificate4 = sqlReader["certificate4"] == DBNull.Value ? string.Empty : (string)sqlReader["certificate4"];
+                        user.certificate5 = sqlReader["certificate5"] == DBNull.Value ? string.Empty : (string)sqlReader["certificate5"];
+                        user.certificate6 = sqlReader["certificate6"] == DBNull.Value ? string.Empty : (string)sqlReader["certificate6"];
+                        user.certificate7 = sqlReader["certificate7"] == DBNull.Value ? string.Empty : (string)sqlReader["certificate7"];
+                        user.certText = sqlReader["certtext"] == DBNull.Value ? string.Empty : (string)sqlReader["certtext"];
+                        user.cert1Text = sqlReader["cert1text"] == DBNull.Value ? string.Empty : (string)sqlReader["cert1text"];
+                        user.cert2Text = sqlReader["cert2text"] == DBNull.Value ? string.Empty : (string)sqlReader["cert2text"];
+                        user.cert3Text = sqlReader["cert3text"] == DBNull.Value ? string.Empty : (string)sqlReader["cert3text"];
+                        user.cert4Text = sqlReader["cert4text"] == DBNull.Value ? string.Empty : (string)sqlReader["cert4text"];
+                        user.cert5Text = sqlReader["cert5text"] == DBNull.Value ? string.Empty : (string)sqlReader["cert5text"];
+                        user.cert6Text = sqlReader["cert6text"] == DBNull.Value ? string.Empty : (string)sqlReader["cert6text"];
+                        user.cert7Text = sqlReader["cert7text"] == DBNull.Value ? string.Empty : (string)sqlReader["cert7text"];
+
                         user.verified = sqlReader["verified"] == DBNull.Value ? false : ((ulong)sqlReader["verified"] == 1);
                         user.createdAt = sqlReader["createdAt"] == DBNull.Value ? DateTime.MinValue : (DateTime)sqlReader["createdAt"];
                     }
@@ -60,7 +77,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("insert into user(openId, nickName, province, city, phone, sex, headpic, usertype, note, expertise, detailimage, certificate, createdAt, updatedAt) values(@openId, @nickName, @province, @city, @phone, @sex, @headpic, @usertype, @note, @expertise, @detailimage, @certificate, now(), now())", conn);
+                    MySqlCommand cmd = new MySqlCommand("insert into user(openId, nickName, province, city, phone, sex, headpic, usertype, note, expertise, detailimage, certificate, certtext, certificate1, cert1text, certificate2, cert2text, certificate3, cert3text, certificate4, cert4text, certificate5, cert5text, certificate6, cert6text, certificate7, cert7text, createdAt, updatedAt) values(@openId, @nickName, @province, @city, @phone, @sex, @headpic, @usertype, @note, @expertise, @detailimage, @certificate, @cert1text, @certificate2, @cert2text, @certificate3, @cert3text, @certificate4, @cert4text, @certificate5, @cert5text, @certificate6, @cert6text, @certificate7, @cert7text, now(), now())", conn);
                     cmd.Parameters.Add(new MySqlParameter("openId", user.openId));
                     cmd.Parameters.Add(new MySqlParameter("nickName", user.nickName));
                     cmd.Parameters.Add(new MySqlParameter("province", user.province));
@@ -72,7 +89,23 @@ namespace kangfupanda.dataentity.DAO
                     cmd.Parameters.Add(new MySqlParameter("expertise", user.expertise));
                     cmd.Parameters.Add(new MySqlParameter("usertype", user.usertype));
                     cmd.Parameters.Add(new MySqlParameter("detailimage", user.detailimage));
+
                     cmd.Parameters.Add(new MySqlParameter("certificate", user.certificate));
+                    cmd.Parameters.Add(new MySqlParameter("certtext", user.certText));
+                    cmd.Parameters.Add(new MySqlParameter("certificate1", user.certificate1));
+                    cmd.Parameters.Add(new MySqlParameter("cert1text", user.cert1Text));
+                    cmd.Parameters.Add(new MySqlParameter("certificate2", user.certificate2));
+                    cmd.Parameters.Add(new MySqlParameter("cert2text", user.cert2Text));
+                    cmd.Parameters.Add(new MySqlParameter("certificate3", user.certificate3));
+                    cmd.Parameters.Add(new MySqlParameter("cert3text", user.cert3Text));
+                    cmd.Parameters.Add(new MySqlParameter("certificate4", user.certificate4));
+                    cmd.Parameters.Add(new MySqlParameter("cert4text", user.cert4Text));
+                    cmd.Parameters.Add(new MySqlParameter("certificate5", user.certificate5));
+                    cmd.Parameters.Add(new MySqlParameter("cert5text", user.cert5Text));
+                    cmd.Parameters.Add(new MySqlParameter("certificate6", user.certificate6));
+                    cmd.Parameters.Add(new MySqlParameter("cert6text", user.cert6Text));
+                    cmd.Parameters.Add(new MySqlParameter("certificate7", user.certificate7));
+                    cmd.Parameters.Add(new MySqlParameter("cert7text", user.cert7Text));
 
                     cmd.ExecuteNonQuery();
 
@@ -96,7 +129,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("update user set nickName=@nickName, province=@province, city=@city, phone=@phone, sex=@sex, headpic=@headpic, usertype=@usertype, note=@note, expertise=@expertise, detailimage=@detailimage, certificate=@certificate, updatedAt=now() where openId=@openId", conn);
+                    MySqlCommand cmd = new MySqlCommand("update user set nickName=@nickName, province=@province, city=@city, phone=@phone, sex=@sex, headpic=@headpic, usertype=@usertype, note=@note, expertise=@expertise, detailimage=@detailimage, certificate=@certificate, certtext=@certtext, certificate1=@certificate1, cert1text=@cert1text,certificate2=@certificate2, cert2text=@cert2text,certificate3=@certificate3, cert3text=@cert3text, certificate4=@certificate4, cert4text=@cert4text, certificate5=@certificate5, cert5text=@cert5text, certificate6=@certificate6,  cert6text=@cert6text, certificate7=@certificate7, cert7text=@cert7text, updatedAt=now() where openId=@openId", conn);
                     cmd.Parameters.Add(new MySqlParameter("openId", user.openId));
                     cmd.Parameters.Add(new MySqlParameter("nickName", user.nickName));
                     cmd.Parameters.Add(new MySqlParameter("province", user.province));
@@ -108,7 +141,23 @@ namespace kangfupanda.dataentity.DAO
                     cmd.Parameters.Add(new MySqlParameter("expertise", user.expertise));
                     cmd.Parameters.Add(new MySqlParameter("usertype", user.usertype));
                     cmd.Parameters.Add(new MySqlParameter("detailimage", user.detailimage));
+
                     cmd.Parameters.Add(new MySqlParameter("certificate", user.certificate));
+                    cmd.Parameters.Add(new MySqlParameter("certtext", user.certText));
+                    cmd.Parameters.Add(new MySqlParameter("certificate1", user.certificate1));
+                    cmd.Parameters.Add(new MySqlParameter("cert1text", user.cert1Text));
+                    cmd.Parameters.Add(new MySqlParameter("certificate2", user.certificate2));
+                    cmd.Parameters.Add(new MySqlParameter("cert2text", user.cert2Text));
+                    cmd.Parameters.Add(new MySqlParameter("certificate3", user.certificate3));
+                    cmd.Parameters.Add(new MySqlParameter("cert3text", user.cert3Text));
+                    cmd.Parameters.Add(new MySqlParameter("certificate4", user.certificate4));
+                    cmd.Parameters.Add(new MySqlParameter("cert4text", user.cert4Text));
+                    cmd.Parameters.Add(new MySqlParameter("certificate5", user.certificate5));
+                    cmd.Parameters.Add(new MySqlParameter("cert5text", user.cert5Text));
+                    cmd.Parameters.Add(new MySqlParameter("certificate6", user.certificate6));
+                    cmd.Parameters.Add(new MySqlParameter("cert6text", user.cert6Text));
+                    cmd.Parameters.Add(new MySqlParameter("certificate7", user.certificate7));
+                    cmd.Parameters.Add(new MySqlParameter("cert7text", user.cert7Text));
 
                     cmd.ExecuteNonQuery();
 
