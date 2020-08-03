@@ -12,6 +12,11 @@ namespace kangfupanda.webapi.Util
 {
     public class WeixinHelper
     {
+        private static System.Web.Caching.Cache tokenCache = HttpRuntime.Cache;
+        private const string tokenCacheName = "token";
+
+        static readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(WeixinHelper));
+
         //一健点评(服务号)：wx496e5a01291ad836
         //一健点评(小程序): wx0bfa43c76629368d
         //快熊康复：wxc10ff63ecf588c90
@@ -126,9 +131,17 @@ namespace kangfupanda.webapi.Util
         /// <returns>access_token</returns>
         private string GetAccess_token(string appid, string secret)
         {
+            if(tokenCache[tokenCacheName] != null)
+            {
+                logger.Info($"get wechat token from cache: {tokenCache[tokenCacheName].ToString()}");
+                return tokenCache[tokenCacheName].ToString();
+            }
+
             string tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + secret;
             string jsonresult = HttpGet(tokenUrl, "UTF-8");
             WX_Token wx = JsonDeserialize<WX_Token>(jsonresult);
+            tokenCache.Insert(tokenCacheName, wx.access_token, null, System.DateTime.Now.AddSeconds(1800), TimeSpan.Zero);
+            logger.Info($"get wechat token from api: {wx.access_token}");
             return wx.access_token;
         }
 

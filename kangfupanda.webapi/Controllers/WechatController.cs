@@ -16,7 +16,7 @@ namespace kangfupanda.webapi.Controllers
     {
         [Route("user")]
         [HttpGet]
-        public string GetWebChatUser(string code)
+        public string GetWeChatUser(string code)
         {
             string accessTokenStr = getAccessToken(code);
             var accessTokenObj = JObject.Parse(accessTokenStr);
