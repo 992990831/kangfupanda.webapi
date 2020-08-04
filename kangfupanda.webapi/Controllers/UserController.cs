@@ -181,6 +181,10 @@ namespace kangfupanda.webapi.Controllers
                     userExt.cert6Text = user.cert6Text;
                     userExt.certificate7 = user.certificate7;
                     userExt.cert7Text = user.cert7Text;
+
+                    userExt.profilevideo = user.profilevideo;
+                    userExt.profilevideoposter = user.profilevideoposter;
+
                     #endregion
 
                     userExt.createdAt = user.createdAt;

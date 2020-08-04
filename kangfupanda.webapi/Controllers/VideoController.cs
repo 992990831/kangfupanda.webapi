@@ -108,6 +108,52 @@ namespace kangfupanda.webapi.Controllers
             }
         }
 
+        /// <summary>
+        /// 上传专家视频、海报
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult UploadProfileVideo()
+        {
+            try
+            {
+                var file = this.Request.Files[0];
+                string strFileExtName = file.FileName;
+
+                string fileUploadPath = ConfigurationManager.AppSettings["UploadFolderPath"];
+                string videoFolder = ConfigurationManager.AppSettings["IntroVideoFolder"];
+                //string fileUplaodUrl = ConfigurationManager.AppSettings["UploadUrl"].ToString();
+
+                string filename = DateTime.Now.ToString("yyyyMMddHHmmssfff") + file.FileName;
+                filename = filename.Replace("+", "");
+                filename = filename.Replace("%", "");
+                filename = filename.Replace(" ", "");
+
+                //string fold = $"{DateTime.Today.ToString("yyyyMMdd")}";
+                //string url = fileUplaodUrl + filename;
+
+                //string fullFolder = this.HttpContext.Server.MapPath("/") + fileUploadPath + "\\";
+
+                if (!Directory.Exists(fileUploadPath + videoFolder))
+                {
+                    Directory.CreateDirectory(fileUploadPath);
+                }
+
+                file.SaveAs(fileUploadPath + videoFolder + "\\" + filename);
+
+                var response = new ResponseEntity<string>(true, "上传成功", filename);
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                //Loger.LogErr("UploadFile " + ex.ToString());
+
+                var response = new ResponseEntity<string>(false, "上传失败", null);
+
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult UploadSiteVideo()
         {
             try

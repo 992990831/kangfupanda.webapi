@@ -132,6 +132,16 @@ namespace kangfupanda.dataentity.Model
         /// 证书描述
         /// </summary>
         public string cert7Text { get; set; }
+
+        /// <summary>
+        /// 专家介绍视频
+        /// </summary>
+        public string profilevideo { get; set; }
+
+        /// <summary>
+        /// 专家介绍视频的封面海报
+        /// </summary>
+        public string profilevideoposter { get; set; }
     }
 
     public class UserProfile : User { 
