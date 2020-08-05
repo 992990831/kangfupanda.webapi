@@ -1,5 +1,6 @@
 ﻿using kangfupanda.dataentity.DAO;
 using kangfupanda.dataentity.Model;
+using kangfupanda.webapi.Common;
 using kangfupanda.webapi.Models;
 using kangfupanda.webapi.Util;
 using Newtonsoft.Json;
@@ -17,6 +18,8 @@ namespace kangfupanda.webapi.Controllers
     [RoutePrefix("user")]
     public class UserController : ApiController
     {
+        static readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(UserController));
+
         [Route("register")]
         [HttpPost]
         /// <summary>
@@ -288,7 +291,24 @@ namespace kangfupanda.webapi.Controllers
         public ResponseEntity<string> AddUser(User userDTO)
         {
             userDTO.openId = Guid.NewGuid().ToString();
-            userDTO.headpic = ConfigurationManager.AppSettings["UploadUrl"] + userDTO.headpic;
+            //userDTO.headpic = ConfigurationManager.AppSettings["UploadUrl"] + userDTO.headpic;
+
+            if (!string.IsNullOrEmpty(userDTO.headpic) && userDTO.headpic.IndexOf("base64,") > -1)
+            {
+                try
+                {
+                    var img = Utils.GetImageFromBase64(userDTO.headpic.Substring(userDTO.headpic.IndexOf("base64,") + 7));
+                    string fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".jpg";
+                    string fullPath = ConfigurationManager.AppSettings["UploadFolderPath"] + fileName;
+                    img.Save(fullPath);
+
+                    userDTO.headpic = ConfigurationManager.AppSettings["UploadUrl"] + fileName;
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.Message);
+                }
+            }
 
             ResponseEntity<string> response = new ResponseEntity<string>();
 
@@ -310,7 +330,24 @@ namespace kangfupanda.webapi.Controllers
         [HttpPost]
         public ResponseEntity<string> UpdateUser(User userDTO)
         {
-            userDTO.headpic = ConfigurationManager.AppSettings["UploadUrl"] + userDTO.headpic;
+            //userDTO.headpic = ConfigurationManager.AppSettings["UploadUrl"] + userDTO.headpic;
+
+            if (!string.IsNullOrEmpty(userDTO.headpic) && userDTO.headpic.IndexOf("base64,") > -1)
+            {
+                try
+                {
+                    var img = Utils.GetImageFromBase64(userDTO.headpic.Substring(userDTO.headpic.IndexOf("base64,") + 7));
+                    string fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".jpg";
+                    string fullPath = ConfigurationManager.AppSettings["UploadFolderPath"] + fileName;
+                    img.Save(fullPath);
+
+                    userDTO.headpic = ConfigurationManager.AppSettings["UploadUrl"] + fileName;
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.Message);
+                }
+            }
 
             ResponseEntity<string> response = new ResponseEntity<string>();
 
