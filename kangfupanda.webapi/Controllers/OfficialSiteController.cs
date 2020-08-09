@@ -1,4 +1,6 @@
-﻿using kangfupanda.webapi.Models;
+﻿using kangfupanda.dataentity.DAO;
+using kangfupanda.webapi.Common;
+using kangfupanda.webapi.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -95,6 +97,89 @@ namespace kangfupanda.webapi.Controllers
             var doctor = JsonConvert.DeserializeObject<SiteDoctor>(doctorStr);
 
             return doctor;
+        }
+
+        /// <summary>
+        /// 官网 - 研习社
+        /// </summary>
+        /// <returns></returns>
+        [Route("club/list")]
+        public List<ClubItem> GetClubList()
+        {
+            List<ClubItem> results = new List<ClubItem>();
+
+            var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+
+            var messages = dao.GetListExt(count: 4, endId: int.MaxValue);
+
+            messages.ForEach(msg =>
+            {
+                List<string> pics = new List<string>();
+                if (!string.IsNullOrEmpty(msg.pic01))
+                {
+                    pics.Add(msg.pic01);
+                }
+                if (!string.IsNullOrEmpty(msg.pic02))
+                {
+                    pics.Add(msg.pic02);
+                }
+                if (!string.IsNullOrEmpty(msg.pic03))
+                {
+                    pics.Add(msg.pic03);
+                }
+                if (!string.IsNullOrEmpty(msg.pic04))
+                {
+                    pics.Add(msg.pic04);
+                }
+                if (!string.IsNullOrEmpty(msg.pic05))
+                {
+                    pics.Add(msg.pic05);
+                }
+                if (!string.IsNullOrEmpty(msg.pic06))
+                {
+                    pics.Add(msg.pic06);
+                }
+
+                List<string> audioes = new List<string>();
+                if (!string.IsNullOrEmpty(msg.audio01))
+                {
+                    audioes.Add(msg.audio01);
+                }
+                if (!string.IsNullOrEmpty(msg.audio02))
+                {
+                    audioes.Add(msg.audio02);
+                }
+                if (!string.IsNullOrEmpty(msg.audio03))
+                {
+                    audioes.Add(msg.audio03);
+                }
+
+                results.Add(new ClubItem()
+                {
+                    postId = msg.id,
+                    openId = msg.openId,
+                    author = msg.author,
+                    authorHeadPic = msg.authorHeadPic,
+                    name = msg.name,
+                    poster = !string.IsNullOrEmpty(msg.poster) ? msg.poster : msg.pic01,
+                    pics = pics,
+                    audioes = audioes,
+                    itemType = ClubItemType.Graphic,
+                    text = msg.text,
+                    likeCount = msg.likeCount,
+                    commentCount = msg.commentCount,
+                    createdAt = msg.createdAt
+                });
+            });
+
+            //SQL里面已经有order by g.id desc，所以这里不用排序了
+            //results = results.OrderByDescending(r => r.createdAt).ToList();
+
+
+            int id = 0;
+            results.ForEach(r => { r.id = ++id; });
+
+            return results;
         }
     }
 
