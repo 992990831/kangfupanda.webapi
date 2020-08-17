@@ -145,6 +145,18 @@ namespace kangfupanda.webapi.Util
             return wx.access_token;
         }
 
+        public string GetCachedToken()
+        {
+            string access_token = GetAccess_token(AppId, AppSecret);
+            //if (tokenCache[tokenCacheName] != null)
+            //{
+            //    logger.Info($"get wechat token from cache: {tokenCache[tokenCacheName].ToString()}");
+            //    return tokenCache[tokenCacheName].ToString();
+            //}
+
+            return access_token;
+        }
+
         /// <summary>
         /// JSON反序列化
         /// </summary>

@@ -14,6 +14,8 @@ namespace kangfupanda.webapi.Controllers
     [RoutePrefix("wechat")]
     public class WechatController : ApiController
     {
+        static readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(WechatController));
+
         [Route("user")]
         [HttpGet]
         public string GetWeChatUser(string code)
@@ -122,8 +124,89 @@ namespace kangfupanda.webapi.Controllers
             return response;
         }
 
-        public class wxRequest { 
-            public string url { get; set; }
+        [HttpGet]
+        [Route("access_token")]
+        /// <summary>
+        /// 获取缓存的access token
+        /// </summary>
+        /// <returns></returns>
+        public string GetAccessToken()
+        {
+            var wxHelper = new WeixinHelper();
+            var access_token = wxHelper.GetCachedToken();
+
+            return access_token;
         }
+
+        [HttpGet]
+        [Route("list/news")]
+        public string GetNewsList(int offset = 0, int count=10 )
+        {
+            var wxHelper = new WeixinHelper();
+            var access_token = wxHelper.GetCachedToken();
+            string postUrl = $"https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token={access_token}";
+            HttpWebRequest request = WebRequest.Create(postUrl) as HttpWebRequest;
+            request.Method = "POST";
+            request.ContentType = "application/json;charset=UTF-8";
+
+            string options = $"{{\"type\":\"news\", \"offset\":{offset}, \"count\":{count}}}";
+            byte[] payload = Encoding.UTF8.GetBytes(options);
+            request.ContentLength = payload.Length;
+
+            Stream writer = request.GetRequestStream();
+            writer.Write(payload, 0, payload.Length);
+            writer.Close();
+
+            System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)request.GetResponse();
+            System.IO.Stream stream = response.GetResponseStream();
+            List<byte> bytes = new List<byte>();
+            int temp = stream.ReadByte();
+            while (temp != -1)
+            {
+                bytes.Add((byte)temp);
+                temp = stream.ReadByte();
+            }
+            byte[] result = bytes.ToArray();
+            string newsListStr = System.Text.Encoding.UTF8.GetString(result);
+
+            return newsListStr;
+        }
+
+        [HttpGet]
+        [Route("image")]
+        public string GetNewsList(string url)
+        {
+            HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+            request.Method = "get";
+            request.ContentType = "application/json;charset=UTF-8";
+
+            //string options = $"{{\"type\":\"news\", \"offset\":{offset}, \"count\":{count}}}";
+            //byte[] payload = Encoding.UTF8.GetBytes(options);
+            //request.ContentLength = payload.Length;
+
+            //Stream writer = request.GetRequestStream();
+            //writer.Write(payload, 0, payload.Length);
+            //writer.Close();
+
+            System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)request.GetResponse();
+            System.IO.Stream stream = response.GetResponseStream();
+            List<byte> bytes = new List<byte>();
+            int temp = stream.ReadByte();
+            while (temp != -1)
+            {
+                bytes.Add((byte)temp);
+                temp = stream.ReadByte();
+            }
+            byte[] result = bytes.ToArray();
+            string imgBase64 = Convert.ToBase64String(result);
+
+            return imgBase64;
+        }
+
+    }
+
+    public class wxRequest
+    {
+        public string url { get; set; }
     }
 }
