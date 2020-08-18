@@ -22,6 +22,8 @@ namespace kangfupanda.webapi.Util
         //快熊康复：wxc10ff63ecf588c90
         public const string AppId = "wxc10ff63ecf588c90";
 
+        public const string AppId2 = "wx496e5a01291ad836";
+
         /// <summary>
         /// 小程序的AppId
         /// </summary>
@@ -31,6 +33,8 @@ namespace kangfupanda.webapi.Util
         //一健点评(小程序): 8db4aeac6f14921b8a7087daeba81f7a
         //快熊康复：7289786fae8511cbe9e94a8aec93e125
         public const string AppSecret = "7289786fae8511cbe9e94a8aec93e125";
+
+        public const string AppSecret2 = "5a544217123aca4505f8a680de415a35";
 
         /// <summary>
         /// 小程序的AppSecret
@@ -147,7 +151,7 @@ namespace kangfupanda.webapi.Util
 
         public string GetCachedToken()
         {
-            string access_token = GetAccess_token(AppId, AppSecret);
+            string access_token = GetAccess_token(AppId2, AppSecret2);
             //if (tokenCache[tokenCacheName] != null)
             //{
             //    logger.Info($"get wechat token from cache: {tokenCache[tokenCacheName].ToString()}");

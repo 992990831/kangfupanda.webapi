@@ -95,6 +95,7 @@ namespace kangfupanda.webapi.Controllers
                         postId = msg.id,
                         openId = msg.openId,
                         author = msg.author,
+                        wechatUrl = msg.wechatUrl,
                         authorHeadPic = msg.authorHeadPic,
                         name = msg.name,
                         poster = !string.IsNullOrEmpty(msg.poster)? msg.poster : msg.pic01,
@@ -284,6 +285,8 @@ namespace kangfupanda.webapi.Controllers
         /// 作者昵称
         /// </summary>
         public string author { get; set; }
+
+        public string wechatUrl { get; set; }
 
         /// <summary>
         /// 作者头像

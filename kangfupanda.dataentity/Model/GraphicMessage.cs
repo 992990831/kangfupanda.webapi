@@ -35,6 +35,16 @@ namespace kangfupanda.dataentity.Model
         public string author { get; set; }
 
         public bool isTop { get; set; }
+
+        /// <summary>
+        /// 该字段标识是否来自微信
+        /// </summary>
+        public string wechatMediaId { get; set; }
+
+        /// <summary>
+        /// 微信文章的url
+        /// </summary>
+        public string wechatUrl { get; set; }
     }
 
     public class GraphicMessageExt : GraphicMessage

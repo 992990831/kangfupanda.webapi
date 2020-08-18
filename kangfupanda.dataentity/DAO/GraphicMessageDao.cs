@@ -22,7 +22,7 @@ namespace kangfupanda.dataentity.DAO
                 try
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("insert into graphicmessage(name, text, poster, pic01, pic02, pic03, pic04, pic05, pic06, audio01, audio02, audio03, openid, author, createdAt, updatedAt) values(@name, @text, @poster, @pic01, @pic02, @pic03, @pic04, @pic05, @pic06, @audio01, @audio02, @audio03, @openid, @author, now(), now()); select @@identity;", conn);
+                    MySqlCommand cmd = new MySqlCommand("insert into graphicmessage(name, text, poster, pic01, pic02, pic03, pic04, pic05, pic06, audio01, audio02, audio03, openid, author, wechatMediaId, wechatUrl, createdAt, updatedAt) values(@name, @text, @poster, @pic01, @pic02, @pic03, @pic04, @pic05, @pic06, @audio01, @audio02, @audio03, @openid, @author, @wechatMediaId, @wechatUrl, now(), now()); select @@identity;", conn);
                     cmd.Parameters.Add(new MySqlParameter("name", msg.name));
                     cmd.Parameters.Add(new MySqlParameter("text", msg.text));
                     cmd.Parameters.Add(new MySqlParameter("poster", msg.poster));
@@ -37,6 +37,8 @@ namespace kangfupanda.dataentity.DAO
                     cmd.Parameters.Add(new MySqlParameter("audio03", msg.audio03));
                     cmd.Parameters.Add(new MySqlParameter("openid", msg.openId));
                     cmd.Parameters.Add(new MySqlParameter("author", msg.author));
+                    cmd.Parameters.Add(new MySqlParameter("wechatMediaId", msg.wechatMediaId));
+                    cmd.Parameters.Add(new MySqlParameter("wechatUrl", msg.wechatUrl));
 
                     ulong id = (ulong)cmd.ExecuteScalar();
 
@@ -286,6 +288,7 @@ namespace kangfupanda.dataentity.DAO
                         msg.openId = sqlReader["openId"] == DBNull.Value ? string.Empty : (string)sqlReader["openId"];
                         msg.isTop = sqlReader["isTop"] == DBNull.Value ? false : (UInt64)sqlReader["isTop"] == 1;
                         msg.author = sqlReader["author"] == DBNull.Value ? string.Empty : (string)sqlReader["author"];
+                        msg.wechatUrl = sqlReader["wechatUrl"] == DBNull.Value ? string.Empty : (string)sqlReader["wechatUrl"];
                         msg.authorHeadPic = sqlReader["headpic"] == DBNull.Value ? string.Empty : (string)sqlReader["headpic"];
                         msg.likeCount = sqlReader["likeCount"] == DBNull.Value ? 0 : (long)sqlReader["likeCount"];
                         msg.commentCount = sqlReader["commentCount"] == DBNull.Value ? 0 : (long)sqlReader["commentCount"];
@@ -333,6 +336,7 @@ namespace kangfupanda.dataentity.DAO
                         msg.openId = sqlReader["openId"] == DBNull.Value ? string.Empty : (string)sqlReader["openId"];
                         msg.isTop = sqlReader["isTop"] == DBNull.Value ? false : (UInt64)sqlReader["isTop"] == 1;
                         msg.author = sqlReader["author"] == DBNull.Value ? string.Empty : (string)sqlReader["author"];
+                        msg.wechatUrl = sqlReader["wechatUrl"] == DBNull.Value ? string.Empty : (string)sqlReader["wechatUrl"];
                         msg.authorHeadPic = sqlReader["headpic"] == DBNull.Value ? string.Empty : (string)sqlReader["headpic"];
                         msg.likeCount = sqlReader["likeCount"] == DBNull.Value ? 0 : (long)sqlReader["likeCount"];
                         msg.commentCount = sqlReader["commentCount"] == DBNull.Value ? 0 : (long)sqlReader["commentCount"];
@@ -373,6 +377,36 @@ namespace kangfupanda.dataentity.DAO
             }
 
             return msgIds;
+        }
+
+        /// <summary>
+        /// 微信MediaId是否已经存在
+        /// </summary>
+        /// <param name="mediaId"></param>
+        /// <returns></returns>
+        public bool MediaIdExist(string mediaId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand($"select count(1) from graphicmessage where expiredAt is null and wechatMediaId='{mediaId}' ", conn);
+
+                    var result = cmd.ExecuteScalar();
+                    Int64 count = (Int64)result;
+                    if (count>0)
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
         }
     }
 }

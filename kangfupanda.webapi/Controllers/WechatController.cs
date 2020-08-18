@@ -1,7 +1,12 @@
-﻿using kangfupanda.webapi.Util;
+﻿using kangfupanda.dataentity.DAO;
+using kangfupanda.dataentity.Model;
+using kangfupanda.webapi.Common;
+using kangfupanda.webapi.Models;
+using kangfupanda.webapi.Util;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -203,6 +208,50 @@ namespace kangfupanda.webapi.Controllers
             return imgBase64;
         }
 
+        /// <summary>
+        /// 添加微信图文消息到小程序
+        /// 作为图文消息的一部分
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        [Route("add")]
+        public ResponseEntity<long> AddWeChatNews(GraphicMessage msg)
+        {
+            msg.isTop = false;
+            if (!string.IsNullOrEmpty(msg.poster) && msg.poster.IndexOf("base64,") > -1)
+            {
+                try
+                {
+                    var img = Utils.GetImageFromBase64(msg.poster.Substring(msg.poster.IndexOf("base64,") + 7));
+                    string fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".jpg";
+                    string fullPath = ConfigurationManager.AppSettings["UploadFolderPath"] + fileName;
+                    img.Save(fullPath);
+
+                    msg.poster = fileName;
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex.Message);
+                }
+            }
+
+            ResponseEntity<long> response = new ResponseEntity<long>();
+
+            var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
+            bool isExists = dao.MediaIdExist(msg.wechatMediaId);
+
+            if (isExists)
+            {
+                response = new ResponseEntity<long>(true, "图文已存在", 0);
+            }
+            else
+            {
+                response = new ResponseEntity<long>(true, "图文导入成功", 0);
+                dao.AddGraphicMessage(msg);
+            }
+
+            return response;
+        }
     }
 
     public class wxRequest
