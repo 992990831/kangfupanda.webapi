@@ -181,6 +181,9 @@ namespace kangfupanda.webapi.Controllers
         [Route("image")]
         public string GetNewsList(string url)
         {
+            if (string.IsNullOrEmpty(url))
+                return string.Empty;
+
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             request.Method = "get";
             request.ContentType = "application/json;charset=UTF-8";

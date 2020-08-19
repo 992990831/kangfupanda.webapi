@@ -28,7 +28,7 @@ namespace kangfupanda.webapi.Controllers
         public List<GraphicMessage> GetMessageList()
         {
             var dao = new GraphicMessageDao(ConfigurationManager.AppSettings["mysqlConnStr"]);
-            var messages = dao.GetList(" order by isTop desc ");
+            var messages = dao.GetList(" order by isTop desc, id desc ");
            
             //messages.ForEach(msg =>
             //{
