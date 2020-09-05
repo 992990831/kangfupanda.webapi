@@ -267,6 +267,7 @@
     <Compile Include="Controllers\ClubController.cs" />
     <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\ComplainController.cs" />
+    <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\FollowController.cs" />
     <Compile Include="Controllers\FoundController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
